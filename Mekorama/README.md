@@ -19,3 +19,8 @@ Assuming that you have create a plan and pasted that this plan into a file calle
 cd mekorama_plandisplay
 python visualize_mekorama_plan.py -f bad_plan.txt
 ```
+
+
+## Visulaization 
+https://user-images.githubusercontent.com/71174892/201474522-3afa20c3-7adc-4915-b6b8-f38565ff0d9f.mp4
+
