@@ -1,2 +1,2 @@
 # myPhD
-Most of the codes during PhD at Umea University, Sweden
+Most of my projects during my PhD in Sweden
