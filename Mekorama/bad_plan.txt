@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+=======
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+(moveup-ver2 t6 x2 y1 y2 y3)
+(movedown-ver2 t6 x2 y1 y2 y3)
+>>>>>>> beab40e56c05ac8af814b4867e56fe77f635a5f1
