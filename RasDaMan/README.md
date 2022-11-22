@@ -12,47 +12,49 @@
 
 
 ## Installetion
-wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
+###1. Open terminal in Ubuntu 20.04 LTS 
 
-echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" \
-| sudo tee /etc/apt/sources.list.d/rasdaman.list
+ ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
 
-sudo apt-get update
+```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list ```
 
-sudo apt-get install rasdaman
+```sudo apt-get update ```
 
-source /etc/profile.d/rasdaman.sh
+```sudo apt-get install rasdaman ```
+
+```source /etc/profile.d/rasdaman.sh ```
 
 ```rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string```
 
 '''echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list'''
 
-'''sudo apt-get update'''
+ ```sudo apt-get update ```
 
-'''sudo apt-get install rasdaman'''
+```sudo apt-get install rasdaman ```
 
-'''source /etc/profile.d/rasdaman.sh'''
+```source /etc/profile.d/rasdaman.sh ```
 
-'''
+###2. Check if rasql is intalled and set in path or not 
+```
 arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 rasql: rasdaman query tool 10.0.5.
 Opening database RASBASE at 127.0.0.1:7001... ok.
 Executing retrieval query... ok.
 Query result collection has 0 element(s):
 rasql done
-'''
+```
 
-check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
+###3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
 
-****Updating****
-'''
+###4. Updating
+```
 sudo apt-get update
 sudo service rasdaman stop
 sudo apt-get install rasdaman
-'''
-**** STATUS *****
-'''
+```
+###5. STATUS
+```
 service rasdaman start
 service rasdaman stop
 service rasdaman status
-'''
+```
