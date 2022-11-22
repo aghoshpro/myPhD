@@ -12,8 +12,8 @@
 2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
 
 
-## Installation
-[Source](https://doc.rasdaman.org/stable/02_inst-guide.html)
+## Installation [docs](https://doc.rasdaman.org/stable/02_inst-guide.html)
+
 ### 1. Open terminal in Ubuntu 20.04 LTS 
 
  ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
