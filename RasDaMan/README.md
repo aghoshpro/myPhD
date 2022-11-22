@@ -5,6 +5,7 @@
 
 ## Google Group
 1. [Rasdaman Google Help Group](https://groups.google.com/g/rasdaman-users/c/6RfopKXiapM/m/vyF5hrcCAgAJ)
+2. [My Discussions](https://groups.google.com/d/msgid/rasdaman-users/10907293-5c82-4e8e-b3b3-dedb0dcdd515n%40googlegroups.com?utm_medium=email&utm_source=footer)
 
 ## Tutorials
 1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
