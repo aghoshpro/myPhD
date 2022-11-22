@@ -133,28 +133,28 @@ service rasdaman status
 
 #### Output in terminal
 ```
-<pre><font color="#4E9A06"><b>arkaghosh@lat7410g</b></font>:<font color="#3465A4"><b>~</b></font>$ wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/AIR_TEMP_RAS_X.json
+arkaghosh@lat7410g:~$ wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/AIR_TEMP_RAS_X.json
 wcst_import.sh: rasdaman v10.0.5 build gf81f9b82
-Collected first 1 files: [&apos;/home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc&apos;]...
+Collected first 1 files: ['/home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc']...
 The recipe has been validated and is ready to run.
-<b>Recipe: </b>general_coverage
-<b>Coverage: </b>AIR_TEMP_X
-<b>WCS Service: </b>http://localhost:8080/rasdaman/ows
-<b>Operation: </b>INSERT
-<b>Subset Correction: </b>False
-<b>Mocked: </b>False
-<b>WMS Import: </b>True
-<b>Import mode: </b>Blocking
+Recipe: general_coverage
+Coverage: AIR_TEMP_X
+WCS Service: http://localhost:8080/rasdaman/ows
+Operation: INSERT
+Subset Correction: False
+Mocked: False
+WMS Import: True
+Import mode: Blocking
 Analyzing file (1/1): /home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc ...
 Elapsed time: 0.081 s.
 All files have been analyzed. Please verify that the axis subsets of the first 1 files above are correct.
-Slice 1: {Axis Subset: ansi(&quot;1900-01-01T00:00:00+00:00&quot;,&quot;2014-12-01T00:00:00+00:00&quot;) Lat(-90.00,90.00) Long(0.000,360.000) 
+Slice 1: {Axis Subset: ansi("1900-01-01T00:00:00+00:00","2014-12-01T00:00:00+00:00") Lat(-90.00,90.00) Long(0.000,360.000) 
 Data Provider: file:///home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc}
 
 Progress: [------------------------------] 0/1 0.00% 
-[2022-11-22 13:41:03] coverage &apos;AIR_TEMP_X&apos; - 1/1 - file &apos;air.mon.mean.v401.nc&apos; - grid domains [0:1379,0:359,0:719] of size 241.82 MB; Total time to ingest file 16.03 s @ 15.09 MB/s.
+[2022-11-22 13:41:03] coverage 'AIR_TEMP_X' - 1/1 - file 'air.mon.mean.v401.nc' - grid domains [0:1379,0:359,0:719] of size 241.82 MB; Total time to ingest file 16.03 s @ 15.09 MB/s.
 Progress: [##############################] 1/1 100.00% Done.
-</pre>
+
 ```
 #### **Output Screenshot**
 ![Screenshot from 2022-11-22 13-49-12](https://user-images.githubusercontent.com/71174892/203321589-6abc0681-6488-4e83-a42c-96dd689cba33.png)
