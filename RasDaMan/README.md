@@ -11,7 +11,7 @@
 2. [General Recipe for WCSTImport](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
 
 
-## Installetion
+## installation
 ### 1. Open terminal in Ubuntu 20.04 LTS 
 
  ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
@@ -52,9 +52,84 @@ sudo apt-get update
 sudo service rasdaman stop
 sudo apt-get install rasdaman
 ```
-### 5. STATUS
+### 5. Status
 ```
 service rasdaman start
 service rasdaman stop
 service rasdaman status
 ```
+
+### 6. Worked
+**DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
+**Temporal Resolution** Monthly values for 1901/01 - 2014/12 (V4.01)
+**Spatial Coverage** 0.5 degree latitude x 0.5 degree longitude global grid (720x360).
+
+#### **Recipe.json**
+```{
+    "config": {
+        "service_url": "http://localhost:8080/rasdaman/ows",
+        "tmp_directory": "/tmp/",
+        "mock": false,
+        "automated": true,
+        "track_files": false
+    },
+    "input": {
+        "coverage_id":"AIR_TEMP_X",
+        "paths": [
+            "/home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc"
+        ]
+    },
+    "recipe": {
+        "name": "general_coverage",
+        "options": {
+            "coverage": {
+                "crs": "OGC/0/AnsiDate@EPSG/0/4326",
+                "metadata": {
+                    "type": "xml",
+                    "global": "auto"
+                },
+                "slicer": {
+                    "type": "netcdf",
+                    "pixelIsPoint": true,
+                    "bands": [{
+                        "name": "air",
+                        "variable": "air",
+                        "description": "Air Temperature",
+                        "identifier": "air",
+                        "nilvalue":"-9.96921e+36f"
+                    }],
+                    "axes": {
+                        "ansi": {
+                            "statements": "from datetime import datetime, timedelta",
+                             "min": "(datetime(1900,1,1,0,0,0) + timedelta(hours=${netcdf:variable:time:min})).strftime(\"%Y-%m-%dT%H:%M\")",
+                             "max": "(datetime(1900,1,1,0,0,0) + timedelta(hours=${netcdf:variable:time:max})).strftime(\"%Y-%m-%dT%H:%M\")",
+                            "directPositions": "[(datetime(1900,1,1,0,0,0) + timedelta(hours=x)).strftime(\"%Y-%m-%dT%H:%M\") for x in ${netcdf:variable:time}]",
+                            "gridOrder": 0,
+                            "type": "ansidate",
+                            "resolution": 1,
+                            "irregular": true
+                        },
+                        "Long": {
+                            "min": "${netcdf:variable:lon:min}",
+                            "max": "${netcdf:variable:lon:max}",
+                            "gridOrder": 2,
+                            "resolution": "${netcdf:variable:lon:resolution}"
+                        },
+                        "Lat": {
+                            "min": "${netcdf:variable:lat:min}",
+                            "max": "${netcdf:variable:lat:max}",
+                            "gridOrder": 1,
+                            "resolution": "-${netcdf:variable:lat:resolution}"
+                        }
+                    }
+                }
+            },
+            "tiling": "ALIGNED [0:0, 0:359, 0:719]" 
+        }
+    }
+}
+```
+
+**Screenshots**
+![Screenshot from 2022-11-22 13-49-12](https://user-images.githubusercontent.com/71174892/203321589-6abc0681-6488-4e83-a42c-96dd689cba33.png)
+
