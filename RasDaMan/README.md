@@ -1,4 +1,4 @@
-# RasDaMan
+# RasDaMan [Raster Data Manager]
 
 ## Datasets
 1. [Air Temperature](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html)
