@@ -51,8 +51,11 @@ service rasdaman start
 service rasdaman stop
 service rasdaman status
 ```
-
-### 6. Worked
+### 6. Tips
+1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
+2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
+3. for irregular axis (resolution is always 1).
+## Worked
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
 #### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
 #### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
