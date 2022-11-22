@@ -36,8 +36,8 @@ Query result collection has 0 element(s):
 rasql done
 ```
 
-### 3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows) 
-Check that petascope is initialized properly, typically at this URL
+### 3.Check that petascope is initialized properly at [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows) 
+
 
 ### 4. Updating
 ```
