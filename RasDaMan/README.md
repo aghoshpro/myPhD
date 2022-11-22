@@ -12,7 +12,7 @@
 
 
 ## Installetion
-###1. Open terminal in Ubuntu 20.04 LTS 
+### 1. Open terminal in Ubuntu 20.04 LTS 
 
  ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
 
@@ -34,7 +34,7 @@
 
 ```source /etc/profile.d/rasdaman.sh ```
 
-###2. Check if rasql is intalled and set in path or not 
+### 2. Check if rasql is intalled and set in path or not 
 ```
 arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 rasql: rasdaman query tool 10.0.5.
@@ -44,15 +44,15 @@ Query result collection has 0 element(s):
 rasql done
 ```
 
-###3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
+### 3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
 
-###4. Updating
+### 4. Updating
 ```
 sudo apt-get update
 sudo service rasdaman stop
 sudo apt-get install rasdaman
 ```
-###5. STATUS
+### 5. STATUS
 ```
 service rasdaman start
 service rasdaman stop
