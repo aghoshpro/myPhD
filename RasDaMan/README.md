@@ -26,16 +26,6 @@
 
 ```source /etc/profile.d/rasdaman.sh ```
 
-```rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string```
-
-```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list```
-
- ```sudo apt-get update ```
-
-```sudo apt-get install rasdaman ```
-
-```source /etc/profile.d/rasdaman.sh ```
-
 ### 2. Check if rasql is intalled and set in path or not 
 ```
 arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
@@ -46,7 +36,8 @@ Query result collection has 0 element(s):
 rasql done
 ```
 
-### 3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
+### 3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows) 
+Check that petascope is initialized properly, typically at this URL
 
 ### 4. Updating
 ```
