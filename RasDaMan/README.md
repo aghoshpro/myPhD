@@ -1,18 +1,19 @@
-# RasDaMan
+# RasDaMan [Raster Data Manager]
 
 ## Datasets
 1. [Air Temperature](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html)
 
 ## Google Group
 1. [Rasdaman Google Help Group](https://groups.google.com/g/rasdaman-users/c/6RfopKXiapM/m/vyF5hrcCAgAJ)
+2. [My Discussions](https://groups.google.com/d/msgid/rasdaman-users/10907293-5c82-4e8e-b3b3-dedb0dcdd515n%40googlegroups.com?utm_medium=email&utm_source=footer)
 
 ## Tutorials
 1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
-2. [General Recipe for WCSTImport](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
+2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
 
 
-## Installation
-[Source](https://doc.rasdaman.org/stable/02_inst-guide.html)
+## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
+
 ### 1. Open terminal in Ubuntu 20.04 LTS 
 
  ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
@@ -20,16 +21,6 @@
 ```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list ```
 
 ```sudo apt-get update ```
-
-```sudo apt-get install rasdaman ```
-
-```source /etc/profile.d/rasdaman.sh ```
-
-```rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string```
-
-```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list```
-
- ```sudo apt-get update ```
 
 ```sudo apt-get install rasdaman ```
 
@@ -45,7 +36,8 @@ Query result collection has 0 element(s):
 rasql done
 ```
 
-### 3. check [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows)
+### 3. Check that petascope is initialized properly at [OGC Web Coverage Service Endpoint](http://localhost:8080/rasdaman/ows) 
+
 
 ### 4. Updating
 ```
@@ -60,10 +52,35 @@ service rasdaman stop
 service rasdaman status
 ```
 
-### 6. Worked
+### 6. Pre-requisite install [for first time users]
+
+1. Install Python 3.8 or more on Ubuntu 20.04
+Install the required dependency for adding custom PPAs.
+
+```sudo apt install software-properties-common -y```
+
+Then proceed and add the deadsnakes PPA to the APT package manager sources list as below.
+
+```sudo add-apt-repository ppa:deadsnakes/ppa```
+
+Press Enter to continue. Now download Python 3.10 with the single command below.
+
+```sudo apt install python3.10```
+
+Verify the installation by checking the installed version.
+```python3 --version```
+
+2. install netcdf4 package
+``` sudo pip3 install netCDF4```
+
+### 7. Tips
+1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
+2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
+3. for irregular axis (resolution is always 1).
+## Worked
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
-#### **Temporal Resolution** Monthly values for 1901/01 - 2014/12 (V4.01)
-#### **Spatial Coverage** 0.5 degree latitude x 0.5 degree longitude global grid (720x360).
+#### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
+#### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
 
 #### **Recipe.json**
 ```{
@@ -163,6 +180,6 @@ Progress: [##############################] 1/1 100.00% Done.
 
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
 
-### 7. Queries
+## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
