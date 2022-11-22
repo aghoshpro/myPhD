@@ -51,6 +51,13 @@ service rasdaman start
 service rasdaman stop
 service rasdaman status
 ```
+
+### 6.Pre-requisite install [for first time users]
+
+1. Check python version (must be 3.8 or later)
+
+2. nstall netcdf4 package
+``` sudo pip3 install netCDF4```
 ### 6. Tips
 1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
 2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
