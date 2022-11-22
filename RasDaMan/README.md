@@ -52,7 +52,7 @@ service rasdaman stop
 service rasdaman status
 ```
 
-### 6.Pre-requisite install [for first time users]
+### 6. Pre-requisite install [for first time users]
 
 1. Install Python 3.8 or more on Ubuntu 20.04
 Install the required dependency for adding custom PPAs.
@@ -180,6 +180,6 @@ Progress: [##############################] 1/1 100.00% Done.
 
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
 
-### 7. Queries
+## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
