@@ -130,7 +130,7 @@ service rasdaman status
     }
 }
 ```
-### Output [```241.82``` MB has expanded to ```1.43``` GB after succesul ingestion in ```16.03``` seconds]
+### Output [```241.82``` MB has expanded to ```1.43``` GB after successful ingestion in ```16.03``` seconds]
 #### Output in terminal
 ```
 arkaghosh@lat7410g:~$ wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/AIR_TEMP_RAS_X.json
