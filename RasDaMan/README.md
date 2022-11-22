@@ -163,4 +163,6 @@ Progress: [##############################] 1/1 100.00% Done.
 
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
 
+### 7. Queries
+[Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
