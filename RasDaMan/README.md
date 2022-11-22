@@ -54,8 +54,8 @@ service rasdaman status
 
 ### 6. Worked
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
-#### **Temporal Resolution** Monthly values for 1901/01 - 2014/12 (V4.01)
-#### **Spatial Coverage** 0.5 degree latitude x 0.5 degree longitude global grid (720x360).
+#### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
+#### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude global grid (720x360).
 
 #### **Recipe.json**
 ```{
