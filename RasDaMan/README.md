@@ -54,11 +54,26 @@ service rasdaman status
 
 ### 6.Pre-requisite install [for first time users]
 
-1. Check python version (must be 3.8 or later)
+1. Install Python 3.8 or more on Ubuntu 20.04
+Install the required dependency for adding custom PPAs.
 
-2. nstall netcdf4 package
+```sudo apt install software-properties-common -y```
+
+Then proceed and add the deadsnakes PPA to the APT package manager sources list as below.
+
+```sudo add-apt-repository ppa:deadsnakes/ppa```
+
+Press Enter to continue. Now download Python 3.10 with the single command below.
+
+```sudo apt install python3.10```
+
+Verify the installation by checking the installed version.
+```python3 --version```
+
+2. install netcdf4 package
 ``` sudo pip3 install netCDF4```
-### 6. Tips
+
+### 7. Tips
 1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
 2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
 3. for irregular axis (resolution is always 1).
