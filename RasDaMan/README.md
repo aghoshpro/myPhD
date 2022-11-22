@@ -9,7 +9,7 @@
 
 ## Tutorials
 1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
-2. [General Recipe for WCSTImport](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
+2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
 
 
 ## Installation
