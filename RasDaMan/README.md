@@ -82,7 +82,15 @@ Verify the installation by checking the installed version.
 #### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
 #### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
 
-#### **Recipe.json**
+#### WCSTImport introduces two concepts:
+
+* **Recipe** - A recipe is a class implementing the BaseRecipe that based on a set of parameters (ingredients) can import a set of files into WCS forming a well defined structure (image, regular timeseries, irregular timeseries etc)
+
+* **Ingredients** - An ingredients file is a json file containing a set of parameters that define how the recipe should behave (e.g. the WCS endpoint, the CRS resolver etc are all ingredients)
+
+**NOTE** Its only input is an "**ingredient**" file telling everything about the import process that the utility needs to know. (On a side note, such ingredients files constitute an excellent documentation.)
+
+#### **Ingredient.json**
 ```{
     "config": {
         "service_url": "http://localhost:8080/rasdaman/ows",
