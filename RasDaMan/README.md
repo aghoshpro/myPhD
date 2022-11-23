@@ -79,12 +79,12 @@ Verify the installation by checking the installed version.
 3. for irregular axis (resolution is always 1).
 ## Worked
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
-#### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
-#### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
+* **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
+* **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
 
 #### WCSTImport introduces two concepts:
 
-* **Recipe** - A recipe is a class implementing the BaseRecipe that based on a set of parameters (ingredients) can import a set of files into WCS forming a well defined structure (image, regular timeseries, irregular timeseries etc)
+* **Recipe** - A recipe is a class implementing the BaseRecipe that based on a set of parameters (ingredients) can import a set of files into WCS forming a well defined structure (image, regular timeseries, irregular timeseries etc). 4 types of recipe are as follows (General Recipe,Mosaic Map, Regular Timeseries, Irregular Timeseries)
 
 * **Ingredients** - An ingredients file is a json file containing a set of parameters that define how the recipe should behave (e.g. the WCS endpoint, the CRS resolver etc are all ingredients)
 
