@@ -91,7 +91,7 @@ Verify the installation by checking the installed version.
 
 **NOTE** Its only input is an "**ingredient**" file telling everything about the import process that the utility needs to know. (On a side note, such ingredients files constitute an excellent documentation.)
 
-#### **Ingredient.json**
+#### **Ingredient File (AIR_TEMP_RAS_X.json)**
 ```{
     "config": {
         "service_url": "http://localhost:8080/rasdaman/ows",
