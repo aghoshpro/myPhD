@@ -27,7 +27,7 @@
 
 ```source /etc/profile.d/rasdaman.sh ```
 
-### 2. Check if rasql is intalled and set in path or not 
+### 2. Check if rasql is installed and set in path or not 
 ```
 arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 rasql: rasdaman query tool 10.0.5.
