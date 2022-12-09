@@ -201,4 +201,17 @@ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 ```
 rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
 ```
-
+* To run with **rasdapy**
+```
+arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
+```
+```
+arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ ls
+env_rasdaman  rasdapy.ipynb  Rasdapy-Query-Workflow.ipynb  rasdapy-tutorial.ipynb
+```
+```
+arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
+```
+```
+(**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
+```
