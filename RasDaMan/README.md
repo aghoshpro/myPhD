@@ -192,3 +192,13 @@ Progress: [##############################] 1/1 100.00% Done.
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
+* To check exiting db collection
+```
+rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
+
+```
+* To delete the collection
+```
+rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
+```
+
