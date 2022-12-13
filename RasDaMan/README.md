@@ -214,4 +214,11 @@ arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 ```
 ```
 (**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
+
+```
+### rasdaPy Workflow
+* To activate environment
+```
+arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$  source env_rasdaman/bin/activate
+
 ```
