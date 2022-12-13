@@ -17,7 +17,9 @@
 
 ### 1. Open terminal in Ubuntu 20.04 LTS 
 
- ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
+ ```
+ wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
+ ```
 
 ```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list ```
 
