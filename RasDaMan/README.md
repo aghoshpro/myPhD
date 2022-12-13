@@ -216,9 +216,23 @@ arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 (**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
 
 ```
-### rasdaPy Workflow
+* Changing pyhton3 version in UbuntU
 * To activate environment
 ```
-arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$  source env_rasdaman/bin/activate
-
+arkag@arkag-VirtualBox:~$ sudo su
 ```
+```
+0. root@arkag-VirtualBox:/usr/bin# which python ==> /usr/bin/python
+
+1. root@arkag-VirtualBox:~# cd /usr/bin/
+2. root@arkag-VirtualBox:/usr/bin# ls -lrth python*
+3. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 2.7
+4. root@arkag-VirtualBox:/usr/bin# unlink python
+5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
+6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
+```
+
+* Output
+![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
+
+
