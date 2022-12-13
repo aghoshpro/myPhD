@@ -217,7 +217,6 @@ arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 
 ```
 * Changing pyhton3 version in UbuntU
-* To activate environment
 ```
 arkag@arkag-VirtualBox:~$ sudo su
 ```
@@ -233,6 +232,7 @@ arkag@arkag-VirtualBox:~$ sudo su
 ```
 
 * Output
+
 ![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
 
 
