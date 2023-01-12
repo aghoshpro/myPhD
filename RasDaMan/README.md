@@ -202,16 +202,41 @@ Progress: [##############################] 1/1 100.00% Done.
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
-* To check exiting db collection
+* **To check exiting db collection**
 ```
 rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
-
 ```
-* To delete the collection
+```
+arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
+rasql: rasdaman query tool 10.0.5.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 5 element(s):
+  Result object 1: AIR_TEMP_02
+  Result object 2: AIR_TEMP_01
+  Result object 3: output1
+  Result object 4: AIR_TEMP_03
+  Result object 5: AIR_TEMP_X
+rasql done.
+```
+* **To delete the collection**
 ```
 rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
 ```
-### To run with **rasdapy**
+
+* **Q1**
+```
+rasql -q "select sdom(c) from AIR_TEMP_X as c" --out string
+```
+```
+rasql: rasdaman query tool 10.0.5.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 1 element(s):
+Result element 1: [0:1379,0:359,0:719]
+rasql done
+```
+## **Rasdapy3**
 ```
 arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
 ```
@@ -262,5 +287,14 @@ arkag@arkag-VirtualBox:~$ sudo su
 * Output
 
 ![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
+
+* **RQ1**
+```
+>>> sdom = query_executor.execute_read("select sdom(c) from AIR_TEMP_X as c")         
+>>> print(sdom)
+```
+```
+[0:1379,0:359,0:719]
+```
 
 
