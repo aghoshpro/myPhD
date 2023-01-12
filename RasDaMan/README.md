@@ -251,7 +251,7 @@ arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 (**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
 
 ```
-* **Check all existing pyhton versions** *
+* **Check all existing python versions** *
 ```
 compgen -c python | sort -u | grep -v -- '-config$' | while read -r p; do
      printf "%-14s  " "$p"
