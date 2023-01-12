@@ -211,7 +211,7 @@ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 ```
 rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
 ```
-* To run with **rasdapy**
+### To run with **rasdapy**
 ```
 arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
 ```
@@ -240,7 +240,24 @@ arkag@arkag-VirtualBox:~$ sudo su
 5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
 6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
 ```
-
+* **Check all existing pyhton versions** *
+```
+compgen -c python | sort -u | grep -v -- '-config$' | while read -r p; do
+     printf "%-14s  " "$p"
+     "$p" --version
+done
+```
+```
+python          Python 2.7.18
+python2         Python 2.7.18
+python2.7       Python 2.7.18
+python3         Python 3.10.9
+python3.10      Python 3.10.9
+python3.11      Python 3.11.0
+python3.8       Python 3.8.10
+python3-futurize  0.18.2
+python3-pasteurize  0.18.2
+```
 * Output
 
 ![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
