@@ -226,20 +226,6 @@ arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 (**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
 
 ```
-* Changing pyhton3 version in UbuntU
-```
-arkag@arkag-VirtualBox:~$ sudo su
-```
-```
-0. root@arkag-VirtualBox:/usr/bin# which python ==> /usr/bin/python
-
-1. root@arkag-VirtualBox:~# cd /usr/bin/
-2. root@arkag-VirtualBox:/usr/bin# ls -lrth python*
-3. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 2.7
-4. root@arkag-VirtualBox:/usr/bin# unlink python
-5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
-6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
-```
 * **Check all existing pyhton versions** *
 ```
 compgen -c python | sort -u | grep -v -- '-config$' | while read -r p; do
@@ -257,6 +243,21 @@ python3.11      Python 3.11.0
 python3.8       Python 3.8.10
 python3-futurize  0.18.2
 python3-pasteurize  0.18.2
+```
+
+* **Changing pyhton3 version in Ubuntu**
+```
+arkag@arkag-VirtualBox:~$ sudo su
+```
+```
+0. root@arkag-VirtualBox:/usr/bin# which python ==> /usr/bin/python
+
+1. root@arkag-VirtualBox:~# cd /usr/bin/
+2. root@arkag-VirtualBox:/usr/bin# ls -lrth python*
+3. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 2.7
+4. root@arkag-VirtualBox:/usr/bin# unlink python
+5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
+6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
 ```
 * Output
 
