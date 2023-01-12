@@ -284,9 +284,12 @@ arkag@arkag-VirtualBox:~$ sudo su
 5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
 6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
 ```
-* Output
+* **Output**
 
 ![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
+
+![Screenshot from 2023-01-12 22-51-16](https://user-images.githubusercontent.com/71174892/212136544-147f55c8-3c37-47cb-9c7b-7e25c9c4162b.png)
+
 
 * **RQ1**
 ```
