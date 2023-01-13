@@ -248,7 +248,7 @@ env_rasdaman  rasdapy.ipynb  Rasdapy-Query-Workflow.ipynb  rasdapy-tutorial.ipyn
 arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
 ```
 ```
-(**env_rasdaman**) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
+(env_rasdaman) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
 
 ```
 * **Check all existing python versions** *
