@@ -237,6 +237,7 @@ Result element 1: [0:1379,0:359,0:719]
 rasql done
 ```
 ## **Rasdapy3**
+* **Activate virtual environment**
 ```
 arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
 ```
