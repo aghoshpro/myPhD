@@ -15,7 +15,7 @@
 
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
-### 1. Open terminal in Ubuntu 20.04 LTS 
+### 1. Open terminal in Ubuntu 22.04 LTS 
 
  ```
  wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
