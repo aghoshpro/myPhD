@@ -17,25 +17,25 @@
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
 
-    ```
-    wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
-    ```
+```
+wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
+```
 
-   ```
+```
    echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list
-   ```
+```
 
-   ```
+```
    sudo apt-get update
-   ```
+```
 
-   ```
+```
    sudo apt-get install rasdaman
-   ```
+```
 
-   ```
+```
    source /etc/profile.d/rasdaman.sh
-   ```
+```
 
 ### 2. Check if rasql is installed and set in path or not 
 ```
@@ -65,21 +65,21 @@ service rasdaman status
 
 ### 6. Pre-requisite install [for first time users]
 
-1. Install Python 3.8 or more on Ubuntu 20.04
+1. Install Python 3.8 or more on Ubuntu 22.04
 Install the required dependency for adding custom PPAs.
 
-```sudo apt install software-properties-common -y```
+* ```sudo apt install software-properties-common -y```
 
 Then proceed and add the deadsnakes PPA to the APT package manager sources list as below.
 
-```sudo add-apt-repository ppa:deadsnakes/ppa```
+* ```sudo add-apt-repository ppa:deadsnakes/ppa```
 
 Press Enter to continue. Now download Python 3.10 with the single command below.
 
-```sudo apt install python3.10```
+* ```sudo apt install python3.10```
 
 Verify the installation by checking the installed version.
-```python3 --version```
+* ```python3 --version```
 
 2. install netcdf4 package
 ``` sudo pip3 install netCDF4```
