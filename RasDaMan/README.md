@@ -17,25 +17,25 @@
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
 
- ```
- wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
- ```
+    ```
+    wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
+    ```
 
-```
-echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list
-```
+   ```
+   echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list
+   ```
 
-```
-sudo apt-get update
-```
+   ```
+   sudo apt-get update
+   ```
 
-```
-sudo apt-get install rasdaman
-```
+   ```
+   sudo apt-get install rasdaman
+   ```
 
-```
-source /etc/profile.d/rasdaman.sh
-```
+   ```
+   source /etc/profile.d/rasdaman.sh
+   ```
 
 ### 2. Check if rasql is installed and set in path or not 
 ```
