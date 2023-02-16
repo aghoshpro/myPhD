@@ -10,23 +10,34 @@
 ## Tutorials
 1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
 2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
+3. [NetCDF in RaSdAmAn](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe#Netcdf)
 
 
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
-### 1. Open terminal in Ubuntu 20.04 LTS 
+### 1. Open terminal in Ubuntu 22.04 LTS 
 
- ```wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add - ```
+```
+wget -O - https://download.rasdaman.org/packages/rasdaman.gpg | sudo apt-key add -
+```
 
-```echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list ```
+```
+   echo "deb [arch=amd64] https://download.rasdaman.org/packages/deb focal stable" | sudo tee /etc/apt/sources.list.d/rasdaman.list
+```
 
-```sudo apt-get update ```
+```
+   sudo apt-get update
+```
 
-```sudo apt-get install rasdaman ```
+```
+   sudo apt-get install rasdaman
+```
 
-```source /etc/profile.d/rasdaman.sh ```
+```
+   source /etc/profile.d/rasdaman.sh
+```
 
-### 2. Check if rasql is intalled and set in path or not 
+### 2. Check if rasql is installed and set in path or not 
 ```
 arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
 rasql: rasdaman query tool 10.0.5.
@@ -54,21 +65,21 @@ service rasdaman status
 
 ### 6. Pre-requisite install [for first time users]
 
-1. Install Python 3.8 or more on Ubuntu 20.04
+1. Install Python 3.8 or more on Ubuntu 22.04
 Install the required dependency for adding custom PPAs.
 
-```sudo apt install software-properties-common -y```
+* ```sudo apt install software-properties-common -y```
 
 Then proceed and add the deadsnakes PPA to the APT package manager sources list as below.
 
-```sudo add-apt-repository ppa:deadsnakes/ppa```
+* ```sudo add-apt-repository ppa:deadsnakes/ppa```
 
 Press Enter to continue. Now download Python 3.10 with the single command below.
 
-```sudo apt install python3.10```
+* ```sudo apt install python3.10```
 
 Verify the installation by checking the installed version.
-```python3 --version```
+* ```python3 --version```
 
 2. install netcdf4 package
 ``` sudo pip3 install netCDF4```
@@ -79,10 +90,18 @@ Verify the installation by checking the installed version.
 3. for irregular axis (resolution is always 1).
 ## Worked
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
-#### **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
-#### **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
+* **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
+* **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
 
-#### **Recipe.json**
+#### WCSTImport introduces two concepts:
+
+* ```Recipe``` - A recipe is a class implementing the BaseRecipe that based on a set of parameters (ingredients) can import a set of files into WCS forming a well defined structure (image, regular timeseries, irregular timeseries etc). 4 types of recipe are as follows (General Recipe,Mosaic Map, Regular Timeseries, Irregular Timeseries)
+
+* ```Ingredients``` - An ingredients file is a json file containing a set of parameters that define how the recipe should behave (e.g. the WCS endpoint, the CRS resolver etc are all ingredients)
+
+**NOTE** Its only input is an "**ingredient**" file telling everything about the import process that the utility needs to know. (On a side note, such ingredients files constitute an excellent documentation.)
+
+#### **Ingredient File (AIR_TEMP_RAS_X.json)**
 ```{
     "config": {
         "service_url": "http://localhost:8080/rasdaman/ows",
@@ -182,4 +201,104 @@ Progress: [##############################] 1/1 100.00% Done.
 
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
+
+* **To check exiting db collection**
+```
+rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
+```
+```
+arkaghosh@lat7410g:~$ rasql -q 'select c from RAS_COLLECTIONNAMES as c' --out string
+rasql: rasdaman query tool 10.0.5.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 5 element(s):
+  Result object 1: AIR_TEMP_02
+  Result object 2: AIR_TEMP_01
+  Result object 3: output1
+  Result object 4: AIR_TEMP_03
+  Result object 5: AIR_TEMP_X
+rasql done.
+```
+* **To delete the collection**
+```
+rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
+```
+
+* **Q1**
+```
+rasql -q "select sdom(c) from AIR_TEMP_X as c" --out string
+```
+```
+rasql: rasdaman query tool 10.0.5.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 1 element(s):
+Result element 1: [0:1379,0:359,0:719]
+rasql done
+```
+## **Rasdapy3**
+* **Activate virtual environment**
+```
+arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
+```
+```
+arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ ls
+env_rasdaman  rasdapy.ipynb  Rasdapy-Query-Workflow.ipynb  rasdapy-tutorial.ipynb
+```
+```
+arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ source env_rasdaman/bin/activate
+```
+```
+(env_rasdaman) arkaghosh@lat7410g:~/Downloads/rasdapy3_dir$ jupyter notebook
+
+```
+* **Check all existing python versions** *
+```
+compgen -c python | sort -u | grep -v -- '-config$' | while read -r p; do
+     printf "%-14s  " "$p"
+     "$p" --version
+done
+```
+```
+python          Python 2.7.18
+python2         Python 2.7.18
+python2.7       Python 2.7.18
+python3         Python 3.10.9
+python3.10      Python 3.10.9
+python3.11      Python 3.11.0
+python3.8       Python 3.8.10
+python3-futurize  0.18.2
+python3-pasteurize  0.18.2
+```
+
+* **Changing pyhton3 version in Ubuntu**
+```
+arkag@arkag-VirtualBox:~$ sudo su
+```
+```
+0. root@arkag-VirtualBox:/usr/bin# which python ==> /usr/bin/python
+
+1. root@arkag-VirtualBox:~# cd /usr/bin/
+2. root@arkag-VirtualBox:/usr/bin# ls -lrth python*
+3. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 2.7
+4. root@arkag-VirtualBox:/usr/bin# unlink python
+5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
+6. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 3.8.
+```
+* **Output**
+
+![Screenshot from 2022-12-13 16-50-27](https://user-images.githubusercontent.com/71174892/207380999-7d0d0de1-37aa-4bc0-9e3c-d873ce855221.png)
+
+![Screenshot from 2023-01-12 22-51-16](https://user-images.githubusercontent.com/71174892/212136544-147f55c8-3c37-47cb-9c7b-7e25c9c4162b.png)
+
+
+* **RQ1**
+```
+>>> sdom = query_executor.execute_read("select sdom(c) from AIR_TEMP_X as c")         
+>>> print(sdom)
+```
+```
+[0:1379,0:359,0:719]
+```
+
 
