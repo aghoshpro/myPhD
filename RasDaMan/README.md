@@ -95,9 +95,10 @@ Verify the installation by checking the installed version.
 ``` sudo pip3 install netCDF4```
 
 ### 7. Tips
-1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
-2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
-3. for irregular axis (resolution is always 1).
+1. **How to choose correct recipe**:  Time series recipes are generally used with 2D formats like geotiff.For netcdf we provide a general_coverage recipe.
+2. Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
+3. Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
+4. for irregular axis (resolution is always 1).
 
 ## Worked
 ### NetCDF Format
