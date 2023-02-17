@@ -98,7 +98,9 @@ Verify the installation by checking the installed version.
 1.  Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
 2.  Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
 3. for irregular axis (resolution is always 1).
+
 ## Worked
+### NetCDF Format
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
 * **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
 * **Spatial Coverage**: 0.5 degree latitude x 0.5 degree longitude | global grid (720x360) | 3D datacube (time x lat x long = 1380 x 720 x 360).
@@ -208,6 +210,43 @@ Progress: [##############################] 1/1 100.00% Done.
 #### Output Endpoint
 
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
+
+### GeoTIFF Format
+
+#### **Ingredient File (general_coverage_gdal_LST_Timeseries.json)**
+```{
+  "config": {
+    "service_url": "http://localhost:8080/rasdaman/ows",
+    "tmp_directory": "/tmp/",
+    "crs_resolver": "http://localhost:8080/def/",
+    "default_crs": "http://www.opengis.net/def/crs/EPSG/0/4326",
+    "mock": false,
+    "automated": true
+  },
+  "input": {
+    "coverage_id": "LST_03_GeoTIFF",
+    "paths": [
+      "/home/arkaghosh/Downloads/RAS_DATA/MODIS/*.tif"
+    ]
+  },
+  "recipe": {
+    "name": "time_series_irregular",
+    "options": {
+      "time_parameter": {
+        "filename": {
+          "__comment__": "The regex has to contain groups of tokens, separated by parentheses. The group parameter specifies which regex group to use for retrieving the time value",
+          "regex": "(.*)_(.*)_doy(.+?)_(.*)",
+          "group": "3"
+        },
+        "datetime_format": "YYYYMMDD"
+      },
+      "time_crs": "http://localhost:8080/def/crs/OGC/0/AnsiDate",
+      "tiling": "ALIGNED [0:*,0:43098, 0:20756]"
+    }
+  }
+}
+
+```
 
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
