@@ -62,17 +62,6 @@ service rasdaman start
 service rasdaman stop
 service rasdaman status
 ```
-
-### 5.1 Check the metadata of data usinf [gdal](https://gdal.org/)
-   * GeoTIFF
-```
-gdalinfo /home/arkaghosh/Downloads/RAS_DATA/MOD11A1.006_LST_Night_1km_doy2017001_aid0001.tif
-```
-   * netCDF
-```
-gdalinfo /home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc
-```
-
 ### 6. Pre-requisite install [for first time users]
 
 1. Install Python 3.8 or more on Ubuntu 22.04
@@ -100,7 +89,19 @@ Verify the installation by checking the installed version.
 3. Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
 4. for irregular axis (resolution is always 1).
 
-## Worked
+
+## Data Exploration
+### Check the metadata of data using [gdal](https://gdal.org/)
+   * GeoTIFF
+```
+gdalinfo /home/arkaghosh/Downloads/RAS_DATA/MOD11A1.006_LST_Night_1km_doy2017001_aid0001.tif
+```
+   * netCDF
+```
+gdalinfo /home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc
+```
+
+## Worked Examples
 ### NetCDF Format
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
 * **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
