@@ -214,6 +214,8 @@ Progress: [##############################] 1/1 100.00% Done.
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
 
 ### GeoTIFF Format
+**Data**: [MOD11A1.006 Terra Land Surface Temperature and Emissivity Daily Global 1km](https://developers.google.com/earth-engine/datasets/catalog/MODIS_006_MOD11A1#bands)
+Here I have ingested 3 MODIS Daily LST geotiff file each of size 334 MB. Each image has a spatial dimention of 43099 X 20757.
 
 #### **Ingredient File (general_coverage_gdal_LST_Timeseries.json)**
 ```{
@@ -290,6 +292,12 @@ Progress: [------------------------------] 0/1 0.00%
 Progress: [##############################] 1/1 100.00% Done.
 Recipe executed successfully
 ```
+#### Output Screenshot
+![image](https://user-images.githubusercontent.com/71174892/219706205-8a217e48-0afe-4cdc-aa3f-ca03e2d07bd4.png)
+
+#### Output Endpoint
+![image](https://user-images.githubusercontent.com/71174892/219706500-7e78936a-13b8-4085-b120-c1659db55962.png)
+
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
