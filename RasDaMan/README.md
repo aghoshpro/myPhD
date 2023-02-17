@@ -63,6 +63,16 @@ service rasdaman stop
 service rasdaman status
 ```
 
+* Check the metadata of data
+   * GeoTIFF
+```
+gdalinfo /home/arkaghosh/Downloads/RAS_DATA/MOD11A1.006_LST_Night_1km_doy2017001_aid0001.tif
+```
+   * netCDF
+```
+gdalinfo /home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc
+```
+
 ### 6. Pre-requisite install [for first time users]
 
 1. Install Python 3.8 or more on Ubuntu 22.04
