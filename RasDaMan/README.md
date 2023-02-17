@@ -63,7 +63,7 @@ service rasdaman stop
 service rasdaman status
 ```
 
-* Check the metadata of data
+### 5.1 Check the metadata of data usinf [gdal](https://gdal.org/)
    * GeoTIFF
 ```
 gdalinfo /home/arkaghosh/Downloads/RAS_DATA/MOD11A1.006_LST_Night_1km_doy2017001_aid0001.tif
