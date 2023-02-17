@@ -247,7 +247,47 @@ Progress: [##############################] 1/1 100.00% Done.
 }
 
 ```
+### Output [```1``` GB has expanded to ```10``` GB after successful ingestion in ```143.03``` seconds]
+#### Output in terminal
+```
+arkaghosh@lat7410g:~$ wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/general_coverage_gdal_LST_Timeseries.json
+wcst_import.sh: rasdaman v10.1.3 build g47ad85de
+Collected first 3 files: ['/home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170101_aid0001.tif', '/home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170115_aid0001.tif', '/home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170126_aid0001.tif']...
+The recipe has been validated and is ready to run.
+Recipe: time_series_irregular
+Coverage: LST_03_GeoTIFF
+WCS Service: http://localhost:8080/rasdaman/ows
+Operation: INSERT
+Subset Correction: False
+Mocked: False
+WMS Import: True
+Import mode: Blocking
+Track files: True
+Analyzing file (1/3): /home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170101_aid0001.tif ...
+Elapsed time: 0.001 s.
+Analyzing file (2/3): /home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170115_aid0001.tif ...
+Elapsed time: 0.001 s.
+Analyzing file (3/3): /home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170126_aid0001.tif ...
+Elapsed time: 0.001 s.
+All files have been analyzed. Please verify that the axis subsets of the first 3 files above are correct.
+Slice 1: {Axis Subset: ansi("2017-01-01T00:00:00+00:00") Lat(-84.658333325730799103,88.31666665873561) Lon(-179.15833331724446,179.999999983835549921) 
+Data Provider: file:///home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170101_aid0001.tif}
 
+Slice 2: {Axis Subset: ansi("2017-01-15T00:00:00+00:00") Lat(-84.658333325730799103,88.31666665873561) Lon(-179.15833331724446,179.999999983835549921) 
+Data Provider: file:///home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170115_aid0001.tif}
+
+Slice 3: {Axis Subset: ansi("2017-01-26T00:00:00+00:00") Lat(-84.658333325730799103,88.31666665873561) Lon(-179.15833331724446,179.999999983835549921) 
+Data Provider: file:///home/arkaghosh/Downloads/RAS_DATA/MODIS/MOD11A1.006_LST_Night_1km_doy20170126_aid0001.tif}
+
+Progress: [------------------------------] 0/1 0.00% 
+[2023-02-17 21:24:43] coverage 'LST_03_GeoTIFF' - 1/3 - file 'MOD11A1.006_LST_Night_1km_doy20170101_aid0001.tif' - grid domains [0,0:20756,0:43098] of size 338.81 MB; Total time to ingest file 34.84 s @ 9.72 MB/s.
+Progress: [------------------------------] 0/1 0.00% 
+[2023-02-17 21:25:18] coverage 'LST_03_GeoTIFF' - 2/3 - file 'MOD11A1.006_LST_Night_1km_doy20170115_aid0001.tif' - grid domains [0,0:20756,0:43098] of size 361.2 MB; Total time to ingest file 35.31 s @ 10.23 MB/s.
+Progress: [------------------------------] 0/1 0.00% 
+[2023-02-17 21:25:53] coverage 'LST_03_GeoTIFF' - 3/3 - file 'MOD11A1.006_LST_Night_1km_doy20170126_aid0001.tif' - grid domains [0,0:20756,0:43098] of size 307.71 MB; Total time to ingest file 34.19 s @ 9.0 MB/s.
+Progress: [##############################] 1/1 100.00% Done.
+Recipe executed successfully
+```
 ## Queries
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
