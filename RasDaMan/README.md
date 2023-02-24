@@ -403,7 +403,13 @@ arkag@arkag-VirtualBox:~$ sudo su
 ## WCPS Query
 
 * Source: https://mundi.rasdaman.com/demos/client_jupyter-notebook/index.html
+* Important Links
+* http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe
 
+  i. http://rasdaman.org/search?q=WCPS+clip%28%29+polygon+coordinate&noquickjump=1&changeset=on&milestone=on&ticket=on&wiki=on
+  ii. http://rasdaman.org/ticket/1692
+  iii. http://rasdaman.org/ticket/1833
+  iv. 
 1. WCPS Query 1
 ``` 
 for c in (AIR_TEMP_X) return max(clip(c[ansi("2014-12-01T00:00:00.000Z")], MULTIPOLYGON(((-20.4270 131.6931, -28.4204 124.1895,-27.9944 139.4604, -26.3919 129.0015 )),(( -20.4270 131.6931, -19.9527 142.4268,-27.9944 139.4604, -21.8819 40.5151)) ) ))
