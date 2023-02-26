@@ -414,3 +414,9 @@ arkag@arkag-VirtualBox:~$ sudo su
 ``` 
 for c in (AIR_TEMP_X) return max(clip(c[ansi("2014-12-01T00:00:00.000Z")], MULTIPOLYGON(((-20.4270 131.6931, -28.4204 124.1895,-27.9944 139.4604, -26.3919 129.0015 )),(( -20.4270 131.6931, -19.9527 142.4268,-27.9944 139.4604, -21.8819 40.5151)) ) ))
 ```
+
+2. WCPS clip() query POLYGON(long, lat) aacording to [CRS](https://www.w3.org/2015/spatial/wiki/Coordinate_Reference_Systems)
+```
+for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00.000Z")], POLYGON((35.960222969296694 66.62109374999999, 36.173356935221605 94.92187499999999, 5.003394345022173 94.30664062499999, 5.266007882805496 66.88476562499999,35.960222969296694 66.62109374999999)), "EPSG:4326"), "tiff")
+```
+[gis stock exchange](https://gis.stackexchange.com/questions/436101/polygon-coords-are-backwards)
