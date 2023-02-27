@@ -88,6 +88,8 @@ Verify the installation by checking the installed version.
 2. Coverage's CRS is: OGC/0/AnsiDate@OGC/0/Index1D@EPSG/0/4326 which can be broken to these grid orders respectively: "ansi (datetime)":0, "i(level)":1, "lat":2, "long":3 in case 4D data
 3. Calculate datetime values in netCDF file with the origin of Time CRS (http://www.opengis.net/def/crs/OGC/0/AnsiDate with origin: 1600-12-31T00:00:00Z)
 4. for irregular axis (resolution is always 1).
+5. rasql works on grid **index coordinates**, it doesn't know about **geo coordinates**. Ove has to use WCPS if one wants to address data with geo coordinates in user queries and get geo-referenced data out of rasdaman.[link](https://groups.google.com/g/rasdaman-users/c/_zM3ikFvOXw/m/Vga9hInhAwAJ)
+6. **Polygon clipping ingestion recipe**: **rasdaman stores arrays, so the ingested area needs to be an array and not a polygon (polygons can be used to subset stored array data after).** If you have many such areas you could import them in separate coverages, as arrays having bbox = minimal bbox encompassing the polygon. Then you could update the areas inside the bbox, but outside of the polygon with some null value. [link](https://groups.google.com/g/rasdaman-users/c/0PuKivXMZxw/m/mrLQyMRIEgAJ)
 
 
 ## Data Exploration
