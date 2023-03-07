@@ -427,3 +427,6 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 ```
 for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00.000Z")], MULTIPOLYGON(((-20.4270 131.6931, -28.4204 124.1895,-27.9944 139.4604, -26.3919 129.0015 )),((-20.4270 131.6931, -19.9527 142.4268,-27.9944 139.4604, -21.8819 40.5151))), "EPSG:4326"), "tiff")
 ```
+
+## Ontop 
+### ```jdbc``` driver is needed to connect Ontop with Rasdaman
