@@ -402,6 +402,20 @@ arkag@arkag-VirtualBox:~$ sudo su
 [0:1379,0:359,0:719]
 ```
 
+* **RQ2**
+```
+select clip( c, polygon(( list of WKT points )) )
+from coll as c
+```
+
+* **RQ3**
+```
+select clip( c, multipolygon((( list of WKT points )),(( list of WKT points ))...) )
+from coll as c
+```
+
+
+
 ## WCPS Query
 
 * Source: https://mundi.rasdaman.com/demos/client_jupyter-notebook/index.html
