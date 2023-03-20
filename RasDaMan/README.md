@@ -215,6 +215,26 @@ Progress: [##############################] 1/1 100.00% Done.
 
 ![image](https://user-images.githubusercontent.com/71174892/203323830-ead6e294-52f7-4cad-9c30-89a6ae24d023.png)
 
+#### --------------------------- Database configuration ----------------------------
+
+```
+arkaghosh@lat7410g:~$ cd /opt/rasdaman/etc
+arkaghosh@lat7410g:/opt/rasdaman/etc$ ls
+log-client.conf  log-rasmgr.conf  log-server.conf  petascope.properties  rasmgr.conf  secore.properties
+arkaghosh@lat7410g:/opt/rasdaman/etc$  nano petascope.properties 
+```
+
+#### Default configuration for all DBMS
+```
+spring.jpa.database=default
+spring.jpa.hibernate.ddl-auto=none
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/petascopedb
+spring.datasource.username=petauser
+spring.datasource.password=7d6ccae381f94d5bab7bc4931ca0882d
+spring.datasource.jdbc_jar_path=
+```
+
 ### GeoTIFF Format
 **Data**: [MOD11A1.006 Terra Land Surface Temperature and Emissivity Daily Global 1km](https://developers.google.com/earth-engine/datasets/catalog/MODIS_006_MOD11A1#bands)
 Here I have ingested 3 MODIS Daily LST geotiff file each of size 334 MB. Each image has a spatial dimention of 43099 X 20757.
