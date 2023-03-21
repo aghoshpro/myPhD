@@ -463,4 +463,9 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 ```
 
 ## Ontop 
-### ```jdbc``` driver is needed to connect Ontop with Rasdaman
+#### ```jdbc``` driver is needed to connect Ontop with Rasdaman but as per rasdaman comunity rasdaman doesn't have a jdbc driver and we also double checked it.
+
+#### **Solution**: [ASQLDB](https://blog.52north.org/2014/06/26/sensor-data-access-for-rasdaman-mid-term-blog-post/)
+
+### ASQLDB ([source](https://github.com/misev/asqldb))
+
