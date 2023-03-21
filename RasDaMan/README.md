@@ -469,3 +469,5 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 
 ### ASQLDB ([source](https://github.com/misev/asqldb))
 
+https://blog.52north.org/wp-content/uploads/sites/2/2014/06/AsqlJDBCRasadaman.png
+
