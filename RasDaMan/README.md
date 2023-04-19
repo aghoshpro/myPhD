@@ -474,8 +474,7 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 #### Java8 in Ubuntu ([link](https://www.theserverside.com/blog/Coffee-Talk-Java-News-Stories-and-Opinions/How-do-I-install-Java-on-Ubuntu))
 ```
 $ java --version
-```
-```
+
 openjdk 11.0.18 2023-01-17
 OpenJDK Runtime Environment (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1)
 OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu120.04.1, mixed mode)
@@ -491,8 +490,7 @@ $ source /etc/environment
 ```
 ```
 $ echo $JAVA_HOME
-````
-```
+
 /lib/jvm/java-8-openjdk-amd6
 ```
 
