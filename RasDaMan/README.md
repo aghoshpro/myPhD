@@ -1,4 +1,8 @@
 # RasDaMan [Raster Data Manager]
+## Table of Contents
+1. [About the Project](#Installation)
+2. [Project Status](#project-status)
+1. [Getting Started](#getting-started)
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
