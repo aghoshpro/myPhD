@@ -11,9 +11,10 @@
 7. [RasdaPy](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasdapy3)
 8. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 9. [Usecase](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
-10. [Ontop](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop)
+10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop)
 
-## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
+## Installation 
+* Source: https://doc.rasdaman.org/stable/02_inst-guide.html#installation-and-administration-guide
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
 
@@ -523,7 +524,7 @@ WHERE   m.name_2 IN ('Åsele',
                      'Malå',
                      'Sorsele')
 ```
-# Ontop 
+# Ontop Integration
 #### ```jdbc``` driver is needed to connect Ontop with Rasdaman but as per rasdaman comunity rasdaman doesn't have a jdbc driver and we also double checked it.
 
 * **Solution**: [ASQLDB](https://blog.52north.org/2014/06/26/sensor-data-access-for-rasdaman-mid-term-blog-post/)
