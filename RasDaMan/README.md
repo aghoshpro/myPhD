@@ -13,7 +13,7 @@
 9. [Usecase](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
 10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
 
-## Installation 
+## Installation  
 * Source: https://doc.rasdaman.org/stable/02_inst-guide.html#installation-and-administration-guide
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
