@@ -1,7 +1,7 @@
 # RasDaMan [Raster Data Manager]
 ## Table of Contents
 1. [About the Project](#Installation)
-2. [Data Exploration](#DataExploration)
+2. [Data Exploration](#https://github.com/aghoshpro/myPhD/blob/main/RasDaMan/README.md#data-exploration)
 3. [Google Group](#GoogleGroup)
 
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
