@@ -1,8 +1,17 @@
 # RasDaMan [Raster Data Manager]
 ## Table of Contents
-1. [About the Project](#Installation)
+1. [Installation](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#installation-guide)
 2. [Data Exploration](https://github.com/aghoshpro/myPhD/blob/main/RasDaMan/README.md#data-exploration)
-3. [Google Group](#GoogleGroup)
+3. [Google Group]([#GoogleGroup](https://github.com/aghoshpro/myPhD/blob/main/RasDaMan/README.md#google-group))
+4. [Tutorial](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#tutorials)
+5. [Working Examples](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#working-examples)
+   * [NetCDF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#netcdf-format)
+   * [GeoTIFF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#geotiff-format)
+6. [RaSQL Quries](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#queries)
+7. [RasdaPy](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasdapy3)
+8. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
+9. [Usecase](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
+10. [Ontop](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop)
 
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
