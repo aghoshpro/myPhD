@@ -461,8 +461,58 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 ```
 for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00.000Z")], MULTIPOLYGON(((-20.4270 131.6931, -28.4204 124.1895,-27.9944 139.4604, -26.3919 129.0015 )),((-20.4270 131.6931, -19.9527 142.4268,-27.9944 139.4604, -21.8819 40.5151))), "EPSG:4326"), "tiff")
 ```
+# Usecase: Sweden 
+## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
+### Vector Data
+1. [GADM data (version 4.1)](https://gadm.org/download_country.html)
+#### Ingestion into PostgreSQL
+```
+$ shp2pgsql -s 4326 /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/SWE_adm/SWE_adm2 municipalswe | psql -h localhost -p 5432 -U postgres -d Sweden 
+```
+### Raster Data
+1. [Surface Temperature](http://dx.doi.org/10.5067/MODIS/MOD11A1.061)
+2. [Snow Cover](http://dx.doi.org/10.5067/MODIS/MOD10A1.006)
+3. [Elevation](https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1.1?tab=metadata)
 
-## Ontop 
+One can use [Application for Extracting and Exploring Analysis Ready Samples (AρρEEARS)](https://appeears.earthdatacloud.nasa.gov/) to subset the temperature and snow data according to the boundaries of Sweden and fetch the raster data as netcdf or geotiff.
+
+#### Metadata using ```gdalinfo```
+```
+gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
+```
+#### Ingestion into Rasdaman 
+* Ingredient File (AIR_TEMP_RAS_X.json
+
+### PL/Python
+These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the quires.
+1.  **geo_index2grid_index**
+2.  **aggregated_result_numeric**
+
+### Combined Quries [SQL + Python(RaSQL)]
+* **Q1: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
+```
+SELECT  m.name_2 AS municipalities,
+        rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS max_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS min_temp_°C
+FROM    municipalswe AS m
+WHERE   m.name_2 = 'Linköping'
+```
+* **Q2: What are the average, maximum and minimum temperature the following municipalities of Sweden ?**
+```
+SELECT  m.name_2 AS municipalities,
+        rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS max_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS min_temp_°C    
+FROM    municipalswe AS m
+WHERE   m.name_2 IN ('Åsele',
+                     'Dorotea',
+                     'Lycksele',
+                     'Linköping',
+                     'Malå',
+                     'Sorsele')
+```
+# Ontop 
 #### ```jdbc``` driver is needed to connect Ontop with Rasdaman but as per rasdaman comunity rasdaman doesn't have a jdbc driver and we also double checked it.
 
 * **Solution**: [ASQLDB](https://blog.52north.org/2014/06/26/sensor-data-access-for-rasdaman-mid-term-blog-post/)
