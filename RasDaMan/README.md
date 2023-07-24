@@ -1,8 +1,9 @@
 # RasDaMan [Raster Data Manager]
 ## Table of Contents
 1. [About the Project](#Installation)
-2. [Project Status](#project-status)
-1. [Getting Started](#getting-started)
+2. [Data Exploration](#DataExploration)
+3. [Google Group](#GoogleGroup)
+
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
