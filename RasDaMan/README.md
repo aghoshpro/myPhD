@@ -11,7 +11,7 @@
 7. [RasdaPy](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasdapy3)
 8. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 9. [Usecase](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
-10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop)
+10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
 
 ## Installation 
 * Source: https://doc.rasdaman.org/stable/02_inst-guide.html#installation-and-administration-guide
