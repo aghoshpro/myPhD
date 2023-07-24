@@ -2,7 +2,7 @@
 ## Table of Contents
 1. [Installation](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#installation-guide)
 2. [Data Exploration](https://github.com/aghoshpro/myPhD/blob/main/RasDaMan/README.md#data-exploration)
-3. [Google Group]([#GoogleGroup](https://github.com/aghoshpro/myPhD/blob/main/RasDaMan/README.md#google-group))
+3. [Google Group](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#google-group)
 4. [Tutorial](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#tutorials)
 5. [Working Examples](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#working-examples)
    * [NetCDF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#netcdf-format)
