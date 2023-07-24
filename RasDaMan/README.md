@@ -1,18 +1,4 @@
 # RasDaMan [Raster Data Manager]
-
-## Datasets
-1. [Air Temperature](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html)
-
-## Google Group
-1. [Rasdaman Google Help Group](https://groups.google.com/g/rasdaman-users/c/6RfopKXiapM/m/vyF5hrcCAgAJ)
-2. [My Discussions](https://groups.google.com/d/msgid/rasdaman-users/10907293-5c82-4e8e-b3b3-dedb0dcdd515n%40googlegroups.com?utm_medium=email&utm_source=footer)
-
-## Tutorials
-1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
-2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
-3. [NetCDF in RaSdAmAn](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe#Netcdf)
-
-
 ## Installation [Guide](https://doc.rasdaman.org/stable/02_inst-guide.html)
 
 ### 1. Open terminal in Ubuntu 22.04 LTS 
@@ -93,6 +79,9 @@ Verify the installation by checking the installed version.
 
 
 ## Data Exploration
+### Datasets
+1. [Air Temperature](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html)
+
 ### Check the metadata of data using [gdal](https://gdal.org/)
    * GeoTIFF
 ```
@@ -102,8 +91,16 @@ gdalinfo /home/arkaghosh/Downloads/RAS_DATA/MOD11A1.006_LST_Night_1km_doy2017001
 ```
 gdalinfo /home/arkaghosh/Downloads/RAS_DATA/air.mon.mean.v401.nc
 ```
+## Google Group
+1. [Rasdaman Google Help Group](https://groups.google.com/g/rasdaman-users/c/6RfopKXiapM/m/vyF5hrcCAgAJ)
+2. [My Discussions](https://groups.google.com/d/msgid/rasdaman-users/10907293-5c82-4e8e-b3b3-dedb0dcdd515n%40googlegroups.com?utm_medium=email&utm_source=footer)
 
-## Worked Examples
+## Tutorials
+1. [WCSTImport Guide](http://rasdaman.org/wiki/WCSTImportGuide)
+2. [General Recipe for WCSTImport (NetCDF, PNG)](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe)
+3. [NetCDF in RaSdAmAn](http://rasdaman.org/wiki/WCSTImportGuide/GeneralRecipe#Netcdf)
+
+## Working Examples
 ### NetCDF Format
 #### **DATA**: [/Datasets/udel.airt.precip/v401/air.mon.mean.v401.nc](https://psl.noaa.gov/data/gridded/data.UDel_AirT_Precip.html) 
 * **Temporal Resolution**: Monthly values for 1901/01 - 2014/12 (V4.01)
