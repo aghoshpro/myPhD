@@ -475,9 +475,9 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 ```
 # Usecase: Sweden 
 ## Pre-requisite
-* Check rasdaman status
+* **Check rasdaman status**
 ```
-arkaghosh@lat7410g:~$ **service rasdaman status**
+arkaghosh@lat7410g:~$ service rasdaman status
 
 ● rasdaman.service - Rasdaman Array Database
      Loaded: loaded (/etc/systemd/system/rasdaman.service; enabled; vendor preset: enabled)
@@ -489,7 +489,7 @@ arkaghosh@lat7410g:~$ **service rasdaman status**
      Memory: 1.2G
 
 ```
-* Check postgresql status
+* **Check postgresql status**
 ```
 arkaghosh@lat7410g:~$ sudo service postgresql status
 
