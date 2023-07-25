@@ -660,7 +660,11 @@ finally:
 ```
 
 ### Combined Quries [SQL + Python(RaSQL)]
-* **Q1: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
+* **Q1: Array retrival of 50 temporal snapshots (each of 100 X 100) of temprature raster dataset**
+```
+select rasdaman.get_array01('select m[0:49, 0:99 , 0:99] from Surface_Temperature_Sweden as m')
+```
+* **Q2: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
 ```
 SELECT  m.name_2 AS municipalities,
         rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
@@ -669,7 +673,7 @@ SELECT  m.name_2 AS municipalities,
 FROM    municipalswe AS m
 WHERE   m.name_2 = 'Linköping'
 ```
-* **Q2: What are the average, maximum and minimum temperature the following municipalities of Sweden ?**
+* **Q3: What are the average, maximum and minimum temperature the following municipalities of Sweden ?**
 ```
 SELECT  m.name_2 AS municipalities,
         rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
