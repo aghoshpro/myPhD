@@ -561,8 +561,28 @@ gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
 ```
 ### PL/Python
 These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the quires.
-1.  **geo_index2grid_index**
-2.  **aggregated_result_numeric**
+1.  **get_array** (IN query text, OUT data_array text[])
+   ```
+from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2array(query):
+    result = query_executor.execute_read(query) 
+    numpy_array = result.to_array()
+    return numpy_array  
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   data_array= query2array(query)
+   return data_array
+finally:
+   db_connector.close()
+   ```
+3.  **geo_index2grid_index**
+4.  **aggregated_result_numeric**
 
 ### Combined Quries [SQL + Python(RaSQL)]
 * **Q1: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
