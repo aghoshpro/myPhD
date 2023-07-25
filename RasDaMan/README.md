@@ -8,10 +8,11 @@
    * [NetCDF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#netcdf-format)
    * [GeoTIFF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#geotiff-format)
 6. [RaSQL Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#queries)
-   * [RaSQL Query using RasdaPy](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasdapy3)
+   * [RaSQL Query using rasdapy3](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasql-query-using-rasdapy3)
 7. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 8. [Usecase: Sweden](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
 9. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
+
 
 ## Installation  
 * Source: https://doc.rasdaman.org/stable/02_inst-guide.html#installation-and-administration-guide
