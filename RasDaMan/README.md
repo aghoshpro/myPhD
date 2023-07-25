@@ -699,8 +699,8 @@ select rasdaman.get_array('select m[0:49, 0:99 , 0:99] from Surface_Temperature_
 ```
 SELECT  m.name_2 AS municipalities,
         rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
-	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS max_temp_°C,
-	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS min_temp_°C
+	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((d[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS d')) AS max_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((e[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS e')) AS min_temp_°C
 FROM    municipalswe AS m
 WHERE   m.name_2 = 'Linköping'
 ```
@@ -708,8 +708,8 @@ WHERE   m.name_2 = 'Linköping'
 ```
 SELECT  m.name_2 AS municipalities,
         rasdaman.aggregated_result_numeric(CONCAT('select avg_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS avg_temp_°C,
-	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS max_temp_°C,
-	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS min_temp_°C    
+	rasdaman.aggregated_result_numeric(CONCAT('select max_cells(clip((d[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS d')) AS max_temp_°C,
+	rasdaman.aggregated_result_numeric(CONCAT('select min_cells(clip((e[20, 0:* , 0:*]*0.02) - 273.15,',rasdaman.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Surface_Temperature_Sweden AS e')) AS min_temp_°C    
 FROM    municipalswe AS m
 WHERE   m.name_2 IN ('Åsele',
                      'Dorotea',
