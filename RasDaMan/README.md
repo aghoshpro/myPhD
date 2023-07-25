@@ -474,6 +474,11 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00.000Z")], MULTIPOLYGON(((-20.4270 131.6931, -28.4204 124.1895,-27.9944 139.4604, -26.3919 129.0015 )),((-20.4270 131.6931, -19.9527 142.4268,-27.9944 139.4604, -21.8819 40.5151))), "EPSG:4326"), "tiff")
 ```
 # Usecase: Sweden 
+## Pre-requisite
+* Check rasdaman status
+```
+
+```
 ## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
 ### Vector Data
 1. [GADM data (version 4.1)](https://gadm.org/download_country.html)
@@ -585,7 +590,7 @@ try:
 finally:
    db_connector.close()
 ```
-3.  **geo_index2grid_index(IN geoPOLY text, OUT gridPOLY text)**
+2.  **geo_index2grid_index(IN geoPOLY text, OUT gridPOLY text)**
 ```
 import numpy as np
 import re
@@ -640,7 +645,7 @@ gridPOLY = grid2WKT_polygon(y_grid, x_grid)
 
 return gridPOLY
 ```
-5.  **aggregated_result_numeric (IN query text, OUT numeric)**
+3.  **aggregated_result_numeric (IN query text, OUT numeric)**
 ```
 from rasdapy.db_connector import DBConnector
 from rasdapy.query_executor import QueryExecutor
