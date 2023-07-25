@@ -7,7 +7,7 @@
 5. [Working Examples](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#working-examples)
    * [NetCDF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#netcdf-format)
    * [GeoTIFF](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#geotiff-format)
-6. [RaSQL Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#queries)
+6. [RaSQL Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasql-query)
    * [RaSQL Query using rasdapy3](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasql-query-using-rasdapy3)
 7. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 8. [Usecase: Sweden](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
