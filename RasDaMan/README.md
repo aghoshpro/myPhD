@@ -561,8 +561,8 @@ gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
 ```
 ### PL/Python
 These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the quires.
-1.  **get_array** (IN query text, OUT data_array text[])
-   ```
+1.  **get_array(IN query text, OUT data_array text[])**
+```
 from rasdapy.db_connector import DBConnector
 from rasdapy.query_executor import QueryExecutor
 
@@ -580,9 +580,80 @@ try:
    return data_array
 finally:
    db_connector.close()
-   ```
-3.  **geo_index2grid_index**
-4.  **aggregated_result_numeric**
+```
+3.  **geo_index2grid_index(IN geoPOLY text, OUT gridPOLY text)**
+```
+import numpy as np
+import re
+import gdal
+from affine import Affine
+from shapely.geometry import LineString, MultiPolygon, Polygon, box, MultiPoint, Point
+from shapely import wkt
+
+upper_left_lon_x = 10.958333332351629 
+upper_left_lat_y = 69.06666666047931  
+pixel_size = 0.008333333332587 
+
+def grid2WKT_polygon(long_array, lat_array):
+    polygon = Polygon(zip(long_array, lat_array))
+    return polygon.wkt
+
+  
+def geo2grid(lons, lats, upper_left_lon_x, upper_left_lat_y, pixel_size, xskew = 0.0, yskew = 0.0):
+    aff_gdal = Affine.from_gdal(upper_left_lon_x, pixel_size, xskew, upper_left_lat_y, 0.0, -pixel_size)
+    lons = np.array(lons)
+    lats = np.array(lats)
+    xs, ys = ~aff_gdal*(lons, lats)
+    xs = np.int64(xs)
+    ys = np.int64(ys)
+    return xs, ys 
+
+def add_closing_coordinates(d):
+    i = re.search(r"\d", d).start()
+    j = re.search(r'(\d)[^\d]*$', d).start() + 1
+    c = d.index(',')    
+    return d[:j] + ", " + d[i:c] + d[j:]
+
+def geoPOLYGON_to_gridPOLYGON(polygon_str):
+    data = polygon_str
+    data_wkt = add_closing_coordinates(data)
+    polygon = wkt.loads(data_wkt)
+    coords = np.dstack(polygon.boundary.xy).tolist()[0][:-1]
+    expected_list_of_coordinates_for_received_code = [{"lat": x, "long": y} for x, y in coords]
+    lat_arr = []
+    long_arr = []
+    for i in range(len(expected_list_of_coordinates_for_received_code)):
+        long_arr = np.append(long_arr, expected_list_of_coordinates_for_received_code[i]['lat'])
+        lat_arr = np.append(lat_arr, expected_list_of_coordinates_for_received_code[i]['long'])
+    long_list = long_arr.tolist()
+    lat_list = lat_arr.tolist()
+    return long_list, lat_list
+
+
+longs,lats = geoPOLYGON_to_gridPOLYGON(geoPOLY)
+x_grid, y_grid = geo2grid(longs, lats, upper_left_lon_x, upper_left_lat_y, pixel_size)
+gridPOLY = grid2WKT_polygon(y_grid, x_grid)
+
+return gridPOLY
+```
+5.  **aggregated_result_numeric (IN query text, OUT numeric)**
+```
+from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2result(query):
+   output_val = query_executor.execute_read(query)  
+   return output_val
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   return float("{}".format(query2result(query)))
+finally:
+   db_connector.close()
+```
 
 ### Combined Quries [SQL + Python(RaSQL)]
 * **Q1: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
