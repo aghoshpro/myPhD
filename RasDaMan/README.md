@@ -332,7 +332,7 @@ Recipe executed successfully
 #### Output Endpoint
 ![image](https://user-images.githubusercontent.com/71174892/219706500-7e78936a-13b8-4085-b120-c1659db55962.png)
 
-## Queries
+## **RaSQL Query**
 [Query Language Guide](https://doc.rasdaman.org/stable/04_ql-guide.html#query-language-guide)
 
 * **To check exiting db collection**
@@ -369,7 +369,7 @@ Query result collection has 1 element(s):
 Result element 1: [0:1379,0:359,0:719]
 rasql done
 ```
-## **Rasdapy3**
+## **RaSQL Query using Rasdapy3**
 * **Activate virtual environment**
 ```
 arkaghosh@lat7410g:~$ cd Downloads/rasdapy3_dir
@@ -448,7 +448,7 @@ from coll as c
 
 
 
-## WCPS Query
+## **WCPS Query**
 
 * Source: https://mundi.rasdaman.com/demos/client_jupyter-notebook/index.html
 * Important Links
