@@ -477,6 +477,31 @@ for c in (LST_03_GeoTIFF_FLIPPED) return encode(clip(c[ansi("2017-01-01T00:00:00
 ## Pre-requisite
 * Check rasdaman status
 ```
+arkaghosh@lat7410g:~$ **service rasdaman status**
+
+● rasdaman.service - Rasdaman Array Database
+     Loaded: loaded (/etc/systemd/system/rasdaman.service; enabled; vendor preset: enabled)
+     Active: active (running) since Tue 2023-07-25 14:36:35 IST; 21min ago
+       Docs: https://rasdaman.org
+    Process: 653 ExecStart=/etc/init.d/rasdaman start (code=exited, status=0/SUCCESS)
+   Main PID: 749 (rasmgr)
+      Tasks: 137 (limit: 18691)
+     Memory: 1.2G
+
+```
+* Check postgresql status
+```
+arkaghosh@lat7410g:~$ sudo service postgresql status
+
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Tue 2023-07-25 14:36:14 IST; 23min ago
+    Process: 1432 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 1432 (code=exited, status=0/SUCCESS)
+
+Jul 25 14:36:14 lat7410g systemd[1]: Starting PostgreSQL RDBMS...
+Jul 25 14:36:14 lat7410g systemd[1]: Finished PostgreSQL RDBMS.
+
 
 ```
 ## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
