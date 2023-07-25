@@ -660,9 +660,9 @@ finally:
 ```
 
 ### Combined Quries [SQL + Python(RaSQL)]
-* **Q1: Array retrival of 50 temporal snapshots (each of 100 X 100) of temprature raster dataset**
+* **Q1: Array retrival of 50 temporal snapshots (each of size 100 X 100) of temprature raster dataset**
 ```
-select rasdaman.get_array01('select m[0:49, 0:99 , 0:99] from Surface_Temperature_Sweden as m')
+select rasdaman.get_array('select m[0:49, 0:99 , 0:99] from Surface_Temperature_Sweden as m')
 ```
 * **Q2: What are the average, maximum and minimum temperature over 'Linköping' municipality of Sweden ?**
 ```
