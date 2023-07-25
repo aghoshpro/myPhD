@@ -564,7 +564,7 @@ gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
 wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/Sweden_Temperature_1km.json
 ```
 ### PL/Python
-These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the quires.
+These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the queries.
 1.  **get_array(IN query text, OUT data_array text[])**
 ```
 from rasdapy.db_connector import DBConnector
