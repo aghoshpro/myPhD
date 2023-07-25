@@ -1,0 +1,53 @@
+{
+    "config": {
+        "service_url": "http://localhost:8080/rasdaman/ows",
+        "tmp_directory": "/tmp/",
+        "mock": false,
+        "automated": true,
+        "track_files": false
+    },
+    "input": {
+        "coverage_id":"Elevation_Sweden",
+        "paths": [
+            "/home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/Elevation_Sweden.nc"
+        ]
+    },
+    "recipe": {
+        "name": "general_coverage",
+        "options": {
+            "coverage": {
+                "crs": "OGC/0/AnsiDate@EPSG/0/4326",
+                "metadata": {
+                    "type": "xml",
+                    "global": "auto"
+                },
+                "slicer": {
+                    "type": "netcdf",
+                    "pixelIsPoint": true,
+                    "bands": [{
+                        "name": "Band1",
+                        "variable": "Band1",
+                        "description": "Digital elevaion model of Sweden from SRTM",
+                        "identifier": "Band1",
+                        "nilvalue":"9.96920996838686905e+36"
+                    }],
+                    "axes": {
+                        "Long": {
+                            "min": "${netcdf:variable:lon:min}",
+                            "max": "${netcdf:variable:lon:max}",
+                            "gridOrder": 2,
+                            "resolution": "${netcdf:variable:lon:resolution}"
+                        },
+                        "Lat": {
+                            "min": "${netcdf:variable:lat:min}",
+                            "max": "${netcdf:variable:lat:max}",
+                            "gridOrder": 1,
+                            "resolution": "-${netcdf:variable:lat:resolution}"
+                        }
+                    }
+                }
+            },
+            "tiling": "ALIGNED [0:0, 0:42723, 0:44378]" 
+        }
+    }
+}

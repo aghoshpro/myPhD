@@ -1,0 +1,202 @@
+JAVA_HOME="/lib/jvm/java-11-openjdk-amd64/bin/java"
+
+to run InteliJ
+
+/opt/idea-IC-223.8836.41/bin/idea.sh
+
+
+The test file foe ASQLDB
+/home/arkaghosh/Downloads/asqldb-master/ASQLDB_TEST/AsqldbTest/src/test/java/org/n52/hibernate/HibernateMArrayQueryTest.java
+
+CREATE TABLE studentsumu(id SERIAL PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, role VARCHAR);
+
+INSERT INTO studentsumu(first_name, last_name, role) VALUES ('John', 'Smith', 'PhD');
+
+arkaghosh@lat7410g:~$ sudo -u postgres psql
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=# \l
+                                                  List of databases
+    Name     |  Owner   | Encoding |   Collate   |    Ctype    | ICU Locale | Locale Provider |   Access privileges   
+-------------+----------+----------+-------------+-------------+------------+-----------------+-----------------------
+ petascopedb | petauser | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ postgres    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ template0   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+ template1   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+(4 rows)
+
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ petauser  | Superuser, Create role, Create DB                          | {}
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+postgres=# CREATE DATABASE emp_umea; 
+CREATE DATABASE
+postgres=# \c emp_umea
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+You are now connected to database "emp_umea" as user "postgres".
+emp_umea=# CREATE TABLE studentsUmU(id SERIAL PRIMARY KEY, first_name VARCHAR, last_name VARCHAR, role VARCHAR);
+CREATE TABLE
+emp_umea=# \dt
+            List of relations
+ Schema |    Name     | Type  |  Owner   
+--------+-------------+-------+----------
+ public | studentsumu | table | postgres
+(1 row)
+
+emp_umea=# INSERT INTO studentsumu(first_name, last_name, role) VALUES ('John', 'Smith', 'PhD');
+INSERT 0 1
+emp_umea=# select * from studentsumu
+emp_umea-# INSERT INTO studentsumu(first_name, last_name, role) VALUES ('John', 'Smith', 'PhD');;
+ERROR:  syntax error at or near "INTO"
+LINE 2: INSERT INTO studentsumu(first_name, last_name, role) VALUES ...
+               ^
+emp_umea=# select * from studentsumu;
+ id | first_name | last_name | role 
+----+------------+-----------+------
+  1 | John       | Smith     | PhD
+(1 row)
+
+emp_umea=# select * from studentsumu 
+INSERT INTO studentsumu(first_name, last_name, role) VALUES ('Ark', 'Gho', 'PhD');;         
+ERROR:  syntax error at or near "INTO"
+LINE 2: INSERT INTO studentsumu(first_name, last_name, role) VALUES ...
+               ^
+emp_umea=# INSERT INTO studentsumu(first_name, last_name, role) VALUES ('Ark', 'Gho', 'PhD');
+INSERT 0 1
+emp_umea=# \dt
+            List of relations
+ Schema |    Name     | Type  |  Owner   
+--------+-------------+-------+----------
+ public | studentsumu | table | postgres
+(1 row)
+
+emp_umea=# select * from studentsumu;
+ id | first_name | last_name | role 
+----+------------+-----------+------
+  1 | John       | Smith     | PhD
+  2 | Ark        | Gho       | PhD
+(2 rows)
+
+emp_umea=# cd..
+emp_umea-# cd
+emp_umea-# exit
+Use \q to quit.
+emp_umea-# \q
+arkaghosh@lat7410g:~$ sudo -u postgres psql
+[sudo] password for arkaghosh: 
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=#  \l
+                                                  List of databases
+    Name     |  Owner   | Encoding |   Collate   |    Ctype    | ICU Locale | Locale Provider |   Access privileges   
+-------------+----------+----------+-------------+-------------+------------+-----------------+-----------------------
+ emp_umea    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ petascopedb | petauser | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ postgres    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ template0   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+ template1   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+(5 rows)
+
+postgres=# emp_umu
+postgres-# emp_umea
+postgres-# \c emp_umea
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+You are now connected to database "emp_umea" as user "postgres".
+emp_umea-# select * from studentsumu;
+ERROR:  syntax error at or near "emp_umu"
+LINE 1: emp_umu
+        ^
+emp_umea=# select * from studentsumu;
+ id | first_name | last_name | role 
+----+------------+-----------+------
+  1 | John       | Smith     | PhD
+  2 | Ark        | Gho       | PhD
+(2 rows)
+
+emp_umea=# \q
+arkaghosh@lat7410g:~$ sudo -u postgres psql
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=#  \l                       
+                                                  List of databases
+    Name     |  Owner   | Encoding |   Collate   |    Ctype    | ICU Locale | Locale Provider |   Access privileges   
+-------------+----------+----------+-------------+-------------+------------+-----------------+-----------------------
+ emp_umea    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ petascopedb | petauser | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ postgres    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ template0   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+ template1   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+(5 rows)
+
+postgres=# \c petascopedb 
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+You are now connected to database "petascopedb" as user "postgres".
+petascopedb=# select * ;
+ERROR:  SELECT * with no tables specified is not valid
+LINE 1: select * ;
+               ^
+petascopedb=# select * from petascopedb;
+ERROR:  relation "petascopedb" does not exist
+LINE 1: select * from petascopedb;
+                      
+postgres=# \c emp_umea
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+You are now connected to database "emp_umea" as user "postgres".
+emp_umea=# \dt
+            List of relations
+ Schema |    Name     | Type  |  Owner   
+--------+-------------+-------+----------
+ public | studentsumu | table | postgres
+(1 row)
+
+emp_umea=# \q
+arkaghosh@lat7410g:~$ sudo -u postgres psql
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+Type "help" for help.
+
+postgres=# \l
+                                                  List of databases
+    Name     |  Owner   | Encoding |   Collate   |    Ctype    | ICU Locale | Locale Provider |   Access privileges   
+-------------+----------+----------+-------------+-------------+------------+-----------------+-----------------------
+ emp_umea    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ petascopedb | petauser | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ postgres    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | 
+ template0   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+ template1   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |            | libc            | =c/postgres          +
+             |          |          |             |             |            |                 | postgres=CTc/postgres
+(5 rows)
+
+postgres=# \c petascopedb 
+psql (15.2 (Ubuntu 15.2-1.pgdg20.04+1), server 12.14 (Ubuntu 12.14-0ubuntu0.20.04.1))
+You are now connected to database "petascopedb" as user "postgres".
+petascopedb=# \dt
+petascopedb=# select * from irregular_axis_direct_positions;
+
+psql -h localhost -p 7001 -U RASBASE AIR_TEMP_X
+CREATE FUNCTION pymax (a integer, b integer)
+  RETURNS integer
+AS $$
+a = 90
+b = 1
+  if a > b:
+    return a
+  return b
+$$ LANGUAGE plpython3u;
+
+
+CREATE SERVER foreigndb_fdw FOREIGN DATA WRAPPER postgres_fdw OPTIONS (host '127.0.0.1', port '7001', dbname 'RASBASE');
+
+CREATE USER MAPPING FOR localuser SERVER foreigndb_fdw OPTIONS (user 'fdwuser', password 'secret');

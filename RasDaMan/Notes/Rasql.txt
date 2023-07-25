@@ -1,0 +1,148 @@
+RAS_HOME: /opt/rasdaman/share/rasdaman/wcst_import/recipes_custom/
+
+myfile = /opt/rasdaman/share/rasdaman/examples/images/anthur.tif
+
+/home/arkag/Downloads
+
+----------------------------------Existing collections------------------------------
+rasql -q "select r from RAS_COLLECTIONNAMES as r" \
+      --out string
+
+rasql: rasdaman query tool 10.0.2.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 6 element(s):
+  Result object 1: arka
+  Result object 2: RGB
+  Result object 3: geotif02f
+  Result object 4: BW
+  Result object 5: test
+  Result object 6: geotiff
+rasql done.
+
+*** To Delete ****
+rasql -q "drop collection test"       --user rasadmin --passwd rasadmin
+
+rasql: rasdaman query tool 10.0.2.
+Opening database RASBASE at 127.0.0.1:7001... ok.
+Executing retrieval query... ok.
+Query result collection has 4 element(s):
+  Result object 1: geotiff
+  Result object 2: arka
+  Result object 3: BW
+  Result object 4: RGB
+rasql done.
+=================================== Pipeline =======================================
+
+**** Normal TIFF ****
+---BW ---🐸
+rasql -q "create collection BW GreySet" \
+      --user rasadmin --passwd rasadmin	
+
+rasql -q 'insert into BW values decode($1)' \
+      -f /home/arkag/Downloads/lena_BW.tif --user rasadmin --passwd rasadmin
+
+rasql -q "select snap_BW[0:10,0:10] from BW as snap_BW" --out hex
+
+--- Color ---🐸
+rasql -q "create collection RGB RGBSet" \
+      --user rasadmin --passwd rasadmin	
+
+rasql -q 'insert into RGB values decode($1)' \
+      -f /home/arkag/Downloads/lena_RGB.tif --user rasadmin --passwd rasadmin
+
+rasql -q "select snap_RGB[0:10,0:10] from rgb as snap_RGB" --out hex
+
+
+**** 🌍 Geo-TIFF 🌍 **** ❌
+
+rasql -q "create collection dc_01 GeoSpatial" \
+      --user rasadmin --passwd rasadmin	
+
+rasql -q 'insert into dc_01 values decode($1)' \
+      -f /home/arkag/Downloads/GLDAS_NOAH025.tif --user rasadmin --passwd rasadmin
+
+
+rasql -q "select snap[0:10,0:10] from dc_01 as snap" --out hex
+
+**** 🌍 NetCDF 🌍 **** ❌
+
+wcst_import.sh /home/arkag/Downloads/ingest.template.json
+
+---- Recipe build ----
+
+---- Ingrediants ----
+
+wcst_import.sh /home/arkag/Downloads/time_series_regular.json
+
+wcst_import.sh /home/arkag/Downloads/time_series_regular.json
+
+sudo update-alternatives --set python /usr/bin/python3.8 
+
+
+=================================== Test Ground =======================================
+rasql -q "create collection dc_01 datacube" \
+      --user rasadmin --passwd rasadmin	
+
+create type GLDAS as GeoSpatial mdarray [x(0:1023), y( 0:767 )]
+
+
+rasql -q "create collection dc_01 MyCoverage" \
+      --user rasadmin --passwd rasadmin	
+
+
+rasql -q 'insert into MyCoverage values decode($1)' \
+      -f /home/arkag/Downloads/GLDAS_NOAH025.tif --user rasadmin --passwd rasadmin
+
+rasql -q "select snap_RGB[0:10,0:10] from MyCoverage as snap_RGB" --out hex
+
+
+wcst_import.sh /home/arkag/Downloads/time_series_regular.json
+
+
+
+
+============================== 🐸 Change Python version 🐸==============================
+
+which python == /home/arkag/usr/bin/
+
+arkag@arkag-VirtualBox:~$ sudo su
+
+0. root@arkag-VirtualBox:/usr/bin# which python ==> /usr/bin/python
+
+1. root@arkag-VirtualBox:~# cd /usr/bin/
+2. root@arkag-VirtualBox:/usr/bin# ls -lrth python*
+3. root@arkag-VirtualBox:/usr/bin# python --version ==> Python 2.7
+4. root@arkag-VirtualBox:/usr/bin# unlink python
+5. root@arkag-VirtualBox:/usr/bin# ln -s /usr/bin/python3.6 python
+6. root@arkag-VirtualBox:/usr/bin# python --version == Python 3.8.
+
+============================= Copy using root =========================================
+
+arkag@arkag-VirtualBox:~$ sudo su
+[sudo] password for arkag: 
+root@arkag-VirtualBox:/home/arkag#
+
+root@arkag-VirtualBox:~# cp -v /home/arkag/get-pip.py /usr/bin/
+'/home/arkag/get-pip.py' -> '/usr/bin/get-pip.py'
+
+cp -v /home/arkag/Downloads/rasdaman /etc/default/
+
+python3 -m pip install --upgrade pip ==> Successfully installed pip-21.3.1
+
+============================ netCDF4 issue =============================================
+
+sudo apt-get install python3.8-dev
+
+sudo apt-get install build-essential
+
+sudo apt-get install build-essential autoconf libtool pkg-config python-opengl python-pil python-pyrex python-pyside.qtopengl idle-python2.7 qt4-dev-tools qt4-designer libqtgui4 libqtcore4 libqt4-xml libqt4-test libqt4-script libqt4-network libqt4-dbus python-qt4 python-qt4-gl libgle3 python-dev libssl-dev
+
+sudo easy_install greenlet
+1
+sudo easy_install gevent
+
+
+arkag@arkag-VirtualBox:~$ sudo -u rasdaman gdalinfo /home/arkag/Downloads/soilTEMP/GLDAS_NOAH025_3H.A20110101.0600.021.nc4.SUB.tif
+ERROR 4: /home/arkag/Downloads/soilTEMP/GLDAS_NOAH025_3H.A20110101.0600.021.nc4.SUB.tif: Permission denied
+gdalinfo failed - unable to open '/home/arkag/Downloads/soilTEMP/GLDAS_NOAH025_3H.A20110101.0600.021.nc4.SUB.tif'
