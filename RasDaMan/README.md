@@ -654,12 +654,12 @@ def geoPOLYGON_to_gridPOLYGON(polygon_str):
     data_wkt = add_closing_coordinates(data)
     polygon = wkt.loads(data_wkt)
     coords = np.dstack(polygon.boundary.xy).tolist()[0][:-1]
-    expected_list_of_coordinates_for_received_code = [{"lat": x, "long": y} for x, y in coords]
+    expected_list_of_coordinates_for_received_code = [{"long": x, "lat": y} for x, y in coords]
     lat_arr = []
     long_arr = []
     for i in range(len(expected_list_of_coordinates_for_received_code)):
-        long_arr = np.append(long_arr, expected_list_of_coordinates_for_received_code[i]['lat'])
-        lat_arr = np.append(lat_arr, expected_list_of_coordinates_for_received_code[i]['long'])
+        long_arr = np.append(long_arr, expected_list_of_coordinates_for_received_code[i]['long'])
+        lat_arr = np.append(lat_arr, expected_list_of_coordinates_for_received_code[i]['lat'])
     long_list = long_arr.tolist()
     lat_list = lat_arr.tolist()
     return long_list, lat_list
