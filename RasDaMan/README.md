@@ -493,7 +493,7 @@ One can use [Application for Extracting and Exploring Analysis Ready Samples (AÏ
 gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
 ```
 #### Ingestion into Rasdaman 
-* Ingredient File (AIR_TEMP_RAS_X.json
+* Ingredient File (Sweden_Temperature_1km.json)
 ```
 {
     "config": {
@@ -558,6 +558,10 @@ gdalinfo /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/surface_temp.nc
         }
     }
 }
+```
+* To run the ingrdient file above
+```
+wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/Sweden_Temperature_1km.json
 ```
 ### PL/Python
 These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the quires.
