@@ -10,7 +10,7 @@
 6. [RaSQL Quries](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#queries)
 7. [RasdaPy](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasdapy3)
 8. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
-9. [Usecase](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
+9. [Usecase: Sweden](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
 10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
 
 ## Installation  
