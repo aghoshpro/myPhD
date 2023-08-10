@@ -680,7 +680,7 @@ dependencies:
 - bcrypt 3.1.7
 - apturl 0.5.2
 
-prefix: Z:\workspace_rasdaman
+prefix: Z:\workspace_rasdaman\
 ```
 ## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
 ### Vector Data
