@@ -502,14 +502,191 @@ arkaghosh@lat7410g:~$ sudo service postgresql status
 
 Jul 25 14:36:14 lat7410g systemd[1]: Starting PostgreSQL RDBMS...
 Jul 25 14:36:14 lat7410g systemd[1]: Finished PostgreSQL RDBMS.
+```
+* **Python Environment Packages**
+```
+name: env_rasdaman
+channels:
+- defaults
+dependencies:
+- xarray 2023.1.0
+- wktplot 2.3.2
+- Werkzeug 2.3.6
+- websocket-client 1.4.2
+- webencodings 0.5.1
+- wcwidth 0.2.5
+- typing-extensions 4.0.1
+- traitlets 5.5.0
+- tornado 6.1
+- tinycss2 1.2.1
+- terminado 0.17.0
+- stack-data 0.6.1
+- sqlparse 0.4.3
+- soupsieve 2.3.2.post1
+- sniffio 1.3.0
+- shapely 2.0.1
+- Send2Trash 1.8.0
+- seaborn 0.12.2
+- rasdapy3 1.1.0
+- rasdapy 1.1.0
+- pyzmq 24.0.1
+- PyYAML 6.0
+- pytz 2022.7
+- python-dateutil 2.8.2
+- pyshp 2.3.1
+- pyproj 3.4.1
+- pyparsing 3.0.6
+- Pygments 2.13.0
+- pycparser 2.21
+- pure-eval 0.2.2
+- ptyprocess 0.7.0
+- psutil 5.9.4
+- prompt-toolkit 3.0.33
+- prometheus-client 0.15.0
+- platformdirs 2.5.4
+- pip 23.1.2
+- Pillow 8.4.0
+- pickleshare 0.7.5
+- parso 0.8.3
+- pandocfilters 1.5.0
+- pandas 1.5.2
+- packaging 21.3
+- numpy 1.21.5
+- notebook 6.5.2
+- notebook-shim 0.2.2
+- nest-asyncio 1.5.6
+- nbformat 5.7.0
+- nbconvert 7.2.5
+- nbclient 0.7.0
+- nbclassic 0.4.8
+- munch 2.5.0
+- mistune 2.0.4
+- matplotlib 3.6.3
+- matplotlib-inline 0.1.6
+- MarkupSafe 2.1.3
+- kiwisolver 1.4.4
+- jupyterlab-pygments 0.2.2
+- jupyter-server 1.23.3
+- jupyter-core 5.0.0
+- jupyter-client 7.4.7
+- Jinja2 3.0.3
+- jedi 0.18.2
+- ipython 8.6.0
+- ipython-genutils 0.2.0
+- ipykernel 6.17.1
+- importlib-metadata 5.0.0
+- grpcio 1.51.1
+- geopandas 0.12.2
+- fonttools 4.38.0
+- Fiona 1.9.0
+- Figures 0.4.4
+- fastjsonschema 2.16.2
+- executing 1.2.0
+- defusedxml 0.7.1
+- decorator 5.1.1
+- debugpy 1.6.3
+- cycler 0.11.0
+- contourpy 1.0.7
+- cligj 0.7.2
+- click 8.1.3
+- click-plugins 1.1.1
+- cffi 1.15.1
+- bleach 5.0.1
+- backcall 0.2.0
+- asttokens 2.1.0
+- argon2-cffi 21.3.0
+- argon2-cffi-bindings 21.2.0
+- anyio 3.6.2
+- affine 2.4.0
+- zipp 3.10.0
+- virtualenv 20.16.7
+- pyrsistent 0.19.2
+- pkgutil-resolve-name 1.3.10
+- OWSLib 0.29.2
+- netCDF4 1.6.2
+- lxml 4.9.1
+- jsonschema 4.17.0
+- importlib-resources 5.10.0
+- filelock 3.8.0
+- distlib 0.3.6
+- cftime 1.6.2
+- attrs 22.1.0
+- xkit 0.0.0
+- wheel 0.34.2
+- wadllib 1.3.3
+- usb-creator 0.3.7
+- urllib3 1.25.8
+- unattended-upgrades 0.1
+- ufw 0.36
+- ubuntu-drivers-common 0.0.0
+- ubuntu-advantage-tools 8001
+- systemd-python 234
+- six 1.14.0
+- sip 4.19.21
+- simplejson 3.16.0
+- setuptools 45.2.0
+- SecretStorage 2.3.1
+- retrying 1.3.3
+- requests 2.22.0
+- requests-unixsocket 0.2.0
+- reportlab 3.5.34
+- pyxdg 0.26
+- python-debian 0.1.36+ubuntu1.1
+- python-apt 2.0.1+ubuntu0.20.4.1
+- pyRFC3339 1.1
+- PyNaCl 1.3.0
+- pymacaroons 0.13.0
+- PyJWT 1.7.1
+- PyGObject 3.36.0
+- pycups 1.9.73
+- pycairo 1.16.2
+- psycopg2 2.8.6
+- protobuf 3.6.1
+- pexpect 4.6.0
+- paramiko 2.6.0
+- olefile 0.46
+- oauthlib 3.1.0
+- netifaces 0.10.4
+- more-itertools 4.2.0
+- monotonic 1.5
+- Mako 1.1.0
+- macaroonbakery 1.3.1
+- louis 3.12.0
+- lockfile 0.12.2
+- lazr.uri 1.0.3
+- lazr.restfulclient 0.14.2
+- launchpadlib 1.10.13
+- language-selector 0.1
+- keyring 18.0.1
+- idna 2.8
+- httplib2 0.14.0
+- html5lib 1.0.1
+- GDAL 3.0.4
+- future 0.18.2
+- fasteners 0.14.1
+- entrypoints 0.3
+- duplicity 0.8.12.0
+- distro 1.4.0
+- distro-info 0.23+ubuntu1.1
+- defer 1.0.6
+- dbus-python 1.2.16
+- cupshelpers 1.0
+- command-not-found 0.3
+- colorama 0.4.3
+- chardet 3.0.4
+- certifi 2019.11.28
+- Brlapi 0.7.0
+- blinker 1.4
+- bcrypt 3.1.7
+- apturl 0.5.2
 
-
+prefix: Z:\workspace_rasdaman
 ```
 ## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
 ### Vector Data
 1. [GADM data (version 4.1)](https://gadm.org/download_country.html)
 #### Ingestion into PostgreSQL
-```
+``` 
 $ shp2pgsql -s 4326 /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/SWE_adm/SWE_adm2 municipalswe | psql -h localhost -p 5432 -U postgres -d Sweden 
 ```
 ### Raster Data
