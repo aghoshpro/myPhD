@@ -11,7 +11,7 @@
    * [RaSQL Query using rasdapy3](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasql-query-using-rasdapy3)
 7. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 8. [Usecase: Sweden](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
-9. [Usecase: Bavaria](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
+9. [Usecase: Bavaria](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-bavaria)
 10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
 
 
