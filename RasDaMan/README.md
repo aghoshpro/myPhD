@@ -11,7 +11,8 @@
    * [RaSQL Query using rasdapy3](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#rasql-query-using-rasdapy3)
 7. [WCPS Query](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#wcps-query)
 8. [Usecase: Sweden](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
-9. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
+9. [Usecase: Bavaria](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#usecase-sweden)
+10. [Ontop Integration](https://github.com/aghoshpro/myPhD/tree/main/RasDaMan#ontop-integration)
 
 
 ## Installation  
@@ -895,6 +896,246 @@ WHERE   m.name_2 IN ('Åsele',
                      'Malå',
                      'Sorsele')
 ```
+# Usecase: Bavaria 
+## Pre-requisite
+* **Check rasdaman status**
+```
+arkaghosh@lat7410g:~$ service rasdaman status
+
+● rasdaman.service - Rasdaman Array Database
+     Loaded: loaded (/etc/systemd/system/rasdaman.service; enabled; vendor preset: enabled)
+     Active: active (running) since Tue 2023-07-25 14:36:35 IST; 21min ago
+       Docs: https://rasdaman.org
+    Process: 653 ExecStart=/etc/init.d/rasdaman start (code=exited, status=0/SUCCESS)
+   Main PID: 749 (rasmgr)
+      Tasks: 137 (limit: 18691)
+     Memory: 1.2G
+
+```
+* **Check postgresql status**
+```
+arkaghosh@lat7410g:~$ sudo service postgresql status
+
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Tue 2023-07-25 14:36:14 IST; 23min ago
+    Process: 1432 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 1432 (code=exited, status=0/SUCCESS)
+
+Jul 25 14:36:14 lat7410g systemd[1]: Starting PostgreSQL RDBMS...
+Jul 25 14:36:14 lat7410g systemd[1]: Finished PostgreSQL RDBMS.
+```
+* **Python Environment Packages**
+```
+rasdapy3
+protobuf==3.20.*
+affine
+shapely
+```
+## Integration of Vector Data (PostgreSQL) & Raster Data (RasDaMan)
+### Vector Data
+1. [GADM data (version 4.1)](https://gadm.org/download_country.html)
+#### Ingestion into PostgreSQL
+``` 
+shp2pgsql -s 4326 /home/arkaghosh/Downloads/Baveria/Vector/Baveria_1 baveria_districts | psql -h localhost -p 5432 -U postgres -d Baveria 
+```
+### Raster Data
+1. [Surface Temperature](http://dx.doi.org/10.5067/MODIS/MOD11A1.061)
+
+One can use [Application for Extracting and Exploring Analysis Ready Samples (AρρEEARS)](https://appeears.earthdatacloud.nasa.gov/) to subset the temperature data according to the boundaries of Bavaria and fetch the raster data as netcdf or geotiff.
+
+#### Metadata using ```gdalinfo```
+```
+gdalinfo /home/arkaghosh/Downloads/Baveria/Raster/Baveria_Temp_MOD11A1.061_1km_aid0001.nc
+```
+#### Ingestion into Rasdaman 
+* Ingredient File (Bavaria_Temp.json)
+```
+{
+    "config": {
+        "service_url": "http://localhost:8080/rasdaman/ows",
+        "tmp_directory": "/tmp/",
+        "mock": false,
+        "automated": true,
+        "track_files": false
+    },
+    "input": {
+        "coverage_id":"Baveria_Temperature_MODIS_1km",
+        "paths": [
+            "/home/arkaghosh/Downloads/Baveria/Raster/Baveria_Temp_MOD11A1.061_1km_aid0001.nc"
+        ]
+    },
+    "recipe": {
+        "name": "general_coverage",
+        "options": {
+            "coverage": {
+                "crs": "OGC/0/AnsiDate@EPSG/0/4326",
+                "metadata": {
+                    "type": "xml",
+                    "global": "auto"
+                },
+                "slicer": {
+                    "type": "netcdf",
+                    "pixelIsPoint": true,
+                    "bands": [{
+                        "name": "LST_Night_1km",
+                        "variable": "LST_Night_1km",
+                        "description": "Daily Temp over Baveria from 01 Jan 2023 to October 31, 2023",
+                        "identifier": "LST_Night_1km",
+                        "nilvalue":"0"
+                    }],
+                    "axes": {
+                        "ansi": {
+                            "statements": "from datetime import datetime, timedelta",
+                            "min": "(datetime(2000,1,1,0,0,0) + timedelta(days=${netcdf:variable:time:min})).strftime(\"%Y-%m-%dT%H:%M\")",
+                            "max": "(datetime(2000,1,1,0,0,0) + timedelta(days=${netcdf:variable:time:max})).strftime(\"%Y-%m-%dT%H:%M\")",
+                            "directPositions": "[(datetime(2000,1,1,0,0,0) + timedelta(days=x)).strftime(\"%Y-%m-%dT%H:%M\") for x in ${netcdf:variable:time}]",
+                            "gridOrder": 0,
+                            "type": "ansidate",
+                            "resolution": 1,
+                            "irregular": true
+                        },
+                        "Long": {
+                            "min": "${netcdf:variable:lon:min}",
+                            "max": "${netcdf:variable:lon:max}",
+                            "gridOrder": 2,
+                            "resolution": "${netcdf:variable:lon:resolution}"
+                        },
+                        "Lat": {
+                            "min": "${netcdf:variable:lat:min}",
+                            "max": "${netcdf:variable:lat:max}",
+                            "gridOrder": 1,
+                            "resolution": "-${netcdf:variable:lat:resolution}"
+                        }
+                    }
+                }
+            },
+            "tiling": "ALIGNED [0:0, 0:583, 0:395]" 
+        }
+    }
+}
+```
+* To run the ingrdient file above
+```
+wcst_import.sh /home/arkaghosh/Downloads/Baveria/Baveria_Temp.json
+```
+### PL/Python Stored procedures
+These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the queries.
+1.  **get_array(IN query text, OUT data_array double precision[])**
+```
+from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2array(query):
+    result = query_executor.execute_read(query) 
+    numpy_array = result.to_array()
+    return numpy_array.tolist()   # to convert the output into arrays
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   data_array= query2array(query)
+   return data_array
+finally:
+   db_connector.close()
+```
+2.  **geo_index2grid_index(IN geoPOLY text, OUT gridPOLY text)**
+```
+import numpy as np
+import re
+import gdal
+from affine import Affine
+from shapely.geometry import LineString, MultiPolygon, Polygon, box, MultiPoint, Point
+from shapely import wkt
+
+upper_left_lon_x = 8.979166665862266 
+upper_left_lat_y = 50.979166665862266 
+pixel_size = 0.008333333332587 
+
+def grid2WKT_polygon(long_array, lat_array):
+    polygon = Polygon(zip(long_array, lat_array))
+    return polygon.wkt
+
+def geo2grid(lons, lats, upper_left_lon_x, upper_left_lat_y, pixel_size, xskew = 0.0, yskew = 0.0):
+    aff_gdal = Affine.from_gdal(upper_left_lon_x, pixel_size, xskew, upper_left_lat_y, 0.0, -pixel_size)
+    lons = np.array(lons)
+    lats = np.array(lats)
+    xs, ys = ~aff_gdal*(lons, lats)
+    xs = np.int64(xs)
+    ys = np.int64(ys)
+    return xs, ys 
+
+def add_closing_coordinates(d):
+    i = re.search(r"\d", d).start()
+    j = re.search(r'(\d)[^\d]*$', d).start() + 1
+    c = d.index(',')    
+    return d[:j] + ", " + d[i:c] + d[j:]
+
+def geoPOLYGON_to_gridPOLYGON(polygon_str):
+    data = polygon_str
+    data_wkt = add_closing_coordinates(data)
+    polygon = wkt.loads(data_wkt)
+    coords = np.dstack(polygon.boundary.xy).tolist()[0][:-1]
+    expected_list_of_coordinates_for_received_code = [{"lat": x, "long": y} for x, y in coords]
+    lat_arr = []
+    long_arr = []
+    for i in range(len(expected_list_of_coordinates_for_received_code)):
+        long_arr = np.append(long_arr, expected_list_of_coordinates_for_received_code[i]['lat'])
+        lat_arr = np.append(lat_arr, expected_list_of_coordinates_for_received_code[i]['long'])
+    long_list = long_arr.tolist()
+    lat_list = lat_arr.tolist()
+    return long_list, lat_list
+
+
+longs,lats = geoPOLYGON_to_gridPOLYGON(geoPOLY)
+x_grid, y_grid = geo2grid(longs, lats, upper_left_lon_x, upper_left_lat_y, pixel_size)
+gridPOLY = grid2WKT_polygon(y_grid, x_grid)
+
+return gridPOLY
+```
+3.  **aggregated_result_numeric (IN query text, OUT numeric)**
+```
+from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2result(query):
+   output_val = query_executor.execute_read(query)  
+   return output_val
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   return float("{}".format(query2result(query)))
+finally:
+   db_connector.close()
+```
+
+### Combined Quries [SQL + Python(RaSQL)]
+* **Q1: Array retrival of temprature raster data for 2 days with 3 x 3 each**
+```
+SELECT rasdaman_op.get_array('select m[49:50, 0:2 , 0:2] from Baveria_Temperature_MODIS_1km as m')
+```
+```
+{{{0,0,0},{0,0,0},{0,0,0}},{{0,0,0},{0,0,0},{0,0,0}}}
+```
+* **Q2: What are the average, maximum and minimum temperature the following municipalitieavaria ?**
+```
+SELECT  m.name_2 AS regions,
+        rasdaman_op.aggregated_result(CONCAT('select avg_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C,
+rasdaman_op.aggregated_result(CONCAT('select avg_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS max_temp_°C,
+rasdaman_op.aggregated_result(CONCAT('select avg_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp_°C       
+FROM    baveria_districts as m
+WHERE   m.name_2 in ('Deggendorf',
+	           'Mühldorf am Inn',
+	           'Passau',
+	           'Regen',
+	           'Kelheim',
+	           'Erding');
+```
 # Ontop Integration
 #### ```jdbc``` driver is needed to connect Ontop with Rasdaman but as per rasdaman comunity rasdaman doesn't have a jdbc driver and we also double checked it.
 
@@ -925,6 +1166,78 @@ $ source /etc/environment
 $ echo $JAVA_HOME
 
 /lib/jvm/java-8-openjdk-amd6
+```
+
+```
+*********************************************************************************************************************************
+### Ontology
+
+jdbc:postgresql://localhost:5432/Baveria
+
+:{gid} geo:asWKT {geom}^^geo:wktLiteral .
+
+
+
+:{region} :tempC {tempC}^^xsd:double .
+
+SELECT m.gid as region,
+	   rasdaman_op.aggregated_result('select avg_cells(c[300, 0:* , 0:*]*0.02) - 273.15 from Baveria_Temperature_MODIS_1km AS c') AS tempC
+FROM   baveria_districts as m
+WHERE  m.name_2 = 'München (Kreisfreie Stadt)';
+
+
+
+### Protege
+---------------------------------------------------------------------------------------------------------------------------------------
+
+Mapping ID: rasterData_tempC
+
+:{region} :tempC {tempC}^^xsd:double .
+
+SELECT m.gid as region,
+	   rasdaman_op.aggregated_result('select avg_cells(c[300, 0:* , 0:*]*0.02)- 273.15 from Baveria_Temperature_MODIS_1km AS c') AS tempC
+FROM baveria_districts as m
+
+
+### GeoSPQRQL Query
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+select * {
+#?x a :District .
+?x rdfs:label ?region .
+?x :tempC ?avgTEMP .
+}
+
+### Result
+
+<http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/1>	"Aichach-Friedberg"^^xsd:string	"4.4499467896439455"^^xsd:double	
+<http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/2>	"Altötting"^^xsd:string	"4.4499467896439455"^^xsd:double	
+<http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/3>	"Amberg"^^xsd:string	"4.4499467896439455"^^xsd:double	
+<http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/4>	"Amberg-Sulzbach"^^xsd:string	"4.4499467896439455"^^xsd:double
+
+#### Mapping ID: raster_aggregation
+
+:{region} :raster_aggregation {tempC}^^xsd:double . 
+
+#### Source SQL Query
+
+SELECT m.name_2 as region,
+	   rasdaman_op.aggregated_result('select max_cells(c[300, 0:* , 0:*]*0.02)-273.15 from Baveria_Temperature_MODIS_1km AS c') AS tempC
+FROM    baveria_districts as m
+
+#### GeoSPQRQL Query
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+select * {
+#?x a :District .
+#?x rdfs:label ?region .
+?x :raster_aggregation ?avgTEMP .
+}
 ```
 
 
