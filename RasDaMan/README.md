@@ -773,7 +773,7 @@ wcst_import.sh /home/arkaghosh/Downloads/RASDAMAN_FINALE/Worked/Sweden/Sweden_Te
 ```
 ### PL/Python Stored procedures
 These are stored procedures inside PostgreSQL that connects rasdaman, send rasql queries anf fetched the data arrays or single numeric valeus back to postgresql based on the queries.
-1.  **get_array(IN query text, OUT data_array text[])**
+1.  **get_array(IN query text, OUT data_array double precision[])**
 ```
 from rasdapy.db_connector import DBConnector
 from rasdapy.query_executor import QueryExecutor
@@ -781,7 +781,7 @@ from rasdapy.query_executor import QueryExecutor
 def query2array(query):
     result = query_executor.execute_read(query) 
     numpy_array = result.to_array()
-    return numpy_array  
+    return numpy_array.tolist()   # to convert the output into arrays
 	
 db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
 query_executor = QueryExecutor(db_connector)
