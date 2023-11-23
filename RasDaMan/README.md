@@ -1196,6 +1196,7 @@ WHERE   m.name_2 in ('Deggendorf',
 
 * **Solution**: [ASQLDB](https://blog.52north.org/2014/06/26/sensor-data-access-for-rasdaman-mid-term-blog-post/)
 
+## 0. Experiments
 ### ASQLDB ([source](https://github.com/misev/asqldb))
 
 ![asqldb](https://blog.52north.org/wp-content/uploads/sites/2/2014/06/AsqlJDBCRasadaman.png)
@@ -1295,5 +1296,11 @@ select * {
 }
 ```
 
+## 1.Data Source Preparation
+### Lookup Table Creation
+
+### arrayType in RDF triples
+
+### Automated pipeline
 
 
