@@ -1101,16 +1101,16 @@ import numpy as np
 import re
 import gdal
 from affine import Affine
-from shapely.geometry import LineString, MultiPolygon, Polygon, box, MultiPoint, Point
+from shapely.geometry import Polygon
 from shapely import wkt
 
 upper_left_lon_x = 8.979166665862266 
 upper_left_lat_y = 50.979166665862266 
 pixel_size = 0.008333333332587 
 
-def grid2WKT_polygon(x_grid, y_grid):
-    coordinates = list(zip(x_grid, y_grid))
-    polygon = "POLYGON((" + ", ".join(f"{y} {x}" for x, y in coordinates) + "))"
+def grid2WKT_polygon(y_grid, x_grid):
+    coordinates = list(zip(y_grid, x_grid))
+    polygon = "POLYGON((" + ", ".join(f"{x} {y}" for x, y in coordinates) + "))"
     return polygon
 
 def geo2grid(lons, lats, upper_left_lon_x, upper_left_lat_y, pixel_size, xskew = 0.0, yskew = 0.0):
