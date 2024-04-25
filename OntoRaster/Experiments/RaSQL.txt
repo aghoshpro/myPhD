@@ -1,0 +1,82 @@
+%%%%%%%%%%%%%%%%%%%%
+%%% Meta Queries %%%
+%%%%%%%%%%%%%%%%%%%%
+
+q0 = "select sdom(datacube) from Baveria_Temperature_MODIS_1km as datacube" # [0:303,0:395,0:583]
+
+q_ansi = "select sdom(datacube)[0] from Baveria_Temperature_MODIS_1km as datacube"    # 0:303
+
+q_ansi_lower = "select sdom(datacube)[0].lo from Baveria_Temperature_MODIS_1km as datacube"  # 0
+
+q_ansi_upper = "select sdom(datacube)[0].hi from Baveria_Temperature_MODIS_1km as datacube"  # 303
+
+################################################################################################################
+
+q_lat = "select sdom(datacube)[1] from Baveria_Temperature_MODIS_1km as datacube"   # grid order 1 = Lat
+
+q_lat_lower = "select sdom(datacube)[1].lo from Baveria_Temperature_MODIS_1km as datacube" 
+
+q_lat_upper = "select sdom(datacube)[1].hi from Baveria_Temperature_MODIS_1km as datacube" 
+
+################################################################################################################
+
+q_long = "select sdom(datacube)[2] from Baveria_Temperature_MODIS_1km as datacube"  # grid order 2 = Long
+
+q_long_lower = "select sdom(datacube)[2].lo from Baveria_Temperature_MODIS_1km as datacube" 
+
+q_long_upper = "select sdom(datacube)[2].hi from Baveria_Temperature_MODIS_1km as datacube" 
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% Simple Queries %%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+q1 = "select datacube[247, 0:* , 0:*] from Baveria_Temperature_MODIS_1km as datacube"
+
+q2 = "select datacube[247, 0:* , 0:*]*0.02 from Baveria_Temperature_MODIS_1km as datacube" 
+
+q3 = "select (datacube[247, 0:* , 0:*]*0.02)-273.15 from Baveria_Temperature_MODIS_1km as datacube" 
+
+q4 = "select (datacube[100, 0:* , 0:*]*0.02) > 200 from Baveria_Temperature_MODIS_1km as datacube"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Aggregated Queries %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+q_avg = "select avg_cells((datacube[100:200, 0:* , 0:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km AS datacube" # for 101 rasters for 101 days
+
+q_max = "select max_cells((datacube[100:200, 0:* , 0:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km AS datacube"
+
+q_min = "select min_cells((datacube[100:200, 0:* , 0:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km AS datacube"
+
+
+q1_avg = "select avg_cells((datacube*0.02)-273.15) from Baveria_Temperature_MODIS_1km AS datacube" # Average of whole raster datacube            
+ 
+q2_avg = "select avg_cells((datacube[0:*, 0:* , 0:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km AS datacube" # same as above
+
+q3_avg = "select avg_cells((datacube[199:201, 0:* , 0:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km AS datacube"
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Condenser Queries %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+qCONDENSE_00 = "select condense + over x in [200:201] using datacube[*:*, *:*, x[0]] from Baveria_Temperature_MODIS_1km as datacube"
+
+qCONDENSE_01 = "select condense + over x in [200:201] using 0.02 * a[x[0],*:*, *:*] - 273.15 from Baveria_Temperature_MODIS_1km as a"
+
+qCONDENSE_02 = "select condense + over x in [200:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km as datacube"
+
+qCONDENSE_03 = "select condense + over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km as datacube" # SUM (199 + 200 + 201)
+
+qCONDENSE_04 = "select condense min over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km as datacube" # MIN (199, 200, 201)
+
+qCONDENSE_05 = "select condense max over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15) from Baveria_Temperature_MODIS_1km as datacube" # MAX (199, 200, 201)
+
+qCONDENSE_06 = "select condense + over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15)/3 from Baveria_Temperature_MODIS_1km as datacube" # AVG (199, 200, 201) but manually
+
+qCONDENSE_07 = "select condense + over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15)/x[0] from Baveria_Temperature_MODIS_1km as datacube"
+

@@ -1,0 +1,298 @@
+-- Regions: Deggendorf (Baveria_Temperature_MODIS_1km). 
+-- Raster Baveria_Temperature_MODIS_1km --
+-- xmin = 8.979166665862266  
+-- ymax = 50.56666666213664 
+-- pixel_size = 0.008333333332587
+
+
+-- Regions: Deggendorf (Baveria_Temperature_MODIS_1km). 
+-- Raster Baveria_Temperature_MODIS_1km --
+-- xmin = 10.958333332351629  
+-- ymax = 69.06666666047931 
+-- pixel_size = 0.008333333332586788
+
+
+-- Regions: Deggendorf (Baveria_Temperature_MODIS_1km). 
+-- Raster Baveria_Temperature_MODIS_1km --
+-- xmin = 8.979166665862266  
+-- ymax = 50.56666666213664 
+-- pixel_size = 0.008333333332587
+
+
+
+-- SQL
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2array(CONCAT('select clip(c[100, 0:* , 0:*],',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),') from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+
+-- Custom Polygon Clipping
+
+Source: https://clydedacruz.github.io/openstreetmap-wkt-playground/#
+
+
+POLYGON_1 = 'POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))'
+
+
+POLYGON_2 = 'POLYGON ((10.557861328125 50.73645513701064, 10.557861328125 49.36806633482158, 9.459228515625002 50.583236614805884, 9.986572265625 49.32512199104002, 8.052978515625 49.468124067331644, 9.810791015625002 49.08106236432073, 8.624267578125 48.47292127248784, 9.854736328125 48.87916714896022, 9.305419921875 47.62097541515848, 10.052490234375 48.85025819972151, 10.843505859375002 47.79839667295525, 10.316162109375 48.77791275550183, 11.370849609375 48.71996122264625, 10.579833984375002 48.951366470947704, 13.128662109375002 48.951366470947704, 10.755615234375 49.16733860629108, 12.073974609375 49.73868163928003, 10.777587890625 49.425267160837166, 10.557861328125 50.73645513701064))'
+
+
+SELECT  rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*]*0.02,',rasdaman_op.geo2grid_coords('POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))'),') from Baveria_Temperature_MODIS_1km AS c')) AS filtered_array 	
+
+
+SELECT  rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*],',rasdaman_op.geo2grid_coords('POLYGON ((10.557861328125 50.73645513701064, 10.557861328125 49.36806633482158, 9.459228515625002 50.583236614805884, 9.986572265625 49.32512199104002, 8.052978515625 49.468124067331644, 9.810791015625002 49.08106236432073, 8.624267578125 48.47292127248784, 9.854736328125 48.87916714896022, 9.305419921875 47.62097541515848, 10.052490234375 48.85025819972151, 10.843505859375002 47.79839667295525, 10.316162109375 48.77791275550183, 11.370849609375 48.71996122264625, 10.579833984375002 48.951366470947704, 13.128662109375002 48.951366470947704, 10.755615234375 49.16733860629108, 12.073974609375 49.73868163928003, 10.777587890625 49.425267160837166, 10.557861328125 50.73645513701064))
+'),') from Baveria_Temperature_MODIS_1km AS c')) AS filtered_array     
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*],',rasdaman_op.geo2grid_coords('POLYGON ((10.557861328125 50.73645513701064, 10.557861328125 49.36806633482158, 9.459228515625002 50.583236614805884, 9.986572265625 49.32512199104002, 8.052978515625 49.468124067331644, 9.810791015625002 49.08106236432073, 8.624267578125 48.47292127248784, 9.854736328125 48.87916714896022, 9.305419921875 47.62097541515848, 10.052490234375 48.85025819972151, 10.843505859375002 47.79839667295525, 10.316162109375 48.77791275550183, 11.370849609375 48.71996122264625, 10.579833984375002 48.951366470947704, 13.128662109375002 48.951366470947704, 10.755615234375 49.16733860629108, 12.073974609375 49.73868163928003, 10.777587890625 49.425267160837166, 10.557861328125 50.73645513701064))
+'),') from Baveria_Temperature_MODIS_1km AS c')) AS filtered_array     
+FROM    region_bavaria as m
+
+
+
+-- Temporal Clipping
+
+SELECT rasdaman_op.query2array('select m[49:50, 0:2 , 0:2] from Baveria_Temperature_MODIS_1km as m') AS filtered_array
+
+SELECT m.gid as gid,
+rasdaman_op.query2array('select m[49:50, 0:2 , 0:2] from Baveria_Temperature_MODIS_1km as m') AS filtered_array
+FROM region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+-- Spatial Clipping
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+SELECT  rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+SELECT  m.name_2 AS regions,
+rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C,
+rasdaman_op.query2numeric(CONCAT('select max_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS max_temp_°C,
+rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02) - 273.15,',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp_°C       
+FROM    region_bavaria as m
+WHERE   m.name_2 in ('Deggendorf',
+	           'Mühldorf am Inn',
+	           'Passau',
+	           'Regen',
+	           'Kelheim',
+	           'Erding');
+
+
+
+
+-- LookUp Table Creation In petacopedb
+
+SELECT * FROM public.coverage
+
+SELECT * FROM public.envelope
+
+SELECT * FROM public.envelope_by_axis
+
+SELECT * FROM public.wgs84_bounding_box
+	
+
+SELECT coverage.id, geo_axis.general_grid_id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.axis_type, axis_extent.uom_label AS unit, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound, geo_axis.resolution
+FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis
+WHERE coverage.envelope_id = envelope.envelope_id 
+AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
+AND axis_extent.upper_bound = geo_axis.upper_bound
+
+	
+
+SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
+FROM public.coverage
+JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
+JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
+JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id
+
+	
+CREATE OR REPLACE VIEW lookup_temp AS
+	SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
+	FROM public.coverage
+	JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
+	JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
+	JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id
+		
+
+
+	
+
+CREATE OR REPLACE VIEW lookup_peta AS	
+	SELECT coverage.id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound,lookup_temp.max_lat, lookup_temp.min_lat, lookup_temp.max_long, lookup_temp.min_long, geo_axis.resolution
+	FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis, lookup_temp
+	WHERE coverage.envelope_id = envelope.envelope_id 
+	AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
+	AND axis_extent.upper_bound = geo_axis.upper_bound
+	AND coverage.id = lookup_temp.id
+
+
+SELECT * FROM lookup_peta -- Lookup Table
+
+	
+-- In VectorDB using`dblink`
+
+select nspname as schema
+from pg_extension e
+join pg_namespace n on n.oid = e.extnamespace
+where extname = 'dblink'
+
+SELECT pg_namespace.nspname, pg_proc.proname 
+FROM pg_proc, pg_namespace 
+WHERE pg_proc.pronamespace=pg_namespace.oid 
+AND pg_proc.proname LIKE '%dblink%';
+
+
+SELECT *
+    FROM dblink('host=localhost dbname=Baveria user=postgres password=bolbona options=-csearch_path=','select gid, country from public.baveria_districts')
+AS remote_table(gid int, country text);
+
+SELECT dblink_connect('dbname=petascopedb options=-csearch_path=');
+
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=postgres password=bolbona options=-csearch_path=','select coverage_id from public.coverage')
+AS remote_table(coverage_id text);
+
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=','select coverage_id from public.coverage')
+AS remote_table(coverage_id text);
+
+
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+	   'SELECT coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
+		FROM public.coverage
+		JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
+		JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id ')
+AS remote_table(coverage_id text, max_lat float, min_lat float, max_long float, min_long float);
+
+
+-- SQL TRIGGER AND LOOKUP Table
+		JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
+		JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
+		JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id ')
+AS remote_table(coverage_id text, max_lat float, min_lat float, max_long float, min_long float);
+
+
+-- SQL TRIGGER AND LOOKUP Table
+
+
+CREATE OR REPLACE FUNCTION update_lookup_table()
+  RETURNS TRIGGER 
+  LANGUAGE PLPGSQL
+  AS
+$$
+BEGIN
+	CREATE OR REPLACE VIEW LookUp AS
+	SELECT coverage.id, geo_axis.general_grid_id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.axis_type, axis_extent.uom_label AS unit, axis_extent.lower_bound, axis_extent.grid_lower_bound,
+		    axis_extent.upper_bound, axis_extent.grid_upper_bound, geo_axis.resolution
+	FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis
+	WHERE coverage.envelope_id = envelope.envelope_id 
+	AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
+	AND axis_extent.upper_bound = geo_axis.upper_bound;
+ 
+    RETURN LookUp;	
+END;
+$$
+
+CREATE TRIGGER update_lookup
+AFTER UPDATE ON coverage
+EXECUTE PROCEDURE update_lookup_table();
+
+
+-- MaxLon, MinLat inclusoin in the geo2grid python procedure
+
+SELECT min_long as xmin, max_lat as ymax  FROM lookup_02 WHERE coverage_id = 'Baveria_Temperature_MODIS_1km'
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.geo2grid(ST_AsText((ST_Dump(geom)).geom),8.979166665862266,50.56666666213664) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid(ST_AsText((ST_Dump(geom)).geom),8.979166665862266,50.56666666213664),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+
+SELECT  8.979166665862266 AS minlon, 50.56666666213664 AS maxlat     
+
+
+SELECT rasdaman_op.query2array('select rasdb[49, 0:2 , 0:2] from Baveria_Temperature_MODIS_1km as rasdb')
+
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]),',rasdaman_op.geo2grid(ST_AsText((ST_Dump(geom)).geom),8.979166665862266,50.56666666213664),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.958333332351629,69.06666666047931,0.008333333332586788,0.008333333332586788),')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping';
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping';
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2array(CONCAT('select clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid(ST_AsText((ST_Dump(geom)).geom),8.979166665862266,50.56666666213664),') from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)) AS Geom   
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+-- FDW
+
+SELECT dblink_connect('host=localhost user=postgres password=bolbona dbname=VectorDB');
+
+CREATE FOREIGN DATA WRAPPER postgres VALIDATOR postgresql_fdw_validator;
+
+CREATE SERVER petascope_server FOREIGN DATA WRAPPER postgres_fdw OPTIONS (hostaddr '127.0.0.1', dbname 'petascopedb');
+
+CREATE USER MAPPING FOR postgres SERVER petascope_server OPTIONS (schema_name 'public', user 'petauser', password 'bolbona');
+
+GRANT USAGE ON FOREIGN SERVER petascope_server TO postgres;
+
+SELECT dblink_connect('petascopedb');
+
+SELECT * FROM dblink('petascopedb','select envelope_id from envelope');
+
+
+
+
+
+
+
+

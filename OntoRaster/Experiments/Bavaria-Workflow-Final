@@ -1,0 +1,183 @@
+# **D2G2 Project**: Work-flow for Bavaria
+
+[TOC]
+
+# 1. Database
+
+````shell
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# sudo service postgresql status
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Fri 2023-11-10 21:05:20 IST; 1h 47min ago
+    Process: 90497 ExecStart=/bin/true (code=exited, status=0/SUCCESS)
+   Main PID: 90497 (code=exited, status=0/SUCCESS)
+````
+
+```shell
+arkaghosh@lat7410g:~$ service rasdaman status
+● rasdaman.service - Rasdaman Array Database
+     Loaded: loaded (/etc/systemd/system/rasdaman.service; enabled; vendor preset: enabled)
+     Active: active (running) since Fri 2023-11-10 20:29:48 IST; 1 day 7h ago
+       Docs: https://rasdaman.org
+   Main PID: 84985 (rasmgr)
+      Tasks: 140 (limit: 18690)
+     Memory: 908.8M
+```
+
+## Create a blank database 
+
+* Create extensions like **postgis**, **postgis_raster**, **plpython3u**
+
+## Vector Data
+
+```postgresql
+shp2pgsql -s 4326 /home/arkaghosh/Downloads/Baveria/Vector/Baveria_1 baveria_districts | psql -h localhost -p 5432 -U postgres -d Baveria 
+```
+
+## Raster Data
+
+``` shell
+wcst_import.sh /home/arkaghosh/Downloads/Baveria/Baveria_Temp.json
+```
+
+## Relational Queries 
+
+> ### **q1**
+
+```postgresql
+SELECT name_1,name_2, ST_AsText(ST_Transform (geom, 4326)) FROM public.baveria_districts  -- converts pg_geom to WKT MULTIPOLYGONS
+WHERE name_2 in ('München','München (Kreisfreie Stadt)');
+```
+
+> ### **q2** 
+
+```postgresql
+SELECT name_1,name_2, ST_AsText((ST_Dump(geom)).geom) FROM public.baveria_districts   -- Multipolygons to polygons
+WHERE name_2 in ('München','München (Kreisfreie Stadt)') ;
+```
+
+## Combined Queries
+
+> ### **RQ1**
+
+````postgresql + rasql
+SELECT m.name_2 as region,
+	   rasdaman_op.aggregated_result('select avg_cells(c[300, 0:* , 0:*]*0.02) - 273.15 from Baveria_Temperature_MODIS_1km AS c') AS Avarage
+FROM   baveria_districts as m
+WHERE  m.name_2 = 'München (Kreisfreie Stadt)';
+````
+
+> ### **RQ2**:
+>
+> ### Get average temperature for München (Kreisfreie Stadt) ?
+
+````postgresql + rasql
+SELECT  m.name_2 AS region,
+        rasdaman_op.aggregated_result(CONCAT('select avg_cells(clip((c[300, 0:* , 0:*]*0.02) - 273.15,',
+        rasdaman_op.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C  
+FROM    baveria_districts as m
+WHERE   m.name_2 = 'München (Kreisfreie Stadt)';
+````
+
+> ### **RQ3**: 
+>
+> ### Get average temperature for all districts of Bavaria ? *was running but now tech problem arised*
+
+````postgresql + rasql
+SELECT  m.name_2 AS region,
+        rasdaman_op.aggregated_result(CONCAT('select avg_cells(clip((c[300, 0:* , 0:*]*0.02) - 273.15,',
+        rasdaman_op.geo_index2grid_index(ST_AsText((ST_Dump(m.geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C  
+FROM    baveria_districts as m
+````
+
+# 2. Ontop 
+
+## 2.1 Protege
+
+#### 2.1.1 JDBC Connection
+
+<img src="/home/arkaghosh/snap/typora/86/.config/Typora/typora-user-images/image-20231113032552980.png" style="zoom:100%;" /> 
+
+#### 2.1.2 Mapping Manager
+
+````SPARQL
+Mapping ID: rasterData_tempC
+
+:{region} :tempC {tempC}^^xsd:double .
+
+#### Source SQL Query
+SELECT m.gid as region,
+	   rasdaman_op.aggregated_result('select avg_cells(c[300, 0:* , 0:*]*0.02)- 273.15 from Baveria_Temperature_MODIS_1km AS c') AS tempC
+FROM baveria_districts as m
+
+### GeoSPQRQL Query
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+select * {
+#?x a :District .
+?x rdfs:label ?region .
+?x :tempC ?avgTEMP .
+}
+````
+
+````SPARQL
+#### Mapping ID: raster_aggregation
+
+:{region} :raster_aggregation {tempC}^^xsd:double . 
+
+#### Source SQL Query
+
+SELECT m.name_2 as region,
+	   rasdaman_op.aggregated_result('select max_cells(c[300, 0:* , 0:*]*0.02)-273.15 from Baveria_Temperature_MODIS_1km AS c') AS tempC
+FROM    baveria_districts as m
+
+#### GeoSPQRQL Query
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <http://www.semanticweb.org/arkaghosh/ontologies/2023/10/untitled-ontology-2/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+
+select * {
+#?x a :District .
+#?x rdfs:label ?region .
+?x :raster_aggregation ?avgTEMP .
+}
+````
+
+
+
+# 2.2 Docker [(link)](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository)
+
+````shell
+arkaghosh@lat7410g:~$ sudo -i 
+````
+
+````shell
+root@lat7410g:~# cd /home/arkaghosh/Downloads/Baveria/
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# 
+````
+
+````dockerfile
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# docker ps
+
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+````
+
+````dockerfile
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# docker ps -a
+
+CONTAINER ID   IMAGE               COMMAND             CREATED        STATUS                      PORTS     NAMES
+6b769c9639f3   ontop/ontop:5.1.0   "./entrypoint.sh"   29 hours ago   Exited (143) 29 hours ago             baveria_ontop_1
+````
+
+````dockerfile
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# docker image ls 
+
+REPOSITORY    TAG       IMAGE ID       CREATED        SIZE
+ontop/ontop   5.1.0     7500e3d497d5   2 months ago   187MB
+````
+
+````dockerfile
+root@lat7410g:/home/arkaghosh/Downloads/Baveria# docker-compose -f docker-compose-test.yml up
+````

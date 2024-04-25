@@ -1,0 +1,54 @@
+OntoRaster SPARQL Quries
+[PrefixDeclaration]
+:		http://www.semanticweb.org/arkaghosh/OntoRaster/
+geo:		http://www.opengis.net/ont/geosparql#
+owl:		http://www.w3.org/2002/07/owl#
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+xml:		http://www.w3.org/XML/1998/namespace
+xsd:		http://www.w3.org/2001/XMLSchema#
+obda:		https://w3id.org/obda/vocabulary#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+sosa:		http://www.w3.org/ns/sosa/
+rasdb:		http://www.semanticweb.org/RasterDataCube/
+
+=====|01|=====
+
+SELECT * {
+    ?x rasdb:hasConnection ?v .
+}
+
+=====|02|=====
+
+select * {
+    ?r rdfs:label ?region .
+    ?x :averageRASTER ?output .
+}
+
+=====|03|=====
+
+SELECT ?v {
+    ?x rasdb:hasRasterName ?raster_name .
+    FILTER (?raster_name = 'Surface_Temperature_Sweden')
+    BIND (rasdb:rasSmallRasterArrayTemp(49,50, ?raster_name) AS ?v)
+}
+
+
+=====|04|=====
+SELECT ?v {
+    ?x rasdb:hasRasterName ?raster_name .
+    ?r geo:asWKT ?region .
+    FILTER (?region_name = 'Regen') 
+    FILTER (?raster_name = 'Baveria_Temperature_MODIS_1km'\n) 
+    BIND (rasdb:rasClipRaster(100, ?region, ?raster_name) AS ?v) 
+}
+
+=====|05|=====
+
+SELECT ?v {
+    ?r rdfs:label ?region_name .
+    ?r geo:asWKT ?region .\n
+    ?x rasdb:hasRasterName ?raster_name .
+    FILTER (?region_name = 'Deggendorf')
+    FILTER (?raster_name = 'Baveria_Temperature_MODIS_1km')
+    BIND (rasdb:rasClipRaster(100, ?region, ?raster_name) AS ?v)
+};

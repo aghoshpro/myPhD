@@ -1,0 +1,20 @@
+OntoRasterTables
+
+1. VectorDB.bavaria_districts
+
+
+id 	region_name		geom
+1	Munich			POLY1
+2	Nurenberg		POLY2
+3	Ansbach
+4
+..
+
+2. petascopeDB.rastername
+
+raster_id 	raster_name				start_time	end_time
+1			Bavaria_Temp			0			250
+2			Bavaria_Precipitation	0 			300
+..
+
+3. 

@@ -1,0 +1,380 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.3 (Ubuntu 15.3-1.pgdg20.04+1)
+-- Dumped by pg_dump version 15.3 (Ubuntu 15.3-1.pgdg20.04+1)
+
+-- Started on 2023-07-18 20:20:47 IST
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 10 (class 2615 OID 19011)
+-- Name: rasdaman; Type: SCHEMA; Schema: -; Owner: postgres
+--
+
+CREATE SCHEMA rasdaman;
+
+
+ALTER SCHEMA rasdaman OWNER TO postgres;
+
+--
+-- TOC entry 1473 (class 1255 OID 27239)
+-- Name: aggregated_result(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.aggregated_result(query text, OUT double precision) RETURNS double precision
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2result(query):
+   output_val = query_executor.execute_read(query)  
+   return output_val
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   return float("{}".format(query2result(query)))
+finally:
+   db_connector.close()
+   
+   
+
+
+ $$;
+
+
+ALTER FUNCTION rasdaman.aggregated_result(query text, OUT double precision) OWNER TO postgres;
+
+--
+-- TOC entry 1472 (class 1255 OID 27240)
+-- Name: aggregated_result_numeric(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.aggregated_result_numeric(query text, OUT numeric) RETURNS numeric
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2result(query):
+   output_val = query_executor.execute_read(query)  
+   return output_val
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   return float("{}".format(query2result(query)))
+finally:
+   db_connector.close()
+   
+   
+
+
+ $$;
+
+
+ALTER FUNCTION rasdaman.aggregated_result_numeric(query text, OUT numeric) OWNER TO postgres;
+
+--
+-- TOC entry 1464 (class 1255 OID 19025)
+-- Name: connect_rasdaman(); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.connect_rasdaman(OUT db_connector text) RETURNS text
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+
+db_connector.open() # connection open
+
+if bool(db_connector) == True: 
+	return 'RASDAMAN is Connected'
+
+db_connector.close()$$;
+
+
+ALTER FUNCTION rasdaman.connect_rasdaman(OUT db_connector text) OWNER TO postgres;
+
+--
+-- TOC entry 1463 (class 1255 OID 19022)
+-- Name: describe_data(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.describe_data(url text, OUT info text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$import gdal
+
+rds = gdal.Open(url)
+info = gdal.Info(rds, deserialize=True)
+
+return info$$;
+
+
+ALTER FUNCTION rasdaman.describe_data(url text, OUT info text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1474 (class 1255 OID 27242)
+-- Name: geo_index2grid_index(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.geo_index2grid_index("geoPOLY" text, OUT "gridPOLY" text) RETURNS text
+    LANGUAGE plpython3u
+    AS $_$import numpy as np
+import re
+import gdal
+from affine import Affine
+from shapely.geometry import LineString, MultiPolygon, Polygon, box, MultiPoint, Point
+from shapely import wkt
+
+upper_left_lon_x = 10.958333332351629 
+upper_left_lat_y = 69.06666666047931  
+pixel_size = 0.008333333332587 
+
+def grid2WKT_polygon(long_array, lat_array):
+    polygon = Polygon(zip(long_array, lat_array))
+    return polygon.wkt
+
+  
+def geo2grid(lons, lats, upper_left_lon_x, upper_left_lat_y, pixel_size, xskew = 0.0, yskew = 0.0):
+    aff_gdal = Affine.from_gdal(upper_left_lon_x, pixel_size, xskew, upper_left_lat_y, 0.0, -pixel_size)
+    lons = np.array(lons)
+    lats = np.array(lats)
+    xs, ys = ~aff_gdal*(lons, lats)
+    xs = np.int64(xs)
+    ys = np.int64(ys)
+    return xs, ys 
+
+def add_closing_coordinates(d):
+    i = re.search(r"\d", d).start()
+    j = re.search(r'(\d)[^\d]*$', d).start() + 1
+    c = d.index(',')    
+    return d[:j] + ", " + d[i:c] + d[j:]
+
+def geoPOLYGON_to_gridPOLYGON(polygon_str):
+    data = polygon_str
+    data_wkt = add_closing_coordinates(data)
+    polygon = wkt.loads(data_wkt)
+    coords = np.dstack(polygon.boundary.xy).tolist()[0][:-1]
+    expected_list_of_coordinates_for_received_code = [{"lat": x, "long": y} for x, y in coords]
+    lat_arr = []
+    long_arr = []
+    for i in range(len(expected_list_of_coordinates_for_received_code)):
+        long_arr = np.append(long_arr, expected_list_of_coordinates_for_received_code[i]['lat'])
+        lat_arr = np.append(lat_arr, expected_list_of_coordinates_for_received_code[i]['long'])
+    long_list = long_arr.tolist()
+    lat_list = lat_arr.tolist()
+    return long_list, lat_list
+
+
+longs,lats = geoPOLYGON_to_gridPOLYGON(geoPOLY)
+x_grid, y_grid = geo2grid(longs, lats, upper_left_lon_x, upper_left_lat_y, pixel_size)
+gridPOLY = grid2WKT_polygon(y_grid, x_grid)
+
+return gridPOLY$_$;
+
+
+ALTER FUNCTION rasdaman.geo_index2grid_index("geoPOLY" text, OUT "gridPOLY" text) OWNER TO postgres;
+
+--
+-- TOC entry 1466 (class 1255 OID 19053)
+-- Name: get_array01(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.get_array01(query text, OUT data_array text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+def query2array(query):
+    result = query_executor.execute_read(query) 
+    numpy_array = result.to_array()
+    return numpy_array  
+	
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   data_array= query2array(query)
+   return data_array
+finally:
+   db_connector.close()
+
+
+ $$;
+
+
+ALTER FUNCTION rasdaman.get_array01(query text, OUT data_array text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1471 (class 1255 OID 27214)
+-- Name: get_dim(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.get_dim(query text, OUT data_array text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   data_array=query_executor.execute_read(query)
+   return len(data_array)
+finally:
+   db_connector.close()
+
+
+ $$;
+
+
+ALTER FUNCTION rasdaman.get_dim(query text, OUT data_array text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1465 (class 1255 OID 19031)
+-- Name: get_rasdb_collection(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.get_rasdb_collection(query text, OUT sizeo bigint) RETURNS bigint
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open()
+
+try:
+   collection_list = query_executor.execute_read(query)
+   sizeo = 0
+   for x in collection_list:
+       sizeo+=1
+   return sizeo
+
+finally:
+   db_connector.close()
+
+$$;
+
+
+ALTER FUNCTION rasdaman.get_rasdb_collection(query text, OUT sizeo bigint) OWNER TO postgres;
+
+--
+-- TOC entry 1469 (class 1255 OID 19058)
+-- Name: py_wcs(); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.py_wcs(OUT cont_wcs text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$from owslib.wcs import WebCoverageService 
+wcs = WebCoverageService ('http://localhost:8080/rasdaman/ows', version='2.0.1')
+cont_wcs = list(wcs.contents)
+return cont_wcs
+
+$$;
+
+
+ALTER FUNCTION rasdaman.py_wcs(OUT cont_wcs text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1468 (class 1255 OID 19057)
+-- Name: py_wms(); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.py_wms(OUT contents text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$from owslib.wms import WebMapService
+wms = WebMapService('http://localhost:8080/rasdaman/ows', version='1.3.0')
+cont_wms = list(wms.contents)
+return cont_wms$$;
+
+
+ALTER FUNCTION rasdaman.py_wms(OUT contents text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1462 (class 1255 OID 19015)
+-- Name: return_versions(); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.return_versions() RETURNS character varying
+    LANGUAGE plpython3u
+    AS $$
+    import sys
+    return sys.version
+$$;
+
+
+ALTER FUNCTION rasdaman.return_versions() OWNER TO postgres;
+
+--
+-- TOC entry 1470 (class 1255 OID 27208)
+-- Name: wcps_query(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.wcps_query(query text, OUT out1 text[]) RETURNS text[]
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open() 
+try:
+   out1 = query_executor.execute_read(query)
+   return out1
+finally:
+   db_connector.close()
+
+$$;
+
+
+ALTER FUNCTION rasdaman.wcps_query(query text, OUT out1 text[]) OWNER TO postgres;
+
+--
+-- TOC entry 1467 (class 1255 OID 27212)
+-- Name: wcps_query_04(text); Type: FUNCTION; Schema: rasdaman; Owner: postgres
+--
+
+CREATE FUNCTION rasdaman.wcps_query_04(query text, OUT out1 double precision) RETURNS double precision
+    LANGUAGE plpython3u
+    AS $$from rasdapy.db_connector import DBConnector
+from rasdapy.query_executor import QueryExecutor
+db_connector = DBConnector("localhost", 7001, "rasadmin", "rasadmin")
+query_executor = QueryExecutor(db_connector)
+db_connector.open() 
+try:
+   out1 = query_executor.execute_read(query)
+   return out1
+finally:
+   db_connector.close()
+
+$$;
+
+
+ALTER FUNCTION rasdaman.wcps_query_04(query text, OUT out1 double precision) OWNER TO postgres;
+
+-- Completed on 2023-07-18 20:20:48 IST
+
+--
+-- PostgreSQL database dump complete
+--
+

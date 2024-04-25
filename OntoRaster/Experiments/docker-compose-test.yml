@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+
+# Start ontop
+  ontop:
+    image: ontop/ontop:5.1.0
+    environment:
+      ONTOP_ONTOLOGY_FILE: /opt/ontop/input/BavariaTestOntology.owx
+      ONTOP_XML_CATALOG_FILE: /opt/ontop/input/catalog-v001.xml
+      ONTOP_MAPPING_FILE: /opt/ontop/input/BavariaTestOntology.obda
+      ONTOP_PROPERTIES_FILE: /opt/ontop/input/BavariaTestOntology.properties
+      #ONTOP_PORTAL_FILE: /opt/ontop/input/citygml2.0.portal.toml
+      #ONTOP_SPARQL_RULES_FILE: /opt/ontop/input/citygml2.0-rules.toml
+      ONTOP_CORS_ALLOWED_ORIGINS: "*"
+      ONTOP_DEV_MODE: "true"
+      ONTOP_LOG_LEVEL: "true"
+    volumes:
+      - ./vkg:/opt/ontop/input
+      - ./jdbc:/opt/ontop/jdbc
+    ports:
+      - "8082:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
