@@ -12,7 +12,7 @@
 -- pixel_size = 0.008333333332586788
 
 
--- Regions: Deggendorf (Baveria_Temperature_MODIS_1km). 
+-- Regions: Ultimo (South_Tyrol_Temperature_MODIS_1km).  
 -- Raster Baveria_Temperature_MODIS_1km --
 -- xmin = 8.979166665862266  
 -- ymax = 50.56666666213664 
@@ -25,6 +25,71 @@ SELECT  m.name_2 AS region,
         rasdaman_op.query2array(CONCAT('select clip(c[100, 0:* , 0:*],',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),') from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
 FROM    region_bavaria as m
 WHERE   m.name_2 = 'Deggendorf';
+
+
+
+-- Fetch raster data name based on vector region name
+SELECT  m.name_2 AS region,ST_XMax(ST_GeomFromText(geom))
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+-- Xmin and min_long
+SELECT  m.name_2 AS region, ST_XMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+-- Ymax and max_lat
+SELECT  m.name_2 AS region, ST_YMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom))) as max_lat_V
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+-- BBOX
+SELECT  m.name_2 AS region, ST_XMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom))), ST_XMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom))), ST_YMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom))), ST_YMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Deggendorf';
+
+
+
+
+SELECT DISTINCT coverage_id as raster_name
+FROM lookup_main
+WHERE max_lat > (SELECT  ST_YMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+				 FROM    region_sweden as m
+				 WHERE   m.name_2 = 'Linköping') AND min_lat < (SELECT  ST_YMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+															      FROM    region_sweden as m
+																  WHERE   m.name_2 = 'Linköping') AND max_long > (SELECT  ST_XMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+																												    FROM    region_sweden as m
+																													WHERE   m.name_2 = 'Linköping') AND min_long < (SELECT  ST_XMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+																																									  FROM    region_sweden as m
+																																									  WHERE   m.name_2 = 'Linköping')
+
+
+
+	
+-- Custom Table that hold all regions of three different raster
+
+CREATE VIEW Four_Regions AS
+SELECT gid, name_2, country, geom FROM public.region_bavaria WHERE name_2 = 'Deggendorf'
+UNION
+SELECT gid, name_2, country, geom FROM public.region_bavaria WHERE name_2 = 'Regen'
+UNION
+SELECT gid, name_2, name_0, geom FROM public.region_sweden WHERE name_2 = 'Linköping'
+UNION
+SELECT gid, name_3, country, geom FROM public.region_south_tyrol WHERE name_3 = 'Ultimo';
+
+
+SELECT DISTINCT coverage_id as raster_name
+FROM lookup_main
+WHERE max_lat > (SELECT  ST_YMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+				 FROM    four_regions as m
+				 WHERE   m.name_2 = 'Ultimo') AND min_lat < (SELECT  ST_YMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+															      FROM    four_regions as m
+																  WHERE   m.name_2 = 'Ultimo') AND max_long > (SELECT  ST_XMax(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+																												    FROM    four_regions as m
+																													WHERE   m.name_2 = 'Ultimo') AND min_long < (SELECT  ST_XMin(ST_GeomFromText(ST_AsText((ST_Dump(m.geom)).geom)))
+																																									  FROM    four_regions as m
+																																									  WHERE   m.name_2 = 'Ultimo')
 
 
 
