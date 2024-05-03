@@ -1,3 +1,14 @@
+TODO
+
+User Designer Developer
+
+1. max_lot, min_lat, x_res, y_res from plpython (not mentioned in RasSparql and not in mappings)
+2. automate the mappings for geometry based raster searching
+3. DecTables 
+4. Lookup Table needs to be more robust
+5. 
+
+
 -- Regions: Deggendorf .
 -- Raster Baveria_Temperature_MODIS_1km --
 -- xmin = 8.979166665862266  
@@ -21,6 +32,7 @@
 
 -- Regions of Interest (ROI)
 
+
 SELECT * FROM public.region_sweden
 WHERE name_3 LIKE '%Ume%';
 
@@ -40,7 +52,6 @@ SELECT gid, name_2, name_0, geom FROM public.region_sweden WHERE name_2 = 'Stock
 UNION
 SELECT gid, name_3, country, geom FROM public.region_south_tyrol WHERE name_3 = 'Bolzano';
 
-SELECT * FROM lookup_main; -- Lookup Table
 
 
 -- Fetch raster data name based on vector region name
@@ -147,7 +158,6 @@ WHERE   m.name_2 = 'Deggendorf';
 
 -- Spatial Clipping
 
--- SQL
 SELECT  m.name_2 AS region,
         rasdaman_op.query2array(CONCAT('select clip(c[100, 0:* , 0:*],',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),') from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
 FROM    region_bavaria as m
@@ -175,9 +185,59 @@ WHERE   m.name_2 in ('Deggendorf',
 	           'Erding');
 
 
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[100, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'München';
+
+SELECT  m.name_3 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[283, 0:* , 0:*]*0.02),',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(geom)).geom)),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Bolzano';
 
 
--- LookUp Table Creation In petacopedb
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[249, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),8.974999999195973,50.56666666213664,0.00833333333258679,0.008333333332586797),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'München';
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.958333332351629,69.06666666047931,0.008333333332586788,0.008333333332586788),')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Stockholm';
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[20, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.958333332351629,69.06666666047931,0.008333333332586788,0.008333333332586788),')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Umeå' LIMIT 1;
+
+SELECT  m.name_3 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[283, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Ultimo';
+
+
+SELECT  name_1, name_2, name_3, 
+	    rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762)
+FROM    region_south_tyrol as m
+WHERE   m.name_2 = 'Bolzano';
+
+
+
+
+
+
+-- ###########################################
+-- ### LookUp Table Creation In petacopedb ###
+-- ###########################################
+
+-- 1. Selected Tables from petascopedb
+
+SELECT * FROM public.axis_extent
+
+SELECT * FROM public.geo_axis
+
+SELECT * FROM public.index_axis
 
 SELECT * FROM public.coverage
 
@@ -188,22 +248,8 @@ SELECT * FROM public.envelope_by_axis
 SELECT * FROM public.wgs84_bounding_box
 	
 
-SELECT coverage.id, geo_axis.general_grid_id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.axis_type, axis_extent.uom_label AS unit, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound, geo_axis.resolution
-FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis
-WHERE coverage.envelope_id = envelope.envelope_id 
-AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
-AND axis_extent.upper_bound = geo_axis.upper_bound
-
-	
-
-SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
-FROM public.coverage
-JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
-JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
-JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id
-
-	
-CREATE OR REPLACE VIEW lookup_temp AS
+-- 2. lookup_temp (optional)
+CREATE OR REPLACE VIEW lookup_temp_X AS
 	SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
 	FROM public.coverage
 	JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
@@ -211,19 +257,66 @@ CREATE OR REPLACE VIEW lookup_temp AS
 	JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id
 		
 
-
+-- 3. lookup_peta build from selected tables joined lookup_temp.
 	
-
-CREATE OR REPLACE VIEW lookup_peta AS	
-	SELECT coverage.id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound,lookup_temp.max_lat, lookup_temp.min_lat, lookup_temp.max_long, lookup_temp.min_long, geo_axis.resolution
-	FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis, lookup_temp
+CREATE OR REPLACE VIEW lookup_peta_X AS	
+	SELECT coverage.id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound,lookup_temp_X.max_lat, lookup_temp_X.min_lat, lookup_temp_X.max_long, lookup_temp_X.min_long, geo_axis.resolution
+	FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis, lookup_temp_X
 	WHERE coverage.envelope_id = envelope.envelope_id 
 	AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
 	AND axis_extent.upper_bound = geo_axis.upper_bound
-	AND coverage.id = lookup_temp.id
+	AND coverage.id = lookup_temp_X.id
+
+    -- OR
+
+CREATE OR REPLACE VIEW lookup_peta_X AS	
+    SELECT coverage.id, geo_axis.general_grid_id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.axis_type, axis_extent.uom_label AS unit, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound, geo_axis.resolution
+    FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis
+    WHERE coverage.envelope_id = envelope.envelope_id 
+    AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
+    AND axis_extent.upper_bound = geo_axis.upper_bound
+
+SELECT * FROM lookup_peta_X -- Lookup Table in petascopedb
+
+-- 4. Switch to VectorDB and import lookup_peta_X as lookup_main_X using dblink
+
+CREATE OR REPLACE VIEW lookup_main_X AS		
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+	   'SELECT id, coverage_id, axis_label, lower_bound, upper_bound, resolution, grid_lower_bound, grid_upper_bound FROM public.lookup_peta_x')
+AS remote_table(raster_id text, raster_name text, axis_label text, domain_lower_bound text, domain_upper_bound text, resolution float, grid_lower_bound integer, grid_upper_bound integer);
 
 
-SELECT * FROM lookup_peta -- Lookup Table
+-- 5. Build sample_lookup_X
+
+CREATE OR REPLACE VIEW sample_lookup_X AS
+SELECT 
+    raster_id,
+    raster_name,
+    MAX(CASE WHEN axis_label = 'Long' THEN domain_lower_bound END) AS min_lon,
+    MAX(CASE WHEN axis_label = 'Long' THEN domain_upper_bound END) AS max_lon,
+	MAX(CASE WHEN axis_label = 'Long' THEN grid_lower_bound END) AS min_lon_grid,
+    MAX(CASE WHEN axis_label = 'Long' THEN grid_upper_bound END) AS max_lon_grid,
+	MAX(CASE WHEN axis_label = 'Long' THEN resolution END) AS res_lon,
+    MAX(CASE WHEN axis_label = 'Lat' THEN domain_lower_bound END) AS min_lat,
+    MAX(CASE WHEN axis_label = 'Lat' THEN domain_upper_bound END) AS max_lat,
+	MAX(CASE WHEN axis_label = 'Lat' THEN grid_lower_bound END) AS min_lat_grid,
+    MAX(CASE WHEN axis_label = 'Lat' THEN grid_upper_bound END) AS max_lat_grid,
+	MAX(CASE WHEN axis_label = 'Lat' THEN resolution END) AS res_lat,
+	MAX(CASE WHEN axis_label = 'ansi' THEN domain_lower_bound END) AS start_time,
+    MAX(CASE WHEN axis_label = 'ansi' THEN domain_upper_bound END) AS end_time,
+	MAX(CASE WHEN axis_label = 'ansi' THEN grid_lower_bound END) AS start_time_grid,
+    MAX(CASE WHEN axis_label = 'ansi' THEN grid_upper_bound END) AS end_time_grid,
+	MAX(CASE WHEN axis_label = 'ansi' THEN resolution END) AS res_time
+FROM lookup_main_X
+GROUP BY raster_id, raster_name;
+
+
+select * from sample_lookup_X -- Build mappings with this table
+	
+
+
+
 
 	
 -- In VectorDB using`dblink`
@@ -657,6 +750,99 @@ $BODY$;
 
 ALTER FUNCTION rasdaman_op.query2numeric(text)
     OWNER TO postgres;
+
+
+
+
+-- EXPERIMENTING
+
+SELECT  name_2, geom
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg'; --Göteborg Umeå Leksand
+
+SELECT name_1,name_2, length(ST_AsText((ST_Dump(geom)).geom)), ST_AsText((ST_Dump(geom)).geom) FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Göteborg','Umeå') ;
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),8.974999999195973,50.56666666213664,0.00833333333258679,0.008333333332586797)     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg'; --Göteborg Umeå Leksand
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select max_cells(clip((c[145, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.958333332351629,69.06666666047931,0.008333333332586788,0.008333333332586788),')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg' LIMIT 1;
+
+
+
+-- ###################################################################################################################################################################################################################
+
+SELECT  name_2, geom
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Bayreuth'; --Würzburg Rosenheim Bayreuth Cham
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[249, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),8.974999999195973,50.56666666213664,0.00833333333258679,0.008333333332586797),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Bayreuth'; --Würzburg Rosenheim Bayreuth Cham
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),8.974999999195973,50.56666666213664,0.00833333333258679,0.008333333332586797)     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Rosenheim' LIMIT 1; --Würzburg Rosenheim Bayreuth Cham
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[249, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),8.974999999195973,50.56666666213664,0.00833333333258679,0.008333333332586797),')) from Baveria_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Rosenheim' LIMIT 1; --Würzburg Rosenheim Bayreuth Cham
+
+
+SELECT  m.name_2, geom AS region
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Rosenheim' LIMIT 1; --Würzburg Rosenheim Bayreuth Cham
+
+
+-- ###################################################################################################################################################################################################################
+
+SELECT  name_3, geom
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Bolzano'; -- Lagundo Racines Senales Bolzano
+
+SELECT name_1,name_2, name_3, length(ST_AsText((ST_Dump(geom)).geom)), ST_AsText((ST_Dump(geom)).geom) FROM region_south_tyrol   -- Multipolygons to polygons
+WHERE name_3 ='Bolzano';
+
+SELECT  name_3, geom
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Senales'; -- Lagundo Racines Senales
+
+SELECT  name_3, geom
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Lagundo'; -- Lagundo Racines Senales
+
+SELECT  name_1, name_2, name_3, 
+	    rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762)
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Lagundo' LIMIT 1;
+
+
+SELECT  name_1, name_2, name_3 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[283, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS min_temp     
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Senales' LIMIT 1;
+
+
+
+
+
+
+
+
+
+
 
 
 
