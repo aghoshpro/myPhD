@@ -33,8 +33,18 @@ User Designer Developer
 -- Regions of Interest (ROI)
 
 
+shp2pgsql -s 4326 /home/arkaghosh/Downloads/Bolzano/Vector/South_Tyrol_LOD3.shp region_South_Tyrol | psql -h localhost -p 5432 -U postgres -d VectorDB 
+
+shp2pgsql -s 4326 /home/arkaghosh/Downloads/Baveria/Vector/Baveria_1.shp region_bavaria | psql -h localhost -p 5432 -U postgres -d VectorDB
+
+shp2pgsql -s 4326 /home/arkaghosh/Downloads/OntoRaster/Vector/Districts_India.shp region_India | psql -h localhost -p 5432 -U postgres -d VectorDB
+
+
 SELECT * FROM public.region_sweden
-WHERE name_3 LIKE '%Ume%';
+WHERE name_2 LIKE '%Ume%';
+
+SELECT * FROM public.region_sweden
+WHERE name_2 LIKE '%Göteborg%';
 
 SELECT * FROM public.region_south_tyrol
 WHERE name_3 LIKE '%Bolzano%';
@@ -248,7 +258,7 @@ SELECT * FROM public.envelope_by_axis
 SELECT * FROM public.wgs84_bounding_box
 	
 
--- 2. lookup_temp (optional)
+-- 2. lookup_temp (to get extent as double)
 CREATE OR REPLACE VIEW lookup_temp_X AS
 	SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
 	FROM public.coverage
@@ -280,39 +290,40 @@ SELECT * FROM lookup_peta_X -- Lookup Table in petascopedb
 
 -- 4. Switch to VectorDB and import lookup_peta_X as lookup_main_X using dblink
 
-CREATE OR REPLACE VIEW lookup_main_X AS		
+CREATE OR REPLACE VIEW lookup_main_X1 AS		
 SELECT *
     FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
-	   'SELECT id, coverage_id, axis_label, lower_bound, upper_bound, resolution, grid_lower_bound, grid_upper_bound FROM public.lookup_peta_x')
-AS remote_table(raster_id text, raster_name text, axis_label text, domain_lower_bound text, domain_upper_bound text, resolution float, grid_lower_bound integer, grid_upper_bound integer);
+	   'SELECT id, coverage_id, axis_label, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound, resolution, min_long, max_long, min_lat, max_lat FROM public.lookup_peta_x')
+AS remote_table(raster_id text, raster_name text, axis_label text, domain_lower_bound text, domain_upper_bound date, grid_lower_bound date, grid_upper_bound integer, resolution float, min_long float, max_long float, min_lat float, max_lat float);
+
 
 
 -- 5. Build sample_lookup_X
 
-CREATE OR REPLACE VIEW sample_lookup_X AS
+CREATE OR REPLACE VIEW sample_lookup_X1 AS
 SELECT 
     raster_id,
     raster_name,
-    MAX(CASE WHEN axis_label = 'Long' THEN domain_lower_bound END) AS min_lon,
-    MAX(CASE WHEN axis_label = 'Long' THEN domain_upper_bound END) AS max_lon,
+    MAX(CASE WHEN axis_label = 'Long' THEN min_long END) AS min_lon,
+    MAX(CASE WHEN axis_label = 'Long' THEN max_long END) AS max_lon,
 	MAX(CASE WHEN axis_label = 'Long' THEN grid_lower_bound END) AS min_lon_grid,
     MAX(CASE WHEN axis_label = 'Long' THEN grid_upper_bound END) AS max_lon_grid,
 	MAX(CASE WHEN axis_label = 'Long' THEN resolution END) AS res_lon,
-    MAX(CASE WHEN axis_label = 'Lat' THEN domain_lower_bound END) AS min_lat,
-    MAX(CASE WHEN axis_label = 'Lat' THEN domain_upper_bound END) AS max_lat,
+    MAX(CASE WHEN axis_label = 'Lat' THEN min_lat END) AS min_lat,
+    MAX(CASE WHEN axis_label = 'Lat' THEN max_lat END) AS max_lat,
 	MAX(CASE WHEN axis_label = 'Lat' THEN grid_lower_bound END) AS min_lat_grid,
     MAX(CASE WHEN axis_label = 'Lat' THEN grid_upper_bound END) AS max_lat_grid,
 	MAX(CASE WHEN axis_label = 'Lat' THEN resolution END) AS res_lat,
-	MAX(CASE WHEN axis_label = 'ansi' THEN domain_lower_bound END) AS start_time,
-    MAX(CASE WHEN axis_label = 'ansi' THEN domain_upper_bound END) AS end_time,
+	MAX(CASE WHEN axis_label = 'ansi' THEN domain_lower_bound date END) AS start_time,
+    MAX(CASE WHEN axis_label = 'ansi' THEN domain_upper_bound date END) AS end_time,
 	MAX(CASE WHEN axis_label = 'ansi' THEN grid_lower_bound END) AS start_time_grid,
     MAX(CASE WHEN axis_label = 'ansi' THEN grid_upper_bound END) AS end_time_grid,
 	MAX(CASE WHEN axis_label = 'ansi' THEN resolution END) AS res_time
-FROM lookup_main_X
+FROM lookup_main_X1
 GROUP BY raster_id, raster_name;
 
 
-select * from sample_lookup_X -- Build mappings with this table
+select * from sample_lookup_X1 -- Build mappings with this table
 	
 
 
@@ -380,6 +391,84 @@ $$
 CREATE TRIGGER update_lookup
 AFTER UPDATE ON coverage
 EXECUTE PROCEDURE update_lookup_table();
+
+
+
+-- FUNCTION: public.update_lookup_table()
+
+-- DROP FUNCTION IF EXISTS public.update_lookup_table();
+
+CREATE OR REPLACE FUNCTION public.update_lookup_table()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+BEGIN
+	CREATE OR REPLACE VIEW lookup_peta AS
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+	   'SELECT id, coverage_id, axis_label, max_lat, min_lat, max_long, min_long, resolution, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound FROM public.lookup_peta')
+		AS remote_table(id int, coverage_id text, axis_label text, max_lat float, min_lat float, max_long float, min_long float, resolution float, lower_bound text, upper_bound text, grid_lower_bound int, grid_upper_bound int); 
+    
+	RETURN lookup_peta;	
+END;
+$BODY$;
+
+ALTER FUNCTION public.update_lookup_table()
+    OWNER TO postgres;
+
+
+-- FUNCTION: public.update_lookup()
+
+-- DROP FUNCTION IF EXISTS public.update_lookup();
+
+CREATE OR REPLACE FUNCTION public.update_lookup()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+BEGIN
+	CREATE OR REPLACE VIEW lookup_main AS
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+	   'SELECT id, coverage_id, axis_label, max_lat, min_lat, max_long, min_long, resolution, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound FROM public.lookup_peta')
+		AS remote_table(id int, coverage_id text, axis_label text, max_lat float, min_lat float, max_long float, min_long float, resolution float, lower_bound text, upper_bound text, grid_lower_bound int, grid_upper_bound int); 
+    
+	RETURN lookup_main;	
+END;
+$BODY$;
+
+ALTER FUNCTION public.update_lookup()
+    OWNER TO postgres;
+
+
+-- FUNCTION: public.update_lookup()
+
+-- DROP FUNCTION IF EXISTS public.update_lookup();
+
+CREATE OR REPLACE FUNCTION public.update_lookup()
+    RETURNS trigger
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE NOT LEAKPROOF
+AS $BODY$
+BEGIN
+	CREATE OR REPLACE VIEW lookup_main AS
+SELECT *
+    FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+	   'SELECT id, coverage_id, axis_label, max_lat, min_lat, max_long, min_long, resolution, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound FROM public.lookup_peta')
+		AS remote_table(id int, coverage_id text, axis_label text, max_lat float, min_lat float, max_long float, min_long float, resolution float, lower_bound text, upper_bound text, grid_lower_bound int, grid_upper_bound int); 
+    
+	RETURN lookup_main;	
+END;
+$BODY$;
+
+ALTER FUNCTION public.update_lookup()
+    OWNER TO postgres;
+
+
 
 
 -- MaxLon, MinLat inclusoin in the geo2grid python procedure
@@ -462,6 +551,81 @@ GRANT USAGE ON FOREIGN SERVER petascope_server TO postgres;
 SELECT dblink_connect('petascopedb');
 
 SELECT * FROM dblink('petascopedb','select envelope_id from envelope');
+
+-- Time Translation (Days)
+-- 2022-08-24T00:00:00+00:00 rquivalent 145 for Sweden
+
+SELECT start_time, TO_TIMESTAMP(
+    start_time,
+    '%Y-%m-%dT%H:%M:%E*SZ'
+)
+FROM sample_lookup_X1
+WHERE raster_name = 'Surface_Temperature_Sweden';
+
+
+SELECT start_time_grid + EXTRACT(DAY FROM (TIMESTAMP '2022-05-06T00:00:00+00:00' -  start_time::TIMESTAMP)) 
+FROM sample_lookup_X1
+WHERE raster_name = 'Surface_Temperature_Sweden'
+
+
+
+
+CREATE OR REPLACE FUNCTION rasdaman_op.timestamp2grid(input_time text, input_raster text)
+RETURNS INTEGER AS $$
+DECLARE
+    example_date_grid_val INTEGER;
+BEGIN
+    SELECT start_time_grid + EXTRACT(DAY FROM (input_time::TIMESTAMP - start_time::TIMESTAMP))INTO example_date_grid_val
+    FROM sample_lookup_X1
+    WHERE start_time::TIMESTAMP <= input_time::TIMESTAMP AND end_time::TIMESTAMP >= input_time::TIMESTAMP AND raster_name = input_raster;
+    
+    RETURN example_date_grid_val;
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT rasdaman_op.timestamp2grid('2022-08-23T00:00:00+00:00', 'Surface_Temperature_Sweden') 
+
+
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping';
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[',rasdaman_op.timestamp2grid('2022-08-24T00:00:00+00:00','Surface_Temperature_Sweden'),',0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping';
+
+
+
+CREATE OR REPLACE FUNCTION rasdaman_op.timestamp2grid_X(input_time text, input_raster_id integer)
+RETURNS INTEGER AS $$
+DECLARE
+    example_date_grid_val INTEGER;
+BEGIN
+    SELECT start_time_grid + EXTRACT(DAY FROM (input_time::TIMESTAMP - start_time::TIMESTAMP))INTO example_date_grid_val
+    FROM sample_lookup_X1
+    WHERE start_time::TIMESTAMP <= input_time::TIMESTAMP AND end_time::TIMESTAMP >= input_time::TIMESTAMP AND raster_id::integer = input_raster_id;
+    
+    RETURN example_date_grid_val;
+END;
+
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT rasdaman_op.timestamp2grid_X('2022-08-23T00:00:00+00:00', 407) 
+
+
+-- Time Translation (Months)
+-- 2022-08-24T00:00:00+00:00 rquivalent 145 for Sweden
+
 
 
 --PLPYTHON Functions
@@ -574,6 +738,8 @@ ALTER FUNCTION rasdaman_op.geo2grid_coords(text)
 
 -- FUNCTION: rasdaman_op.geo2grid_final(text, double precision, double precision, double precision, double precision)
 
+-- DROP FUNCTION IF EXISTS rasdaman_op.geo2grid_final(text, double precision, double precision, double precision, double precision);
+
 CREATE OR REPLACE FUNCTION rasdaman_op.geo2grid_final(
 	"geoPOLY" text,
 	min_lon double precision,
@@ -591,6 +757,7 @@ import re
 import gdal
 from affine import Affine
 from shapely.geometry import Polygon
+from shapely.ops import unary_union
 from shapely import wkt
 
 def grid2WKT_polygon(y_grid, x_grid):
@@ -672,7 +839,7 @@ def geoPOLYGON_to_gridPOLYGON_03(inputREGION, min_lon, max_lat, resolution_lon, 
             i = i +1
             
         gridMULTI =  [shapely.wkt.loads(poly) for poly in polygons_array2]
-        return shapely.geometry.MultiPolygon(gridMULTI)	
+        return shapely.geometry.MultiPolygon(unary_union(gridMULTI))	
 	
 gridPOLY = geoPOLYGON_to_gridPOLYGON_03(geoPOLY, min_lon, max_lat, resolution_lon, resolution_lat)
 return gridPOLY
@@ -837,6 +1004,30 @@ WHERE   m.name_3 = 'Senales' LIMIT 1;
 
 
 
+SELECT rasdaman_op.get_max_lat('Surface_Temperature_Sweden')
+
+SELECT rasdaman_op.get_res_lon('Surface_Temperature_Sweden')
+
+SELECT rasdaman_op.get_res_lat('Surface_Temperature_Sweden')
+
+
+
+SELECT rasdaman_op.get_min_longitude('Surface_Temperature_Sweden')
+	
+SELECT rasdaman_op.get_max_latitude('Surface_Temperature_Sweden')
+
+	
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select min_cells(clip((c[145, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),
+	')) from Surface_Temperature_Sweden AS c')) AS min_temp     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping';
+
+
+
+
+
+select * from sample_lookup_X1 
 
 
 
@@ -852,3 +1043,37 @@ WHERE   m.name_3 = 'Senales' LIMIT 1;
 
 
 
+-- Import maxlat, minlon into geo2grid from sample_lookup_x1
+import plpy
+
+def retrieve_column_as_text(table_name, column_name):
+plan = plpy.prepare(f"SELECT {column_name}::TEXT FROM {table_name}", [])
+rv = plpy.execute(plan)
+column_data = [r[column_name] for r in rv]
+return column_data
+
+# Example usage
+result = retrieve_column_as_text('your_table_name', 'your_column_name')
+plpy.notice(result) 
+
+
+
+
+SELECT name_1,name_2, ST_AsText(geom) FROM public.region_bavaria   -- Multipolygons to polygons
+WHERE name_2 in ('München','München (Kreisfreie Stadt)') ;
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg'
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[273, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km')),')) from Bavaria_Temperature_MODIS_1km AS c')) AS val     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham' 
+
+
+SELECT  m.name_2 AS region,
+rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden'))
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham'
