@@ -141,6 +141,7 @@ POLYGON_1 = 'POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48
 
 POLYGON_2 = 'POLYGON ((10.557861328125 50.73645513701064, 10.557861328125 49.36806633482158, 9.459228515625002 50.583236614805884, 9.986572265625 49.32512199104002, 8.052978515625 49.468124067331644, 9.810791015625002 49.08106236432073, 8.624267578125 48.47292127248784, 9.854736328125 48.87916714896022, 9.305419921875 47.62097541515848, 10.052490234375 48.85025819972151, 10.843505859375002 47.79839667295525, 10.316162109375 48.77791275550183, 11.370849609375 48.71996122264625, 10.579833984375002 48.951366470947704, 13.128662109375002 48.951366470947704, 10.755615234375 49.16733860629108, 12.073974609375 49.73868163928003, 10.777587890625 49.425267160837166, 10.557861328125 50.73645513701064))'
 
+POLYGON_3 = 'POLYGON((11.303901672363283 46.50500922967828,11.362953186035158 46.51635073507512,11.402778625488281 46.48586507271446,11.282615661621096 46.46245750599604,11.285362243652346 46.48728338953961,11.38114929199219 46.49650154751427,11.303901672363283 46.50500922967828))'
 
 SELECT  rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*]*0.02,',rasdaman_op.geo2grid_coords('POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))'),') from Baveria_Temperature_MODIS_1km AS c')) AS filtered_array 	
 
@@ -153,6 +154,31 @@ SELECT  m.name_2 AS region,
         rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*],',rasdaman_op.geo2grid_coords('POLYGON ((10.557861328125 50.73645513701064, 10.557861328125 49.36806633482158, 9.459228515625002 50.583236614805884, 9.986572265625 49.32512199104002, 8.052978515625 49.468124067331644, 9.810791015625002 49.08106236432073, 8.624267578125 48.47292127248784, 9.854736328125 48.87916714896022, 9.305419921875 47.62097541515848, 10.052490234375 48.85025819972151, 10.843505859375002 47.79839667295525, 10.316162109375 48.77791275550183, 11.370849609375 48.71996122264625, 10.579833984375002 48.951366470947704, 13.128662109375002 48.951366470947704, 10.755615234375 49.16733860629108, 12.073974609375 49.73868163928003, 10.777587890625 49.425267160837166, 10.557861328125 50.73645513701064))
 '),') from Baveria_Temperature_MODIS_1km AS c')) AS filtered_array     
 FROM    region_bavaria as m
+
+
+SELECT rasdaman_op.geo2grid_coords('POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))')
+
+SELECT  rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*],'
+	,rasdaman_op.geo2grid_coords('POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))'
+	),') from Bavaria_Temperature_MODIS_1km AS c')) 
+
+	
+SELECT rasdaman_op.geo2grid_final('POLYGON((11.324157714843748 48.29050321714061,11.911926269531248 48.279537342260085,11.88995361328125 48.01932418480118,11.340637207031248 48.01564978668938,11.324157714843748 48.29050321714061))'
+	,rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km')
+	,rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km')
+	,rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),
+	rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km'))
+
+
+
+
+SELECT  rasdaman_op.query2array(CONCAT('select clip(c[246, 0:* , 0:*],'
+	,rasdaman_op.geo2grid_final('POLYGON((10.557861328125 50.73645513701064,10.557861328125 49.36806633482158,9.459228515625002 50.583236614805884,9.986572265625 49.32512199104002,8.052978515625 49.468124067331644,9.810791015625002 49.08106236432073,8.624267578125 48.47292127248784,9.854736328125 48.87916714896022,9.305419921875 47.62097541515848,10.052490234375 48.85025819972151,10.843505859375002 47.79839667295525,10.316162109374998 48.77791275550183,11.370849609375 48.71996122264625,10.579833984375002 48.951366470947704,13.128662109375002 48.951366470947704,10.755615234375 49.16733860629108,12.073974609375 49.73868163928003,10.777587890625 49.425267160837166,10.557861328125 50.73645513701064))'
+	,rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km')
+	,rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km')
+	,rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),
+	rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km')
+	),') from Bavaria_Temperature_MODIS_1km AS c'))   
 
 
 
@@ -627,6 +653,35 @@ SELECT rasdaman_op.timestamp2grid_X('2022-08-23T00:00:00+00:00', 407)
 -- 2022-08-24T00:00:00+00:00 rquivalent 145 for Sweden
 
 
+-- FUNCTION: rasdaman_op.get_geom(geometry)
+
+-- DROP FUNCTION IF EXISTS rasdaman_op.get_geom(geometry);
+
+CREATE OR REPLACE FUNCTION rasdaman_op.get_geom(
+	geometry_wkt geometry)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+    out_geom_wkt TEXT;
+BEGIN
+	SELECT 
+	    CASE 
+	        WHEN ST_NumGeometries(geometry_wkt) = 1 THEN ST_AsText(ST_GeometryN(geometry_wkt, 1))
+	        ELSE ST_AsText(geometry_wkt)
+	    END AS geometry_wkt INTO out_geom_wkt;
+
+	RETURN out_geom_wkt;
+END;
+
+$BODY$;
+
+ALTER FUNCTION rasdaman_op.get_geom(geometry)
+    OWNER TO postgres;
+
+
 
 --PLPYTHON Functions
 
@@ -941,6 +996,26 @@ SELECT  m.name_2 AS region,
 FROM    region_sweden as m
 WHERE   m.name_2 = 'Göteborg' LIMIT 1;
 
+SELECT  name_1, name_2,
+	    rasdaman_op.geo2grid_final(ST_AsText(geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762) as geom
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg';
+
+
+SELECT  name_1, name_2,
+	    rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762) as geom
+FROM    region_south_tyrol as m
+WHERE   m.name_2 = 'Göteborg';
+
+
+SELECT name_1,name_2, length(ST_AsText(geom)), ST_AsText(geom) FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Göteborg','Umeå', 'Linköping') ;
+
+
+
+SELECT name_1,name_2, length(ST_AsText((ST_Dump(geom)).geom)), ST_AsText((ST_Dump(geom)).geom) FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Linköping','Göteborg','Umeå') ;
+
 
 
 -- ###################################################################################################################################################################################################################
@@ -1077,3 +1152,176 @@ SELECT  m.name_2 AS region,
 rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden'))
 FROM    region_bavaria as m
 WHERE   m.name_2 = 'Cham'
+
+
+
+
+SELECT name_1,name_2, length(ST_AsText(geom)), ST_AsText(ST_GeometryN(geom, 1)) FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Göteborg','Umeå', 'Linköping', 'Stockholm') ;
+
+
+
+SELECT name_1,name_2, length(ST_AsText((ST_Dump(geom)).geom)), ST_AsText((ST_Dump(geom)).geom) FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Linköping','Göteborg','Umeå','Stockholm') ;
+
+
+
+SELECT  name_1, name_2, name_3, 
+	    rasdaman_op.geo2grid_final(ST_AsText(geom),10.38333333240314,47.099999995780536,0.008333333332586793,0.008333333332586762) as geom
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'bolzano';
+
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[145, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Söderköping'
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[273, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km')),')) from Bavaria_Temperature_MODIS_1km AS c')) AS val     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham' 
+
+
+SELECT  m.name_2 AS region,
+rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden'))
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham'
+
+
+
+-- Sample input
+WITH input_data AS (
+    SELECT 'MULTIPOLYGON(((30 10, 40 40, 20 40, 10 20, 30 10)))'::geometry AS geom
+)
+
+-- Convert MULTIPOLYGON to POLYGON
+SELECT ST_AsText(ST_GeometryN(geom, 1)) AS polygon_geometry
+FROM input_data;
+
+
+
+-- Sample input
+WITH input_data AS (
+    SELECT 'MULTIPOLYGON(((30 10, 40 40, 20 40, 10 20, 30 10)))'::geometry AS geom
+)
+
+-- Convert MULTIPOLYGON to POLYGON if it contains only one polygon, else return as is
+SELECT 
+    CASE 
+        WHEN ST_NumGeometries(geom) = 1 THEN ST_AsText(ST_GeometryN(geom, 1))
+        ELSE ST_AsText(geom)
+    END AS geometry
+FROM input_data;
+
+
+
+
+SELECT name_2, length(ST_AsText(geom)),ST_NumGeometries(geom), geom FROM region_sweden   -- Multipolygons to polygons
+WHERE name_2 in ('Göteborg','Umeå', 'Linköping', 'Stockholm') ;
+
+
+
+SELECT name_3, length(ST_AsText(geom)),ST_NumGeometries(geom), geom FROM region_south_tyrol   -- Multipolygons to polygons
+
+
+
+select * FROM sample_regions_of_interest
+
+
+SELECT name_2,ST_NumGeometries(geom),ST_AsText(geom), geom FROM sample_regions_of_interest
+
+
+-- Convert MULTIPOLYGON to POLYGON if it contains only one polygon, else return as is
+
+SELECT region_id, name_2 AS region_name, ST_NumGeometries(geom) AS num_of_polygons,
+       CASE
+           WHEN ST_NumGeometries(geom) = 1 THEN ST_AsText(ST_GeometryN(geom, 1))
+           ELSE ST_AsText(geom)
+        END AS region_geometry_wkt
+FROM sample_regions_of_interest
+
+
+SELECT region_id, name_2 AS region_name, ST_AsText(ST_GeometryN(geom, 1))
+	FROM sample_regions_of_interest
+
+
+
+
+
+	
+
+
+
+	
+SELECT
+    CASE 
+        WHEN ST_NumGeometries(geom) = 1 THEN ST_AsText(ST_GeometryN(geom, 1))
+        ELSE ST_AsText(geom)
+    END AS geometry
+FROM    region_south_tyrol 
+WHERE   name_3 = 'Bolzano';
+
+
+
+
+
+
+
+-- SELECT  m.name_3 AS region,
+--         rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[145, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('South_Tyrol_Temperature_MODIS_1km')),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS val     
+-- FROM    region_south_tyrol as m
+-- WHERE   m.name_3 = 'Brennero'
+
+-- SELECT  m.name_3 AS region, ST_AsText(ST_GeometryN(geom, 1)), geom
+-- FROM    region_south_tyrol as m
+-- WHERE   m.name_3 = 'Ultimo'
+
+
+	
+
+
+	
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Göteborg'
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[145, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping'
+
+
+SELECT  m.name_2 AS region, ST_AsText((ST_Dump(geom)).geom)
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Linköping'
+
+
+SELECT  name_3, rasdaman_op.get_geom(geom)
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Bolzano'
+
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(rasdaman_op.get_geom(geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS output_val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Söderköping'
+
+
+
+SELECT  m.name_3 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[283, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(rasdaman_op.get_geom(geom),rasdaman_op.get_min_longitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('South_Tyrol_Temperature_MODIS_1km')),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS output_val     
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Merano'
+
+
+
+
+
+
+
+
