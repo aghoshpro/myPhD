@@ -39,13 +39,176 @@ Tom, "2023-01-01T00:00:00+00:00", "2023-01-31T00:00:00+00:00", 31
 # PROMPT_03 #
 #############
 
+I have 1 relational table X in posgresql database such as 
+
+X(xid, xname, xtype, xlb, xub)
+
+An example
+
+xid | xname | xtype | xlb | xub
+1   | ABC   | red   | 0   | 100
+1   | ABC   | yellow|23   | 65
+
+Now I want to convert this table X to X_converted that look like,
+
+xid | xname | type_red | xlb_red | xub_red | type_yellow | xlb_yellow | xub_yellow 
+1   | ABC   | red      | 0       | 100     | yellow      | 23         | 65 
+
+How to achive X_converted(xid, xname, type_red, xlb_red, xub_red, type_yellow, xlb_yellow, xub_yellow)
+
+
 #############
 # PROMPT_04 #
 #############
 
+I have the following dates 
+
+start_time = "2022-04-01T00:00:00+00:00"
+end_time = "2022-11-15T00:00:00+00:00"
+
+Find out the number of days between start_time and end_time using python
+
+example date = "2022-05-06T00:00:00+00:00"
+
+
+from datetime import datetime
+
+start_time = "2022-04-01T00:00:00+00:00"
+end_time = "2022-11-15T00:00:00+00:00"
+
+# Convert strings to datetime objects
+start_datetime = datetime.fromisoformat(start_time.replace("Z", "+00:00"))
+end_datetime = datetime.fromisoformat(end_time.replace("Z", "+00:00"))
+
+# Calculate the difference
+difference = end_datetime - start_datetime
+
+# Extract the number of days
+number_of_days = difference.days
+
+print("Number of days between start_time and end_time:", number_of_days)
+
+
+# Depends on Raster Data
+start_time = "2022-04-01T00:00:00+00:00"
+end_time = "2022-11-15T00:00:00+00:00"
+example_date = "2022-11-14T00:00:00+00:00"
+
+# Convert strings to datetime objects
+start_datetime = datetime.fromisoformat(start_time.replace("Z", "+00:00"))
+end_datetime = datetime.fromisoformat(end_time.replace("Z", "+00:00"))
+example_datetime = datetime.fromisoformat(example_date.replace("Z", "+00:00"))
+
+# Calculate the total number of days between start_time and end_time
+total_days = (end_datetime - start_datetime).days
+
+# Calculate the number of days between start_time and example_date
+days_from_start = (example_datetime - start_datetime).days
+
 #############
 # PROMPT_05 #
 #############
+
+
+I have 1 relational table TimeX in posgresql database such as 
+
+TimeX(id, start_date, end_date, start_date_grid, end_date_grid)
+
+An example
+
+Rname | start_date | end_date | start_date_grid | end_date_grid
+My Data| "2022-04-01T00:00:00+00:00" | "2022-11-15T00:00:00+00:00"| 0 | 228
+
+Please write a sql function to that takes input from TIme table and find out `example_date_grid` of the given example_date = "2022-11-14T00:00:00+00:00" 
+
+
+#############
+# PROMPT_06 #
+#############
+
+I have a relational table sample in posgresql database such as 
+
+sample(id, name, val)
+
+An example
+
+id | name | val 
+100| Bavaria temperature | 12
+12 | Bavaria Snow | 134
+344| Sweden Snow | 123
+
+Write a query that will fetch val of Snow data for Bavaria
+
+I tried the follwing sql query SELECT * FROM sample WHERE name LIKE '%Bavaria%' AND 'Snow'; but didnt work
+
+Please write a sql function to that takes input from TIme table and find out `example_date_grid` of the given example_date = "2022-11-14T00:00:00+00:00" 
+
+
+#############
+# PROMPT_07 #
+#############
+
+I have a relational table students in posgresql database such as 
+
+students(id, name, subject)
+
+An example
+
+id |	name	| subject
+1  |	Anna_M	| Physics
+2  |	Edward	| Chemistry
+3  |	Anna_M_	| Chemistry
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+My RasSPARQL looks like this (takes time, raster_name, region)
+
+As discussed in the last meeting
+
+I have a some sql functions that can output 4 raster_metadata such as max_lon, min_lat, res_lon, res_lat
+
+I have built a `time_translation (input_time, input_raster_name)` funciton that translate a timestamp to it's equivalent grid integer so rasdaman can understand and execute
+
+ISSUE is max_lon, min_lat, res_lon, res_lat and time depends on `raster_name`
+
+So to bulild the final rasql string raster_name should occur 6 times like below
+
+@Override
+public ImmutableFunctionalTerm getRasterSpatialAverageFinal(ImmutableTerm TimeSnap, ImmutableTerm dbRasterName, ImmutableTerm dbRegionGeom){
+    return getImmutableFunctionalTerm(dbFunctionSymbolFactory.getRasterSpatialAverageFinal(), ImmutableList.of(TimeSnap, dbRasterName, dbRegionGeom, dbRasterName, dbRasterName, dbRasterName, dbRasterName, dbRasterName));
+}
+
+
+Even in RasterAverageFinalFunctionSymbolImpl I have defeined 
+
+    return termFactory.getRasterSpatialAverageFinal(subLexicalTerms.get(0), subLexicalTerms.get(1), subLexicalTerms.get(2));
+
+    OR 
+
+    return termFactory.getRasterSpatialAverageFinal(subLexicalTerms.get(0), subLexicalTerms.get(1), subLexicalTerms.get(2), subLexicalTerms.get(3), subLexicalTerms.get(4), subLexicalTerms.get(5), subLexicalTerms.get(6));
+                                                    // time                  // raster_name            // region             // raster_name           //raster_name            //raster_name           //raster_name
 
 
 
