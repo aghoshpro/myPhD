@@ -80,3 +80,11 @@ qCONDENSE_06 = "select condense + over x in [199:201] using ((datacube[x[0],*:*,
 
 qCONDENSE_07 = "select condense + over x in [199:201] using ((datacube[x[0],*:*, *:*]*0.02) - 273.15)/x[0] from Baveria_Temperature_MODIS_1km as datacube"
 
+
+
+####Pre-requisites
+
+check python version (must be 3.8 or later)
+
+####install netcdf4 package
+sudo pip3 install netCDF4
