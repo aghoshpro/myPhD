@@ -68,9 +68,7 @@ SELECT ?v {
     } LIMIT 1;
     
 
-=====|06|=====
-
-
+=====|07|=====
 
 SELECT ?v {
 ?vector rdfs:label ?vector_region_name .

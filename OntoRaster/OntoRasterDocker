@@ -1,3 +1,90 @@
-Container #01
+arkaghosh@lat7410g:~$ sudo -i
+[sudo] password for arkaghosh: 
+JAVA_HOME: command not found
+root@lat7410g:~# echo JAVA_HOME
+JAVA_HOME
+root@lat7410g:~# echo $JAVA_HOME
+/lib/jvm/java-11-openjdk-amd64
+root@lat7410g:~# cd usr
+-bash: cd: usr: No such file or directory
+root@lat7410g:~# cd \
+> arkaghosh@lat7410g:~$ ^C
+arkaghosh@lat7410g:~$ sudo -i
+JAVA_HOME: command not found
+root@lat7410g:~# cd \
+> ^C
+root@lat7410g:~# cd /
+root@lat7410g:/# cd usr
+root@lat7410g:/usr# cd lib
+root@lat7410g:/usr/lib# cd jvm
+root@lat7410g:/usr/lib/jvm# cd java-
+java-1.11.0-openjdk-amd64/ java-11-openjdk-amd64/     java-1.8.0-openjdk-amd64/  java-8-openjdk-amd64/
+root@lat7410g:/usr/lib/jvm# cd java-^C
+root@lat7410g:/usr/lib/jvm# logout
 
-docker-compose -f <dockerfilename> up rasdatabase
+
+arkaghosh@lat7410g:~$ sudo -i
+[sudo] password for arkaghosh: 
+JAVA_HOME: command not found
+root@lat7410g:~# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+root@lat7410g:~# echo $JAVA_HOME
+/usr/lib/jvm/java-11-openjdk-amd64
+root@lat7410g:~# /usr/bin/env bash /home/arkaghosh/Downloads/Github/Ontop/client/docker/build-image.sh
+[2024-06-10 23:37:27] Compiling Ontop 5.2.0-SNAPSHOT
+[INFO] Scanning for projects...
+.
+.
+.
+.
+.
+.
+.
+ => exporting to image                                                                                                                                                                                                         0.4s
+ => => exporting layers                                                                                                                                                                                                        0.4s
+ => => writing image sha256:3ca0a1c20954122878d323ff7a208b28eb6363516cc41273a0dbbf26a2467aea                                                                                                                                   0.0s
+ => => naming to docker.io/ontop/ontop:5.2.0-SNAPSHOT                                                                                                                                                                          0.0s
+ => => naming to docker.io/ontop/ontop:latest                                                                                                                                                                                  0.0s
+[2024-06-10 23:44:51] Done
+root@lat7410g:~# docker image ls
+REPOSITORY    TAG              IMAGE ID       CREATED          SIZE
+ontop/ontop   5.2.0-SNAPSHOT   3ca0a1c20954   16 seconds ago   188MB
+ontop/ontop   latest           3ca0a1c20954   16 seconds ago   188MB
+ontop/ontop   5.1.0            7500e3d497d5   10 months ago    187MB
+root@lat7410g:~# docker tag 3ca0a1c20954 aghoshpro/OntoRaster:v1
+Error parsing reference: "aghoshpro/OntoRaster:v1" is not a valid repository/tag: invalid reference format: repository name (aghoshpro/OntoRaster) must be lowercase
+root@lat7410g:~# docker tag 3ca0a1c20954 aghoshpro/ontoraster:v1
+root@lat7410g:~# docker image ls
+REPOSITORY             TAG              IMAGE ID       CREATED         SIZE
+aghoshpro/ontoraster   v1               3ca0a1c20954   2 minutes ago   188MB
+ontop/ontop            5.2.0-SNAPSHOT   3ca0a1c20954   2 minutes ago   188MB
+ontop/ontop            latest           3ca0a1c20954   2 minutes ago   188MB
+ontop/ontop            5.1.0            7500e3d497d5   10 months ago   187MB
+
+root@lat7410g:~# docker push aghoshpro/ontoraster:v1
+The push refers to repository [docker.io/aghoshpro/ontoraster]
+e9e834ee592a: Preparing 
+ad04b5c1d4a3: Preparing 
+d75915b4cae4: Preparing 
+3b95fa555011: Preparing 
+0b9c994b0484: Preparing 
+denied: requested access to the resource is denied
+root@lat7410g:~# docker login
+Log in with your Docker ID or email address to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com/ to create one.
+You can log in with your password or a Personal Access Token (PAT). Using a limited-scope PAT grants better security and is required for organizations using SSO. Learn more at https://docs.docker.com/go/access-tokens/
+
+Username: aghoshpro@gmail.com
+Password: 
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+root@lat7410g:~# docker push aghoshpro/ontoraster:v1
+The push refers to repository [docker.io/aghoshpro/ontoraster]
+e9e834ee592a: Pushed 
+ad04b5c1d4a3: Pushed 
+d75915b4cae4: Pushed 
+3b95fa555011: Pushed 
+0b9c994b0484: Mounted from library/eclipse-temurin 
+v1: digest: sha256:7f70e00562bf3a503e5530119e9fd5e09d15e58889763256ac4cc285c95f130c size: 1370
+root@lat7410g:~# 
