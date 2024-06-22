@@ -1,0 +1,42 @@
+### 
+# To activate this environment, use
+#
+#     $ conda activate g:\ML_Project\env
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+### If using yml file 
+(base) Z:\workspace_Python>conda env create -f env_torch_cpu.yml
+
+#
+# To activate this environment, use
+#
+#     $ conda activate env_torch_cpu
+#
+# To deactivate an active environment, use
+#
+#     $ conda deactivate
+
+
+(base) Z:\workspace_Python>conda env list
+# conda environments:
+#
+base                  *  C:\Users\arkag\Anaconda3
+env_spatial              C:\Users\arkag\Anaconda3\envs\env_spatial
+env_torch_cpu            C:\Users\arkag\Anaconda3\envs\env_torch_cpu
+
+
+(base) Z:\workspace_Python>conda activate env_torch_cpu
+
+(env_torch_cpu) Z:\workspace_Python>
+
+
+### Kernel Error in Jupyter Notebook - fail to start
+
+step 2 command :- “conda activate (location of your env folder)”
+step 3 command: - “python -m ipykernel install --user”
+
+Source: https://discourse.jupyter.org/t/kernel-error-in-jupyter-notebook-fail-to-start/2260/5

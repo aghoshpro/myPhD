@@ -1,0 +1,92 @@
+After installing Anaconda in a new machine, download these libraries below for Data Science and Machine Learning Works through Anaconda Prompt or cmd
+
+Commands ----------------------------------------------------
+1. conda env create -f env_ds.yml [to create the env with pkgs]
+2. conda update -n base -c defaults conda (update latest ver)
+3. conda env list
+4. conda install [packagename]
+5. conda install -c anaconda jedi
+6. conda list [after env activation]
+
+Jupyter Notebook --------------------------------------------
+1. pip install [package name]
+2. Install a pip package in the current Jupyter kernel
+import sys
+!{sys.executable} -m pip install opencv-python
+
+General -----------------------------------------------------
+1. pip
+2. jedi (autocomplete)
+3. https://anaconda.org/conda-forge/qrcode [qrcode]
+
+.py to .exe ---------------------------------------------------
+1. pyinstaller [D:\workspace_Python>pyinstaller.exe --onefile -w -F --icon=redIcon.ico --add-data=Toposheet_data.csv;. calTopo.py]
+
+Data Processing and Cleaning ---------------------------------
+
+1. NumPy
+2. Pandas
+
+Natural Language Processing ----------------------------------
+1. SpaCy
+2. nltk 
+3. PyPDF2
+4. re     (regular expressions)
+
+Machine Learning, Modeling and Evaluation -----------------------
+
+1. SciKit-Learn
+2. TensorFlow
+3. Keras
+4. PyTorch
+5. XGBoost
+6. Theano
+
+Data Visualization ------------------------------------------
+
+1. Matplotlib
+2. Seaborn
+3. chart-studio, plotly & cufflinks-py 
+4. Bokeh
+5. pydot
+
+Data Mining --------------------------------------------------
+
+1. Scrapy
+2. BeautifulSoup
+
+Digital Image Processing -------------------------------------
+
+1. OpenCV
+2. Pillow (PIL)
+3. SciPy  (Image Processing also)
+
+Geospatial Analysis ------------------------------------------
+
+1. GeoPandas
+2. GDAL/OGR
+3. PyProj
+4. GEOS
+5. Shapely
+6. Fiona
+7. Python Shapefile Library (pyshp)
+8. Rasterio
+9. Folium
+10.NCO (NetCDF Operators)
+
+------------------------ Netcdf Subsetting -------------------------------------------
+(env_spatial) Z:\workspace_Python>conda install -c conda-forge nco
+
+ncks -C -v spatial_ref,time,y,x,LST_Day_1km dataset_greece.nc -O LST_Day_NOC_Output.nc
+
+ncks -C -v spatial_ref,time,y,x,LE_500m dataset_greece.nc -O LE_500m_NOC_Output.nc
+---------------------------------------------------------------------------------------
+
+
+https://www.dataquest.io/blog/15-python-libraries-for-data-science/
+
+https://www.techbeamers.com/top-python-libraries-data-science/
+
+https://morioh.com/p/0815f836fb8c
+
+https://www.analyticsvidhya.com/blog/2020/06/guide-geospatial-analysis-folium-python/
