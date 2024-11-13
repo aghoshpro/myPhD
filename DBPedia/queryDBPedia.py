@@ -1,4 +1,4 @@
-# Install - pip install -q sparqlwrapper  
+# Install  pip install -q sparqlwrapper  
 
 from SPARQLWrapper import SPARQLWrapper, JSON, XML, RDF
 import pandas as pd
