@@ -1,5 +1,7 @@
 # myPhD
 
+<!-- [<img src="./PhD-Mind-Map.jpg">](https://www.wsnmagazine.com/secrets-for-research-excellence/) -->
+
 [<img src="./research.png">](https://www.wsnmagazine.com/secrets-for-research-excellence/)
 
 # Environment
@@ -22,11 +24,26 @@
     Java HotSpot(TM) 64-Bit Server VM (build 23.0.1+11-39, mixed mode, sharing)
     ```
 
+# International Standards
+
+## [OGC](https://www.ogc.org/publications/)
+
+1. [asGeoJSON](https://defs.opengis.net/vocprez/object?uri=http%3A//www.opengis.net/def/function/geosparql/asGeoJSON) : Converts a given geometry to an equivalent GeoJSON representation. Coordinates are converted to the CRS84 coordinate system, the only valid coordinate system to be used in a GeoJSON literal.
+
+## ISO
+
+## Open Street Maps (OSM)
+
+1. [OSM File Formats](https://wiki.openstreetmap.org/wiki/OSM_file_formats)
+2. [osm2pgsql](https://osm2pgsql.org/)
+
 # Relational Data
 
 ## Vector Data
 
 Relational data with additional column representing geometric features of real world feature.
+
+- [GDAL Vector Drivers](https://gdal.org/en/latest/drivers/vector/index.html)
 
 1. https://www.statsilk.com/maps/download-free-shapefile-maps
 2. https://gadm.org/data.html
@@ -36,8 +53,9 @@ Relational data with additional column representing geometric features of real w
 6. https://www.geonames.org/
 7. https://www.efrainmaps.es/english-version/free-downloads/world/
 8. https://download.geofabrik.de/
+9. https://terraformer-js.github.io/glossary/
 
-### Grammar of shapefiles
+### Grammar of Shapefiles
 
 1. https://www.e-education.psu.edu/natureofgeoinfo/c4_p5.html
 2. https://www.loc.gov/preservation/digital/formats/fdd/fdd000280.shtml
@@ -48,7 +66,7 @@ Relational data with additional column representing geometric features of real w
 
 - CityJSON File [Viewer](https://ninja.cityjson.org/)
 
-### Downloading CityGML data from [OpenDATA](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2) using `GitBash`
+### Downloading CityGML data from [OpenDATA](https://geodaten.bayern.de/opengeodata/OpenDataDetail.html?pn=lod2) using GitBash
 
 - Open **GitBash** inside the folder and execute the following shell script `get-munich-citygml.sh` using `$ sh get-munich-citygml.sh`
 
@@ -110,3 +128,21 @@ Relational data with additional column representing geometric features of real w
     ```
 
 # Raster Data
+
+- [GDAL Raster Drivers](https://gdal.org/en/latest/drivers/raster/#)
+
+### Data Sources
+
+1. Application for Extracting and Exploring Analysis Ready Samples ([AρρEEARS](https://appeears.earthdatacloud.nasa.gov/))
+2. [NASA EarthData](https://www.earthdata.nasa.gov/)
+3. [NASA STRM](https://www.earthdata.nasa.gov/data/instruments/srtm)
+4. [SRTM 1 Arc Sec](https://doi.org/10.5066/F7PR7TFT)
+5. [SRTM 30m](https://dwtkns.com/srtm30m/)
+6. [TessaDEM](https://tessadem.com/) is a near-global 30-meter Digital Elevation Model (DEM).
+7. [OpenEO](https://openeo.org/)
+
+### Visualization
+
+1. [Topographic Viewer](https://en-us.topographic-map.com/)
+
+# Experiments
