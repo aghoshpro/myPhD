@@ -1,0 +1,31 @@
+{
+"type": "FeatureCollection",
+"name": "MunichDistricts",
+"features": [
+{ "type": "Feature", "properties": { "Nr": 1, "FIRST_Bezi": "Altstadt-Lehel" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 2, "FIRST_Bezi": "Ludwigsvorstadt-Isarvorstadt" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 3, "FIRST_Bezi": "Maxvorstadt" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 4, "FIRST_Bezi": "Schwabing-West" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 5, "FIRST_Bezi": "Au-Haidhausen" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 6, "FIRST_Bezi": "Sendling" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 7, "FIRST_Bezi": "Sendling-Westpark" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 8, "FIRST_Bezi": "Schwanthalerhöhe" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 9, "FIRST_Bezi": "Neuhausen-Nymphenburg" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 10, "FIRST_Bezi": "Moosach" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 11, "FIRST_Bezi": "Milbertshofen-Am Hart" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 12, "FIRST_Bezi": "Schwabing-Freimann" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 13, "FIRST_Bezi": "Bogenhausen" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 14, "FIRST_Bezi": "Berg am Laim" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 15, "FIRST_Bezi": "Tudering-Riem" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 16, "FIRST_Bezi": "Ramersdorf-Perlach" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 17, "FIRST_Bezi": "Obergiesing" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 18, "FIRST_Bezi": "Untergiesing-Harlaching" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 19, "FIRST_Bezi": "Thalkirchen-Obersendling-Forstenried-Fürstenried-Solln" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 20, "FIRST_Bezi": "Hadern" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 21, "FIRST_Bezi": "Pasing-Obermenzing" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 22, "FIRST_Bezi": "Aubing-Lochhausen-Langwied" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 23, "FIRST_Bezi": "Allach-Untermenzing" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 24, "FIRST_Bezi": "Feldmoching-Hasenbergl" }, "geometry": null },
+{ "type": "Feature", "properties": { "Nr": 25, "FIRST_Bezi": "Laim" }, "geometry": null }
+]
+}
