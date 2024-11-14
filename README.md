@@ -26,9 +26,19 @@
 
 # International Standards
 
+## [W3C](https://www.w3.org/TR/)
+
+The World Wide Web Consortium (W3C) develops standards and guidelines to help everyone build a web based on the principles of accessibility, internationalization, privacy and security.
+
+1. [SPARQL 1.1](https://www.w3.org/TR/sparql11-overview/)
+2. [RDF](https://w3c-cg.github.io/rdfsurfaces/)
+3. [RDF 1.1](https://www.w3.org/TR/rdf-concepts/)
+
 ## [OGC](https://www.ogc.org/publications/)
 
 1. [asGeoJSON](https://defs.opengis.net/vocprez/object?uri=http%3A//www.opengis.net/def/function/geosparql/asGeoJSON) : Converts a given geometry to an equivalent GeoJSON representation. Coordinates are converted to the CRS84 coordinate system, the only valid coordinate system to be used in a GeoJSON literal.
+
+2. [GeoJSON Specs](https://stevage.github.io/geojson-spec/)
 
 ## ISO
 
@@ -59,6 +69,12 @@ Relational data with additional column representing geometric features of real w
 
 1. https://www.e-education.psu.edu/natureofgeoinfo/c4_p5.html
 2. https://www.loc.gov/preservation/digital/formats/fdd/fdd000280.shtml
+
+### Visualization
+
+1. [GeoJSON.io](https://geojson.io/#map=2/0/20)
+2. [WKT Playground](https://clydedacruz.github.io/openstreetmap-wkt-playground/)
+3. [CovJSON](https://covjson.org/playground/)
 
 ## CityGML
 
@@ -134,15 +150,21 @@ Relational data with additional column representing geometric features of real w
 ### Data Sources
 
 1. Application for Extracting and Exploring Analysis Ready Samples ([AρρEEARS](https://appeears.earthdatacloud.nasa.gov/))
-2. [NASA EarthData](https://www.earthdata.nasa.gov/)
-3. [NASA STRM](https://www.earthdata.nasa.gov/data/instruments/srtm)
-4. [SRTM 1 Arc Sec](https://doi.org/10.5066/F7PR7TFT)
-5. [SRTM 30m](https://dwtkns.com/srtm30m/)
-6. [TessaDEM](https://tessadem.com/) is a near-global 30-meter Digital Elevation Model (DEM).
-7. [OpenEO](https://openeo.org/)
+2. [Copernicus](https://www.copernicus.eu/en/access-data)
+3. [NASA EarthData](https://www.earthdata.nasa.gov/)
+4. [NASA STRM](https://www.earthdata.nasa.gov/data/instruments/srtm)
+5. [SRTM 1 Arc Sec](https://doi.org/10.5066/F7PR7TFT)
+6. [SRTM 30m](https://dwtkns.com/srtm30m/)
+7. [TessaDEM](https://tessadem.com/) is a near-global 30-meter Digital Elevation Model (DEM).
+8. [OpenEO](https://openeo.org/)
 
 ### Visualization
 
 1. [Topographic Viewer](https://en-us.topographic-map.com/)
+2. [GeoTIFF Viwer](https://app.geotiff.io/)
+
+# Graph Data
+
+1. [GraphDB](https://graphdb.ontotext.com/documentation/10.8/)
 
 # Experiments
