@@ -1,0 +1,63 @@
+SELECT * FROM public.munich_bldings_osm LIMIT 100
+
+
+-- How many churches
+
+SELECT * FROM public.munich_bldings_osm
+WHERE type = 'church'
+
+SELECT COUNT(*) FROM public.munich_bldings_osm
+WHERE type = 'church'
+
+-- How many train_station
+
+SELECT * FROM public.munich_bldings_osm
+WHERE type = 'train_station'
+
+SELECT COUNT(*) FROM public.munich_bldings_osm
+WHERE type = 'train_station'
+
+-- How many government
+
+SELECT * FROM public.munich_bldings_osm
+WHERE type = 'government'
+
+SELECT COUNT(*) FROM public.munich_bldings_osm
+WHERE type = 'government'
+
+-- How many univerties (144 OR 77 IF NOT NULL )
+
+SELECT * FROM public.munich_bldings_osm
+WHERE type = 'university' AND name IS NOT NULL
+
+SELECT * FROM public.munich_bldings_osm
+WHERE type = 'hospital' AND name IS NOT NULL
+
+
+
+
+
+
+-- How many of each type
+
+SELECT 
+    type, 
+    count(type) AS "count"
+FROM public.munich_bldings_osm
+WHERE type IS NOT NULL
+GROUP BY type
+ORDER BY "count" DESC;
+
+-- How many NULLS and NOT NULLS
+
+SELECT 
+    COUNT(*)
+FROM public.munich_bldings_osm
+WHERE type IS NOT null
+
+SELECT COUNT(*)
+FROM public.munich_bldings_osm
+WHERE type IS NULL
+
+
+

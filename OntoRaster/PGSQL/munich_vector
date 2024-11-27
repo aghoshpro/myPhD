@@ -1,0 +1,111 @@
+-- 25 Districts
+
+SELECT * FROM munich_dist25
+
+SELECT * 
+FROM munich_dist25
+WHERE first_bezi = 'Laim'
+
+
+SELECT gid, first_bezi AS dist_name, ST_NumGeometries(geom) AS num_of_polygons,
+       CASE
+           WHEN ST_NumGeometries(geom) = 1 THEN ST_AsText(ST_GeometryN(geom, 1))
+           ELSE ST_AsText(geom)
+        END AS regionWkt
+FROM munich_dist25
+
+
+
+-- 105 SubDistricts
+
+SELECT * FROM munich_subdist105
+
+SELECT gid, name, bezirk, nr, geom
+FROM munich_subdist105
+ORDER BY nr ASC
+
+SELECT gid, name, bezirk, nr, ST_NumGeometries(geom) AS num_of_polygons,
+       CASE
+           WHEN ST_NumGeometries(geom) = 1 THEN ST_AsText(ST_GeometryN(geom, 1))
+           ELSE ST_AsText(geom)
+        END AS regionWkt
+FROM munich_subdist105
+ORDER BY nr ASC
+
+SELECT bezirk, count(bezirk) AS "count"
+FROM munich_subdist105
+WHERE bezirk IS NOT NULL
+GROUP BY bezirk
+ORDER BY "count" DESC;
+
+
+
+
+
+
+
+--
+-- QUERIES - VECTOR + OSM
+-- 
+
+
+-- 1. How many buildings are there within dist 25 'Laim' ?
+-- ST_Contains and ST_Within
+
+SELECT COUNT(*) AS bldg_count
+FROM munich_bldings_osm b 
+JOIN munich_dist25 d ON ST_Within(b.geom, d.geom)
+WHERE d.first_bezi = 'Laim'
+
+SELECT b.geom
+FROM munich_bldings_osm b 
+JOIN munich_dist25 d ON ST_Within(b.geom, d.geom)
+WHERE d.first_bezi = 'Laim'
+
+-- 2. How many buildings are there within subdist 55 'Friedenheim' of dist 25 Laim ?
+-- ST_Contains and ST_Within
+
+SELECT b.osm_id, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_subdist105 d ON ST_Within(b.geom, d.geom)
+WHERE d.name = 'Friedenheim'
+
+-- 3. How many buildings are there within subdist 25 'St. Ulrich' of dist 25 Laim ?
+-- ST_Contains and ST_Within
+
+SELECT b.osm_id, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_subdist105 d ON ST_Within(b.geom, d.geom)
+WHERE d.name = 'St. Ulrich'
+
+
+SELECT b.osm_id, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_subdist105 d ON ST_Contains(d.geom, b.geom) -- reverse of ST_Within
+WHERE d.name = 'St. Ulrich'
+
+SELECT b.osm_id, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_subdist105 d ON ST_Intersects(b.geom, d.geom) -- order didint matter ? CHECK
+WHERE d.name = 'St. Ulrich'
+
+-- 4. How many buildings are there within subdist 45 'St. Neufreimann' of dist 12 Schwabing-Freimann ?
+
+SELECT b.osm_id, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_subdist105 d ON ST_Intersects(b.geom, d.geom) -- order didint matter ? CHECK
+WHERE d.name = 'Neufreimann'
+
+-- 5. How many churches are there in the district Laim (list them as well)
+
+SELECT COUNT(*) AS number_of_churches
+FROM munich_bldings_osm b 
+JOIN munich_dist25 d ON ST_Within(b.geom, d.geom)
+WHERE d.first_bezi = 'Laim' AND b.type = 'church'
+
+SELECT b.name, b.geom
+FROM munich_bldings_osm b 
+JOIN munich_dist25 d ON ST_Within(b.geom, d.geom)
+WHERE d.first_bezi = 'Laim' AND b.type = 'church'
+
+

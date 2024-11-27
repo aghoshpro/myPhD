@@ -1,0 +1,255 @@
+--
+-- Update Raster Lookup
+--
+SELECT * FROM public.raster_lookup_live -- (BEFORE)
+
+CREATE TABLE public.raster_lookup_live AS SELECT * FROM lookup_structured_x; -- ADDING NEW RASTER METADATA
+
+ALTER TABLE public.raster_lookup_live ADD PRIMARY KEY (raster_id);
+
+SELECT * FROM public.raster_lookup_live -- (AFTER)
+
+
+--
+-- INITIAL QUERY CHECK
+--
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km')),')) from Bavaria_Temperature_MODIS_1km AS c')) AS val     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham'  --Würzburg Rosenheim Bayreuth Cham
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]*0.02)-273.15,',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Bavaria_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Bavaria_Temperature_MODIS_1km')),')) from Bavaria_Temperature_MODIS_1km AS c')) AS val     
+FROM    region_bavaria as m
+WHERE   m.name_2 = 'Cham'  --Würzburg Rosenheim Bayreuth Cham
+
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Stockholm' 
+
+SELECT  m.name_2 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[145, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('Surface_Temperature_Sweden'),rasdaman_op.get_max_latitude('Surface_Temperature_Sweden'),rasdaman_op.get_res_lon('Surface_Temperature_Sweden'),rasdaman_op.get_res_lat('Surface_Temperature_Sweden')),')) from Surface_Temperature_Sweden AS c')) AS val     
+FROM    region_sweden as m
+WHERE   m.name_2 = 'Umeå' --('Göteborg','Umeå', 'Linköping', 'Stockholm')
+
+
+SELECT  m.name_3 AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip((c[283, 0:* , 0:*]),',rasdaman_op.geo2grid_final(ST_AsText((ST_Dump(geom)).geom),rasdaman_op.get_min_longitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('South_Tyrol_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('South_Tyrol_Temperature_MODIS_1km')),')) from South_Tyrol_Temperature_MODIS_1km AS c')) AS val     
+FROM    region_south_tyrol as m
+WHERE   m.name_3 = 'Bolzano'; -- Merano
+
+
+
+--
+-- QUERYING NEW ADDED RASTER DATA FOR Munich
+--
+
+SELECT  m.first_bezi AS region,
+		rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation'))
+FROM    public.munich_dist25 as m
+WHERE   m.first_bezi = 'Laim'
+
+SELECT  m.first_bezi AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[0, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')),')) from Munich_SRTM_NC_Elevation AS c')) AS val     
+FROM    public.munich_dist25 as m
+WHERE   m.first_bezi = 'Laim'
+
+SELECT  m.first_bezi AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[10, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Munich_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Munich_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Munich_Temperature_MODIS_1km')),')) from Munich_Temperature_MODIS_1km AS c')) AS val     
+FROM    public.munich_dist25 as m
+WHERE   m.first_bezi = 'Laim'
+
+
+
+--
+-- OSM
+-- 
+SELECT  m.name AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[0, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')),')) from Munich_SRTM_NC_Elevation AS c')) AS val     
+FROM    public.munich_bldings_osm as m
+WHERE   m.name = 'Gienger'
+
+SELECT  m.name AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[0, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_Temperature_MODIS_1km'),rasdaman_op.get_max_latitude('Munich_Temperature_MODIS_1km'),rasdaman_op.get_res_lon('Munich_Temperature_MODIS_1km'),rasdaman_op.get_res_lat('Munich_Temperature_MODIS_1km')),')) from Munich_Temperature_MODIS_1km AS c')) AS val     
+FROM    public.munich_bldings_osm as m
+WHERE   m.name = 'Gienger'
+
+
+SELECT  m.first_bezi AS region,
+        rasdaman_op.query2numeric(CONCAT('select avg_cells(clip(c[0, 0:* , 0:*],',rasdaman_op.geo2grid_final(ST_AsText(ST_GeometryN(geom, 1)),rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')),')) from Munich_SRTM_NC_Elevation AS c')) AS val  
+FROM    public.munich_dist25 as m
+
+--
+-- QUERIES : VECTOR + OSM + RASTER
+-- 
+
+-- 1. List the districts with average elevation less than 501 meters ?
+
+WITH computed_values AS (
+    SELECT m.first_bezi AS region, geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_dist25 AS m
+)
+SELECT region, val, geom
+FROM computed_values
+WHERE val <= 501;
+
+-- 2. List the sub-districts with average elevation less than 500 meters ?
+
+WITH computed_values AS (
+    SELECT m.name AS region, bezirk, geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_subdist105 AS m
+)
+SELECT region, bezirk, val, geom
+FROM computed_values
+WHERE val < 500;
+
+-- 3. List all the churches in Munich where average elevation more than 550 meters ?
+
+WITH computed_values AS (
+    SELECT m.first_bezi AS region, m.geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(m.geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_dist25 AS m
+)
+SELECT b.name AS church_name, m.first_bezi AS region, c.val AS elevation, b.geom AS building_geom
+FROM munich_bldings_osm b
+JOIN public.munich_dist25 m ON ST_Within(b.geom, m.geom)
+JOIN computed_values c ON c.region = m.first_bezi
+WHERE b.type = 'church' AND c.val > 550;
+
+
+
+-- 4. List all the industrial in Munich where average elevation is between 540 and 560 meters ?
+
+WITH computed_values AS (
+    SELECT m.first_bezi AS region, m.geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(m.geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_dist25 AS m
+)
+SELECT b.name AS industrial_name, m.first_bezi AS region, c.val AS elevation, b.geom AS building_geom
+FROM munich_bldings_osm b
+JOIN public.munich_dist25 m ON ST_Within(b.geom, m.geom)
+JOIN computed_values c ON c.region = m.first_bezi
+WHERE b.type = 'industrial' AND c.val > 540 AND c.val < 560; -- AND b.name IS NOT NULL;
+
+
+-- 5. List all the hospitals in Munich where average elevation is between 540 and 560 meters ?
+
+WITH computed_values AS (
+    SELECT m.first_bezi AS region, m.geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(m.geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_dist25 AS m
+)
+SELECT b.name AS industrial_name, m.first_bezi AS region, c.val AS elevation, b.geom AS building_geom
+FROM munich_bldings_osm b
+JOIN public.munich_dist25 m ON ST_Within(b.geom, m.geom)
+JOIN computed_values c ON c.region = m.first_bezi
+WHERE b.type = 'hospital' AND c.val > 540 AND c.val < 560 AND b.name IS NOT NULL;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+-- EXPERIEMNTS
+--
+SELECT b.name, b.geom, m.first_bezi
+FROM munich_bldings_osm b 
+JOIN munich_dist25 m ON ST_Within(b.geom, m.geom)
+WHERE b.type = 'church'
+
+
+WITH computed_values AS (
+    SELECT m.first_bezi AS region, b.name AS ch_name, b.geom,
+           rasdaman_op.query2numeric(
+               CONCAT(
+                   'select avg_cells(clip(c[0, 0:* , 0:*],',
+                   rasdaman_op.geo2grid_final(
+                       ST_AsText(ST_GeometryN(m.geom, 1)),
+                       rasdaman_op.get_min_longitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_max_latitude('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lon('Munich_SRTM_NC_Elevation'),
+                       rasdaman_op.get_res_lat('Munich_SRTM_NC_Elevation')
+                   ),
+                   ')) from Munich_SRTM_NC_Elevation AS c'
+               )
+           ) AS val  
+    FROM public.munich_dist25 AS m
+	JOIN munich_bldings_osm b ON ST_Within(m.geom, b.geom)
+)
+SELECT region, val, ch_name, geom
+FROM computed_values
+WHERE val <= 510;
+

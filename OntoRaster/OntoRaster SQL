@@ -195,7 +195,7 @@ WHERE   m.name_2 = 'Deggendorf';
 -- Spatial Clipping
 
 SELECT  m.name_2 AS region,
-        rasdaman_op.query2array(CONCAT('select clip(c[100, 0:* , 0:*],',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),') from Baveria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
+        rasdaman_op.query2array(CONCAT('select clip(c[100, 0:* , 0:*],',rasdaman_op.geo2grid_coords(ST_AsText((ST_Dump(m.geom)).geom)),') from Bavaria_Temperature_MODIS_1km AS c')) AS avg_temp_°C     
 FROM    region_bavaria as m
 WHERE   m.name_2 = 'Deggendorf';
 
@@ -1215,7 +1215,7 @@ SELECT
     END AS geometry
 FROM input_data;
 
-
+    
 
 
 SELECT name_2, length(ST_AsText(geom)),ST_NumGeometries(geom), geom FROM region_sweden   -- Multipolygons to polygons

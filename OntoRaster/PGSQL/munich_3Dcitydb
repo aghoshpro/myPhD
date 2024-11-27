@@ -1,0 +1,28 @@
+SELECT * FROM citydb.building
+ORDER BY id ASC
+
+SELECT * FROM citydb.address
+ORDER BY id ASC
+
+SELECT * FROM citydb.address_to_building
+
+-- FILTERED
+
+SELECT id, roof_type, objectclass_id, building_root_id, measured_height, lod2_solid_id FROM citydb.building
+ORDER BY id ASC LIMIT 100
+
+SELECT id, gmlid, street, city FROM citydb.address
+ORDER BY id ASC LIMIT 100
+
+SELECT * FROM citydb.address_to_building
+ORDER BY building_id ASC, address_id ASC
+LIMIT 100
+
+-- CITY COUNT
+SELECT 
+    city, 
+    count(city) AS "count"
+FROM citydb.address
+WHERE city IS NOT NULL
+GROUP BY city
+ORDER BY "count" DESC;
