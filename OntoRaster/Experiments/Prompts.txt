@@ -2,7 +2,7 @@
 # PROMPT_01 #
 #############
 
-I have 4 relational tables X, B, C, Y in posgresql database such as 
+I have 4 relational tables X, B, C, Y in postgresql database such as 
 
 X(xid, xname, bid)
 B(bid, bname, cid)
@@ -25,12 +25,12 @@ JOIN Y ON X.yid = Y.yid;
 # PROMPT_02 #
 #############
 
-I have a table `timelog` in postgresql where the a row looks like follwing,
+I have a table `timelog` in postgresql where the a row looks like following,
 
 ID, start_time, end_time
 Tom, "2023-01-01T00:00:00+00:00", "2023-10-31T00:00:00+00:00"
 
-I want the time interval bwtween the start_time and end_time using a sql query and store it into a separe column days in the table `timelog`
+I want the time interval between the start_time and end_time using a sql query and store it into a separate column days in the table `timelog`
 ID, start_time, end_time, days
 Tom, "2023-01-01T00:00:00+00:00", "2023-01-31T00:00:00+00:00", 31
 
@@ -39,7 +39,7 @@ Tom, "2023-01-01T00:00:00+00:00", "2023-01-31T00:00:00+00:00", 31
 # PROMPT_03 #
 #############
 
-I have 1 relational table X in posgresql database such as 
+I have 1 relational table X in postgresql database such as 
 
 X(xid, xname, xtype, xlb, xub)
 
@@ -110,7 +110,7 @@ days_from_start = (example_datetime - start_datetime).days
 #############
 
 
-I have 1 relational table TimeX in posgresql database such as 
+I have 1 relational table TimeX in postgresql database such as 
 
 TimeX(id, start_date, end_date, start_date_grid, end_date_grid)
 
@@ -126,7 +126,7 @@ Please write a sql function to that takes input from TIme table and find out `ex
 # PROMPT_06 #
 #############
 
-I have a relational table sample in posgresql database such as 
+I have a relational table sample in postgresql database such as 
 
 sample(id, name, val)
 
@@ -139,7 +139,7 @@ id | name | val
 
 Write a query that will fetch val of Snow data for Bavaria
 
-I tried the follwing sql query SELECT * FROM sample WHERE name LIKE '%Bavaria%' AND 'Snow'; but didnt work
+I tried the following sql query SELECT * FROM sample WHERE name LIKE '%Bavaria%' AND 'Snow'; but didn't work
 
 Please write a sql function to that takes input from TIme table and find out `example_date_grid` of the given example_date = "2022-11-14T00:00:00+00:00" 
 
@@ -148,7 +148,7 @@ Please write a sql function to that takes input from TIme table and find out `ex
 # PROMPT_07 #
 #############
 
-I have a relational table students in posgresql database such as 
+I have a relational table students in postgresql database such as 
 
 students(id, name, subject)
 
@@ -159,12 +159,37 @@ id |	name	| subject
 2  |	Edward	| Chemistry
 3  |	Anna_M_	| Chemistry
 
+#############
+# PROMPT_08 #
+#############
+
+I have three relational tables in postgresql database such as 
+
+building(id, roof, height)
+address(id, address, roofs)
+building_to_address(build_id, address_id)
+
+Write a query that will output building address and their height provided that there is null row
 
 
+#############
+# PROMPT_09 #
+#############
+This is SPARQL query that fetches average elevation for regionName 'Laim'. 
+
+SELECT ?v {
+           ?vector rdfs:label ?regionName .
+                ?vector geo:asWKT ?regionWkt .
+                ?raster rasdb:rasterName ?rasterName .
+                FILTER (?regionName = 'Laim')
+                FILTER (CONTAINS(?rasterName, 'Elevation'))
+                BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+                BIND (rasdb:rasSpatialAverage(?timeStamp, ?regionWkt, ?rasterName) AS ?v)
+                }
 
 
-
-
+Now rewrite a SPARQL query that includes all 10 or more regionNames including 'Laim' and respective average elevation by using
+rasdb:rasSpatialAverage
 
 
 
