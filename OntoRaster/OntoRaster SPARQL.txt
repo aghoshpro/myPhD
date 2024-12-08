@@ -82,6 +82,34 @@ BIND (rasdb:rasSpatialAverageFINAL(?timestamp, ?vector_region_wkt, ?raster_name)
 
 =====|08|=====
 
+###################################################################################################
+#### Query 5. Find spatial minimum value over a user-specific vector Region and Raster dataset ####
+###################################################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?answer {
+?dist a :District .
+?dist rdfs:label ?distName .
+?dist geo:asWKT ?distWkt .
+?bldg a lgdo:Temple .
+?bldg geo:asWKT ?bldgWkt .
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?answer)
+FILTER(?answer < 500)
+} 
+
+=====|08x|=====
+
 PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
 PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
 PREFIX geo:	<http://www.opengis.net/ont/geosparql#>
