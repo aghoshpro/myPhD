@@ -88,6 +88,34 @@ BIND (rasdb:rasSpatialAverageFINAL(?timestamp, ?vector_region_wkt, ?raster_name)
 
 =====|08|=====
 
+###################################################################################################
+#### Query 5. Find spatial minimum value over a user-specific vector Region and Raster dataset ####
+###################################################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?answer {
+?dist a :District .
+?dist rdfs:label ?distName .
+?dist geo:asWKT ?distWkt .
+?bldg a lgdo:Temple .
+?bldg geo:asWKT ?bldgWkt .
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?answer)
+FILTER(?answer < 500)
+} 
+
+=====|08x|=====
+
 PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
 PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
 PREFIX geo:	<http://www.opengis.net/ont/geosparql#>
@@ -106,3 +134,142 @@ BIND ('2022-08-24T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
 BIND (rasdb:rasSpatialMaximum(?timeStamp, ?regionWkt, ?rasterName) AS ?answer)
 BIND (geof:asGeoJSON(?regionWkt) AS ?regionGeoJSON)
 } 
+
+[[tabGroups]]
+
+name="Munich"
+
+[[tabGroups.tabs]]
+
+name="Q11. Get Churches"
+query="""
+#####################################################################
+#### Query 11. List all the churches in Munich where elevation is less than 520 meters ####
+#####################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?distName ?answer ?bldgWkt {
+?dist a :District .
+?dist rdfs:label ?distName .
+?dist geo:asWKT ?distWkt .
+?bldg a lgdo:Church .
+?bldg geo:asWKT ?bldgWkt .
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?answer)
+FILTER(?answer < 520)
+} 
+
+"""
+
+[[tabGroups.tabs]]
+
+name="Q12. Get Churches"
+query="""
+#####################################################################
+#### Query 12. List all the churches in Munich where elevation is more than 500 meters
+#####################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?distName ?answer ?distWkt ?distWktColor ?bldgWkt ?bldgWktColor {
+?dist a :District .
+?dist rdfs:label ?distName .
+?dist geo:asWKT ?distWkt .
+BIND('#008AFF5C' AS ?distWktColor)
+?bldg a lgdo:Church .
+?bldg geo:asWKT ?bldgWkt .
+BIND('red' AS ?bldgWktColor)
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?answer)
+FILTER(?answer > 500)
+} 
+
+"""
+
+[[tabGroups.tabs]]
+
+name="Q13. Get Universities"
+query="""
+#####################################################################
+#### Query 13. List all the universities in Munich where elevation is more than 500 meters
+#####################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?distName ?elv ?distWkt ?distWktColor ?bldgWkt ?bldgWktColor {
+?dist a :District .
+?dist rdfs:label ?distName .
+?dist geo:asWKT ?distWkt .
+BIND('#008AFF5C' AS ?distWktColor)
+?bldg a lgdo:University .
+?bldg geo:asWKT ?bldgWkt .
+BIND('red' AS ?bldgWktColor)
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?elv)
+FILTER(?elv > 500)
+} 
+
+"""
+
+[[tabGroups.tabs]]
+
+name="Q13. Get Universities"
+query="""
+#####################################################################
+#### Query 13. List all the residential in Munich where elevation is more than 520 meters
+#####################################################################
+
+PREFIX :	<https://github.com/aghoshpro/OntoRaster/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX geo:	 <http://www.opengis.net/ont/geosparql#>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX lgdo: <http://linkedgeodata.org/ontology/>
+PREFIX rasdb: <https://github.com/aghoshpro/RasterDataCube/>
+
+SELECT ?distName ?answer ?distWkt ?distWktColor ?distWktLabel ?bldgWkt ?bldgWktColor {
+?dist a :District .
+?dist rdfs:label ?distName .
+BIND(?distName AS ?distWktLabel)
+?dist geo:asWKT ?distWkt .
+BIND('#008AFF5C' AS ?distWktColor)
+?bldg a lgdo:Residential .
+?bldg geo:asWKT ?bldgWkt .
+BIND('red' AS ?bldgWktColor)
+FILTER (geof:sfWithin(?bldgWkt, ?distWkt))
+?gridCoverage a :Raster .
+?gridCoverage rasdb:rasterName ?rasterName .
+FILTER (CONTAINS(?rasterName, 'Elevation'))
+BIND ('2000-02-11T00:00:00+00:00'^^xsd:dateTime AS ?timeStamp)
+BIND (rasdb:rasSpatialMinimum(?timeStamp, ?distWkt, ?rasterName) AS ?answer)
+FILTER(?answer > 520)
+} 
+
+"""
