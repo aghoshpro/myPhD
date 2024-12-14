@@ -1,25 +1,16 @@
 arkaghosh@lat7410g:~$ sudo -i
 [sudo] password for arkaghosh: 
 JAVA_HOME: command not found
-root@lat7410g:~# echo JAVA_HOME
-JAVA_HOME
 root@lat7410g:~# echo $JAVA_HOME
 /lib/jvm/java-11-openjdk-amd64
 root@lat7410g:~# cd usr
 -bash: cd: usr: No such file or directory
-root@lat7410g:~# cd \
-> arkaghosh@lat7410g:~$ ^C
-arkaghosh@lat7410g:~$ sudo -i
-JAVA_HOME: command not found
-root@lat7410g:~# cd \
-> ^C
 root@lat7410g:~# cd /
 root@lat7410g:/# cd usr
 root@lat7410g:/usr# cd lib
 root@lat7410g:/usr/lib# cd jvm
 root@lat7410g:/usr/lib/jvm# cd java-
 java-1.11.0-openjdk-amd64/ java-11-openjdk-amd64/     java-1.8.0-openjdk-amd64/  java-8-openjdk-amd64/
-root@lat7410g:/usr/lib/jvm# cd java-^C
 root@lat7410g:/usr/lib/jvm# logout
 
 
@@ -50,8 +41,8 @@ REPOSITORY    TAG              IMAGE ID       CREATED          SIZE
 ontop/ontop   5.2.0-SNAPSHOT   3ca0a1c20954   16 seconds ago   188MB
 ontop/ontop   latest           3ca0a1c20954   16 seconds ago   188MB
 ontop/ontop   5.1.0            7500e3d497d5   10 months ago    187MB
-root@lat7410g:~# docker tag 3ca0a1c20954 aghoshpro/OntoRaster:v1
-Error parsing reference: "aghoshpro/OntoRaster:v1" is not a valid repository/tag: invalid reference format: repository name (aghoshpro/OntoRaster) must be lowercase
+
+
 root@lat7410g:~# docker tag 3ca0a1c20954 aghoshpro/ontoraster:v1
 root@lat7410g:~# docker image ls
 REPOSITORY             TAG              IMAGE ID       CREATED         SIZE
