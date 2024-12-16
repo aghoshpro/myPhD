@@ -259,9 +259,21 @@ FROM    region_south_tyrol as m
 WHERE   m.name_2 = 'Bolzano';
 
 
+-- ##########################
+-- ### TO INSTAL PLPYTHON ###
+-- ##########################
 
 
-
+sudo -i
+[sudo] password for arkaghosh: 
+JAVA_HOME: command not found
+root@lat7410g:~# python3.8 -m  pip install rasterio folium
+Collecting rasterio
+  Downloading rasterio-1.3.11-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (21.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 21.8/21.8 MB 4.6 MB/s eta 0:00:00
+Collecting folium
+  Downloading folium-0.18.0-py2.py3-none-any.whl (108 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 108.9/108.9 kB 4.4 MB/s eta 0:00:00
 
 -- ###########################################
 -- ### LookUp Table Creation In petacopedb ###
