@@ -259,10 +259,11 @@ FROM    region_south_tyrol as m
 WHERE   m.name_2 = 'Bolzano';
 
 
--- ##########################
--- ### TO INSTALL PLPYTHON ###
--- ##########################
+-- ######################################
+-- ### TO INSTALL NEW PLPYTHON MODULE ###
+-- ######################################
 
+python version python3.8.10 in pgsql
 
 sudo -i
 [sudo] password for arkaghosh: 
@@ -985,11 +986,11 @@ $BODY$;
 ALTER FUNCTION rasdaman_op.query2numeric(text)
     OWNER TO postgres;
 
--- FUNCTION: rasdaman_op.query2geotiff02(text, text, text, double precision)
+-- FUNCTION: rasdaman_op.query2geotiff(text, text, text, double precision)
 
--- DROP FUNCTION IF EXISTS rasdaman_op.query2geotiff02(text, text, text, double precision);
+-- DROP FUNCTION IF EXISTS rasdaman_op.query2geotiff(text, text, text, double precision);
 
-CREATE OR REPLACE FUNCTION rasdaman_op.query2geotiff02(
+CREATE OR REPLACE FUNCTION rasdaman_op.query2geotiff(
 	query text,
 	geomm text,
 	filename text,
@@ -1014,6 +1015,12 @@ from rasterio.plot import show, reshape_as_image, reshape_as_raster, reshape_as_
 import folium
 from folium.raster_layers import ImageOverlay
 
+def get_polygon_extent(polygon):
+    coords = list(polygon.exterior.coords)
+    xs = [x for x, y in coords]
+    ys = [y for x, y in coords]
+    return [min(xs), min(ys), max(xs), max(ys)]
+	
 def getGeoTransform(extent, nlines, ncols):
     resx = (extent[2] - extent[0]) / ncols
     resy = (extent[3] - extent[1]) / nlines
@@ -1037,9 +1044,8 @@ def query2folium(query, region, filename, fill_val):
     srs.ImportFromProj4('+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
     grid_data.SetProjection(srs.ExportToWkt())
     region = wkt.loads(region)
-    if region.geom_type == 'Polygon':    
-        extent = [11.5028, 48.1255, 11.5308, 48.1438] # bounds(region).tolist()
-        grid_data.SetGeoTransform(getGeoTransform(extent, nrows, ncols))	
+    extent = get_polygon_extent(region)
+    grid_data.SetGeoTransform(getGeoTransform(extent, nrows, ncols))	
     
     file_name = str(filename)+'.tif'
     driver.CreateCopy(file_name, grid_data, 0)  
@@ -1082,8 +1088,9 @@ finally:
    db_connector.close()	
 $BODY$;
 
-ALTER FUNCTION rasdaman_op.query2geotiff02(text, text, text, double precision)
+ALTER FUNCTION rasdaman_op.query2geotiff(text, text, text, double precision)
     OWNER TO postgres;
+
 
 
 

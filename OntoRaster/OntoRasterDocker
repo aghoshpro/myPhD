@@ -79,3 +79,64 @@ d75915b4cae4: Pushed
 0b9c994b0484: Mounted from library/eclipse-temurin 
 v1: digest: sha256:7f70e00562bf3a503e5530119e9fd5e09d15e58889763256ac4cc285c95f130c size: 1370
 root@lat7410g:~# 
+
+
+
+
+
+
+
+
+#################
+#### WORKING ####
+#################
+
+arkaghosh@lat7410g:~$ sudo -i
+[sudo] password for arkaghosh: 
+JAVA_HOME: command not found
+root@lat7410g:~# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+root@lat7410g:~# echo $JAVA_HOME
+/usr/lib/jvm/java-11-openjdk-amd64
+root@lat7410g:~# /usr/bin/env bash /home/arkaghosh/Downloads/Github/Ontop/client/docker/build-image.sh
+[2024-06-10 23:37:27] Compiling Ontop 5.2.0-SNAPSHOT
+[INFO] Scanning for projects...
+
+[2024-06-10 23:44:51] Done
+
+root@lat7410g:~# docker image ls
+
+REPOSITORY             TAG              IMAGE ID       CREATED          SIZE
+ontop/ontop            5.2.0-SNAPSHOT   0bde6d0ef037   57 seconds ago   188MB
+ontop/ontop            latest           0bde6d0ef037   57 seconds ago   188MB
+aghoshpro/ontoraster   v1.2             6d681ae5614f   10 days ago      188MB
+aghoshpro/ontoraster   v1.1             c9e99e11212f   6 months ago     188MB
+aghoshpro/ontotaster   v1.1             c9e99e11212f   6 months ago     188MB
+aghoshpro/ontoraster   v1               3ca0a1c20954   6 months ago     188MB
+ontop/ontop            5.1.0            7500e3d497d5   16 months ago    187MB
+hello-world            latest           d2c94e258dcb   19 months ago    13.3kB
+
+root@lat7410g:~# docker tag 0bde6d0ef037 aghoshpro/ontoraster:v1.3
+
+root@lat7410g:~# docker image ls
+REPOSITORY             TAG              IMAGE ID       CREATED         SIZE
+aghoshpro/ontoraster   v1.3             0bde6d0ef037   3 minutes ago   188MB
+ontop/ontop            5.2.0-SNAPSHOT   0bde6d0ef037   3 minutes ago   188MB
+ontop/ontop            latest           0bde6d0ef037   3 minutes ago   188MB
+aghoshpro/ontoraster   v1.2             6d681ae5614f   10 days ago     188MB
+aghoshpro/ontoraster   v1.1             c9e99e11212f   6 months ago    188MB
+aghoshpro/ontotaster   v1.1             c9e99e11212f   6 months ago    188MB
+aghoshpro/ontoraster   v1               3ca0a1c20954   6 months ago    188MB
+ontop/ontop            5.1.0            7500e3d497d5   16 months ago   187MB
+hello-world            latest           d2c94e258dcb   19 months ago   13.3kB
+
+root@lat7410g:~# docker push aghoshpro/ontoraster:v1.3
+
+The push refers to repository [docker.io/aghoshpro/ontoraster]
+838696606bd0: Pushed 
+19d351c36608: Layer already exists 
+b4d77fa63fe9: Layer already exists 
+9579a22d7f2d: Layer already exists 
+2573e0d81582: Layer already exists 
+v1.3: digest: sha256:89df0ba328dad85f22ed786e4fbae9764f1e6cffeff69e29e386836df5ed3294 size: 1370
+
+root@lat7410g:~#
