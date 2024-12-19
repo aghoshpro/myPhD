@@ -298,72 +298,100 @@ SELECT * FROM public.wgs84_bounding_box
 	
 
 -- 2. lookup_temp (to get extent as double)
-CREATE OR REPLACE VIEW lookup_temp_X AS
-	SELECT coverage.id, coverage.coverage_id, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
+CREATE OR REPLACE VIEW lookup_temp_RED AS
+	SELECT coverage.id, coverage.coverage_id, field.field_id, field.name AS field_name, nil_value.null_value AS fill_nan, uom.code AS scale_factor, wgs84_bounding_box.max_lat, wgs84_bounding_box.min_lat, wgs84_bounding_box.max_long, wgs84_bounding_box.min_long 	
 	FROM public.coverage
 	JOIN public.envelope ON coverage.envelope_id = envelope.envelope_id
+	JOIN public.range_type ON coverage.range_type_id = range_type.range_type_id 
+	JOIN public.field ON field.data_record_id = range_type.data_record_id
 	JOIN public.envelope_by_axis ON  envelope.envelope_by_axis_id = envelope_by_axis.envelope_by_axis_id
 	JOIN public.wgs84_bounding_box ON envelope_by_axis.wgs84_bounding_box_id = wgs84_bounding_box.wgs84_bounding_box_id
+	JOIN public.quantity ON field.quantity_id = quantity.quantity_id
+	JOIN public.nil_value ON nil_value.quantity_id = quantity.quantity_id
+	JOIN public.uom ON uom.uom_id = quantity.uom_id
 		
 
 -- 3. lookup_peta build from selected tables joined lookup_temp.
 	
-CREATE OR REPLACE VIEW lookup_peta_X AS	
-	SELECT coverage.id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound,lookup_temp_X.max_lat, lookup_temp_X.min_lat, lookup_temp_X.max_long, lookup_temp_X.min_long, geo_axis.resolution
-	FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis, lookup_temp_X
+CREATE OR REPLACE VIEW lookup_peta_RED AS	
+	SELECT coverage.id, coverage.coverage_id, lookup_temp_RED.field_id, lookup_temp_RED.field_name,  lookup_temp_RED.fill_nan,  lookup_temp_RED.scale_factor, axis_extent.axis_label, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound,lookup_temp_RED.max_lat, lookup_temp_RED.min_lat, lookup_temp_RED.max_long, lookup_temp_RED.min_long, axis_extent.resolution
+	FROM public.coverage, public.envelope,  public.axis_extent, lookup_temp_RED
 	WHERE coverage.envelope_id = envelope.envelope_id 
 	AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
-	AND axis_extent.upper_bound = geo_axis.upper_bound
-	AND coverage.id = lookup_temp_X.id
+	AND coverage.id = lookup_temp_RED.id
 
-    -- OR
+SELECT * FROM lookup_peta_RED -- Lookup Table in petascopedb
 
-CREATE OR REPLACE VIEW lookup_peta_X AS	
-    SELECT coverage.id, geo_axis.general_grid_id, coverage.coverage_id,  axis_extent.axis_label, axis_extent.axis_type, axis_extent.uom_label AS unit, axis_extent.lower_bound, axis_extent.grid_lower_bound, axis_extent.upper_bound, axis_extent.grid_upper_bound, geo_axis.resolution
-    FROM public.coverage, public.envelope,  public.axis_extent, public.geo_axis
-    WHERE coverage.envelope_id = envelope.envelope_id 
-    AND envelope.envelope_by_axis_id = axis_extent.envelope_by_axis_id 
-    AND axis_extent.upper_bound = geo_axis.upper_bound
+-- 4. Switch to VectorDB and import lookup_peta_red as lookup_unstructured_YELLOW from petascopedb using **dblink** 
 
-SELECT * FROM lookup_peta_X -- Lookup Table in petascopedb
-
--- 4. Switch to VectorDB and import lookup_peta_X as lookup_main_X using dblink
-
-CREATE OR REPLACE VIEW lookup_main_X1 AS		
+CREATE OR REPLACE VIEW public.lookup_unstructured_YELLOW AS		
 SELECT *
     FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
-	   'SELECT id, coverage_id, axis_label, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound, resolution, min_long, max_long, min_lat, max_lat FROM public.lookup_peta_x')
-AS remote_table(raster_id text, raster_name text, axis_label text, domain_lower_bound text, domain_upper_bound date, grid_lower_bound date, grid_upper_bound integer, resolution float, min_long float, max_long float, min_lat float, max_lat float);
+	   'SELECT id, coverage_id, field_id, field_name, fill_nan, scale_factor, axis_label, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound, resolution, min_long, max_long, min_lat, max_lat FROM public.lookup_peta_red')
+AS remote_table(raster_id text, raster_name text, field_id text, field_name text, fill_nan float, scale_factor float, axis_label text, domain_lower_bound text, domain_upper_bound text, grid_lower_bound integer, grid_upper_bound integer, resolution float, min_long float, max_long float, min_lat float, max_lat float);
+
+
+-- CREATE OR REPLACE VIEW lookup_main_X1 AS		
+-- SELECT *
+--     FROM dblink('host=localhost dbname=petascopedb user=petauser password=petapasswd options=-csearch_path=',
+-- 	   'SELECT id, coverage_id, axis_label, lower_bound, upper_bound, grid_lower_bound, grid_upper_bound, resolution, min_long, max_long, min_lat, max_lat FROM public.lookup_peta_x')
+-- AS remote_table(raster_id text, raster_name text, axis_label text, domain_lower_bound text, domain_upper_bound date, grid_lower_bound date, grid_upper_bound integer, resolution float, min_long float, max_long float, min_lat float, max_lat float);
 
 
 
--- 5. Build sample_lookup_X
+-- 5. Build raster_lookup_YELLOW
 
-CREATE OR REPLACE VIEW sample_lookup_X1 AS
-SELECT 
-    raster_id,
-    raster_name,
-    MAX(CASE WHEN axis_label = 'Long' THEN min_long END) AS min_lon,
-    MAX(CASE WHEN axis_label = 'Long' THEN max_long END) AS max_lon,
-	MAX(CASE WHEN axis_label = 'Long' THEN grid_lower_bound END) AS min_lon_grid,
-    MAX(CASE WHEN axis_label = 'Long' THEN grid_upper_bound END) AS max_lon_grid,
-	MAX(CASE WHEN axis_label = 'Long' THEN resolution END) AS res_lon,
-    MAX(CASE WHEN axis_label = 'Lat' THEN min_lat END) AS min_lat,
-    MAX(CASE WHEN axis_label = 'Lat' THEN max_lat END) AS max_lat,
-	MAX(CASE WHEN axis_label = 'Lat' THEN grid_lower_bound END) AS min_lat_grid,
-    MAX(CASE WHEN axis_label = 'Lat' THEN grid_upper_bound END) AS max_lat_grid,
-	MAX(CASE WHEN axis_label = 'Lat' THEN resolution END) AS res_lat,
-	MAX(CASE WHEN axis_label = 'ansi' THEN domain_lower_bound date END) AS start_time,
-    MAX(CASE WHEN axis_label = 'ansi' THEN domain_upper_bound date END) AS end_time,
-	MAX(CASE WHEN axis_label = 'ansi' THEN grid_lower_bound END) AS start_time_grid,
-    MAX(CASE WHEN axis_label = 'ansi' THEN grid_upper_bound END) AS end_time_grid,
-	MAX(CASE WHEN axis_label = 'ansi' THEN resolution END) AS res_time
-FROM lookup_main_X1
-GROUP BY raster_id, raster_name;
+SELECT * FROM lookup_unstructured_YELLOW;
+
+CREATE OR REPLACE VIEW public.raster_lookup_structured_YELLOW AS
+	SELECT 
+	    raster_id,
+	    raster_name,
+		field_id,
+		field_name, 
+		fill_nan,
+		scale_factor,
+	    MAX(CASE WHEN axis_label = 'Long' THEN min_long END) AS min_lon,
+	    MAX(CASE WHEN axis_label = 'Long' THEN max_long END) AS max_lon,
+		MAX(CASE WHEN axis_label = 'Long' THEN grid_lower_bound END) AS min_lon_grid,
+	    MAX(CASE WHEN axis_label = 'Long' THEN grid_upper_bound END) AS max_lon_grid,
+		MAX(CASE WHEN axis_label = 'Long' THEN resolution END) AS res_lon,
+	    MAX(CASE WHEN axis_label = 'Lat' THEN min_lat END) AS min_lat,
+	    MAX(CASE WHEN axis_label = 'Lat' THEN max_lat END) AS max_lat,
+		MAX(CASE WHEN axis_label = 'Lat' THEN grid_lower_bound END) AS min_lat_grid,
+	    MAX(CASE WHEN axis_label = 'Lat' THEN grid_upper_bound END) AS max_lat_grid,
+		MAX(CASE WHEN axis_label = 'Lat' THEN resolution END) AS res_lat,
+		MAX(CASE WHEN axis_label = 'ansi' THEN domain_lower_bound END) AS start_time,
+	    MAX(CASE WHEN axis_label = 'ansi' THEN domain_upper_bound END) AS end_time,
+		MAX(CASE WHEN axis_label = 'ansi' THEN grid_lower_bound END) AS start_time_grid,
+	    MAX(CASE WHEN axis_label = 'ansi' THEN grid_upper_bound END) AS end_time_grid,
+		MAX(CASE WHEN axis_label = 'ansi' THEN resolution END) AS res_time
+	FROM lookup_unstructured_YELLOW
+	GROUP BY raster_id, raster_name, field_id, field_name, fill_nan, scale_factor;
+
+-- 6. Build raster_lookup_live_GREEN for creating mappings for VKG
+
+select * from raster_lookup_structured_YELLOW -- Convert it to table
+
+CREATE TABLE public.raster_lookup_live_GREEN AS SELECT * FROM raster_lookup_structured_YELLOW; 
+
+ALTER TABLE public.raster_lookup_live_GREEN ADD PRIMARY KEY (raster_id); 
+
+SELECT * FROM raster_lookup_live_GREEN -- (ORIGINAL, DONT TOUCH) -- Build mappings with this table
 
 
-select * from sample_lookup_X1 -- Build mappings with this table
-	
+
+-- IF NECESSARY
+
+-- 6a. Change the column type to float, handling blank strings as NULL
+ALTER TABLE raster_lookup_live_GREEN ALTER COLUMN scale_factor TYPE FLOAT USING NULLIF(scale_factor, '')::FLOAT;
+
+-- 6a. Replace NULL values with 0.001
+UPDATE raster_lookup_live_GREEN
+SET scale_factor = 0.02
+WHERE scale_factor IS NULL;
+
+SELECT * FROM raster_lookup_live_GREEN 
 
 
 

@@ -119,6 +119,7 @@ root@lat7410g:~# docker tag 0bde6d0ef037 aghoshpro/ontoraster:v1.3
 
 root@lat7410g:~# docker image ls
 REPOSITORY             TAG              IMAGE ID       CREATED         SIZE
+aghoshpro/ontoraster   v1.4             37694dd28b1d   1 minute ago    188MB
 aghoshpro/ontoraster   v1.3             0bde6d0ef037   3 minutes ago   188MB
 ontop/ontop            5.2.0-SNAPSHOT   0bde6d0ef037   3 minutes ago   188MB
 ontop/ontop            latest           0bde6d0ef037   3 minutes ago   188MB
@@ -132,11 +133,12 @@ hello-world            latest           d2c94e258dcb   19 months ago   13.3kB
 root@lat7410g:~# docker push aghoshpro/ontoraster:v1.3
 
 The push refers to repository [docker.io/aghoshpro/ontoraster]
-838696606bd0: Pushed 
+43e003d514b7: Pushed 
 19d351c36608: Layer already exists 
 b4d77fa63fe9: Layer already exists 
 9579a22d7f2d: Layer already exists 
 2573e0d81582: Layer already exists 
-v1.3: digest: sha256:89df0ba328dad85f22ed786e4fbae9764f1e6cffeff69e29e386836df5ed3294 size: 1370
+v1.4: digest: sha256:a2204aa3970738ff33a096eeddddb9cd6b0ade1dfc69f5360d322d44239d7ca9 size: 1370
+
 
 root@lat7410g:~#
