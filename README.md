@@ -4,7 +4,9 @@
 
 [<img src="./research.png">](https://www.wsnmagazine.com/secrets-for-research-excellence/)
 
-# Environment
+## Funding
+
+## Environment
 
 ### Installing Java SE Platform (JDK 23)
 
@@ -146,8 +148,6 @@ Relational data with additional column representing geometric features of real w
 # Raster Data
 
 - [GDAL Raster Drivers](https://gdal.org/en/latest/drivers/raster/#)
-
-### Data Sources
 
 1. Application for Extracting and Exploring Analysis Ready Samples ([AρρEEARS](https://appeears.earthdatacloud.nasa.gov/))
 2. [Copernicus](https://www.copernicus.eu/en/access-data)
