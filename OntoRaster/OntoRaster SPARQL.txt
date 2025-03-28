@@ -273,3 +273,49 @@ FILTER(?answer > 520)
 } 
 
 """
+
+
+String query7 = "PREFIX :\t<https://github.com/aghoshpro/OntoRaster/>\n"
++ "PREFIX rdfs:\t<http://www.w3.org/2000/01/rdf-schema#>\n"
++ "PREFIX gn:\t<https://www.geonames.org/ontology#>\n"
++ "PREFIX geo:\t<http://www.opengis.net/ont/geosparql#>\n"
++ "PREFIX geof:\t<http://www.opengis.net/def/function/geosparql/>\n"
++ "PREFIX rasdb:\t<https://github.com/aghoshpro/RasterDataCube/>\n"
++ "SELECT ?v {\n"
++ "?vector a :Region .\n"
++ "?vector rdfs:label ?region_name .\n"
++ "?vector geo:asWKT ?regionWkt .\n"
++ "?gname a gn:RSTN .\n"
++ "?gname geo:asWKT ?pointWkt .\n"
++ "FILTER (geof:sfWithin(?pointWkt, ?regionWkt)\n)"
++ "?raster rasdb:rasterName ?raster_name .\n"
++ "FILTER (?region_name = 'Stockholm'\n)" //Vector region = Umeå (2022-08-24T00:00:00+00:00), Ultimo (2023-09-24T00:00:00+00:00),  Bayreuth (2023-07-24T00:00:00+00:00)
++ "FILTER (CONTAINS(?raster_name, 'Sweden')\n)"
++ "BIND ('2022-08-24T00:00:00+00:00'^^xsd:dateTime AS ?timestamp\n)"
++ "BIND (rasdb:rasSpatialAverage(?timestamp, ?regionWkt, ?raster_name) AS ?v)"
++ "}\n";
+
+; ---------------- Mapping for GeoNames Data for Sweden (SE) -----------------
+mappingId  GeoNames_ID_SE
+target     :geonames/sweden/{geonameid} a gn:Feature .
+source     SELECT geonameid FROM public.geonames_se
+
+mappingId  GeoNames_ID_SE1
+target     :geonames/sweden/{geonameid} rdfs:label {name}^^xsd:string .
+source     SELECT geonameid, name FROM public.geonames_se
+
+mappingId  GeoNames_ID_SE2
+target     :geonames/sweden/{geonameid} gn:countryCode {country_code}^^xsd:string .
+source     SELECT geonameid, country_code FROM public.geonames_se
+
+mappingId  GeoNames_ID_SE3
+target     :geonames/sweden/{geonameid} geo:asWKT {pointWkt}^^geo:wktLiteral .
+source     SELECT geonameid, ST_AsText(ST_Point(longitude, latitude)) AS pointWkt FROM public.geonames_se
+
+mappingId  GeoNames_ID_SE3
+target     :geonames/sweden/{geonameid} a gn:{featureCode} .
+source     SELECT geonameid, feature_code AS featureCode FROM public.geonames_se
+
+
+
+
