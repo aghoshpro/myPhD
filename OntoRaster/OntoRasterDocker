@@ -92,11 +92,14 @@ root@lat7410g:~#
 #################
 
 arkaghosh@lat7410g:~$ sudo -i
+
 [sudo] password for arkaghosh: 
 JAVA_HOME: command not found
+
 root@lat7410g:~# export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 root@lat7410g:~# echo $JAVA_HOME
 /usr/lib/jvm/java-11-openjdk-amd64
+
 root@lat7410g:~# /usr/bin/env bash /home/arkaghosh/Downloads/Github/Ontop/client/docker/build-image.sh
 [2024-06-10 23:37:27] Compiling Ontop 5.2.0-SNAPSHOT
 [INFO] Scanning for projects...
@@ -106,31 +109,40 @@ root@lat7410g:~# /usr/bin/env bash /home/arkaghosh/Downloads/Github/Ontop/client
 root@lat7410g:~# docker image ls
 
 REPOSITORY             TAG              IMAGE ID       CREATED          SIZE
-ontop/ontop            5.2.0-SNAPSHOT   0bde6d0ef037   57 seconds ago   188MB
-ontop/ontop            latest           0bde6d0ef037   57 seconds ago   188MB
-aghoshpro/ontoraster   v1.2             6d681ae5614f   10 days ago      188MB
-aghoshpro/ontoraster   v1.1             c9e99e11212f   6 months ago     188MB
-aghoshpro/ontotaster   v1.1             c9e99e11212f   6 months ago     188MB
-aghoshpro/ontoraster   v1               3ca0a1c20954   6 months ago     188MB
-ontop/ontop            5.1.0            7500e3d497d5   16 months ago    187MB
-hello-world            latest           d2c94e258dcb   19 months ago    13.3kB
+ontop/ontop            5.2.0-SNAPSHOT   58ec57d52963   About a minute ago   188MB
+ontop/ontop            latest           58ec57d52963   About a minute ago   188MB
+aghoshpro/ontoraster   v1.51            51edee5f35db   3 months ago         188MB
+aghoshpro/ontoraster   v1.5             8e30c6994cf3   3 months ago         188MB
+aghoshpro/ontoraster   v1.4             37694dd28b1d   3 months ago         188MB
+aghoshpro/ontoraster   v1.3             0bde6d0ef037   3 months ago         188MB
+aghoshpro/ontoraster   v1.2             6d681ae5614f   4 months ago         188MB
+aghoshpro/ontoraster   v1.1             c9e99e11212f   10 months ago        188MB
+aghoshpro/ontotaster   v1.1             c9e99e11212f   10 months ago        188MB
+aghoshpro/ontoraster   v1               3ca0a1c20954   10 months ago        188MB
+ontop/ontop            5.1.0            7500e3d497d5   20 months ago        187MB
+hello-world            latest           d2c94e258dcb   23 months ago        13.3kB
 
-root@lat7410g:~# docker tag 0bde6d0ef037 aghoshpro/ontoraster:v1.3
+
+root@lat7410g:~# docker tag 58ec57d52963 aghoshpro/ontoraster:v1.6
 
 root@lat7410g:~# docker image ls
 REPOSITORY             TAG              IMAGE ID       CREATED         SIZE
-aghoshpro/ontoraster   v1.4             37694dd28b1d   1 minute ago    188MB
-aghoshpro/ontoraster   v1.3             0bde6d0ef037   3 minutes ago   188MB
-ontop/ontop            5.2.0-SNAPSHOT   0bde6d0ef037   3 minutes ago   188MB
-ontop/ontop            latest           0bde6d0ef037   3 minutes ago   188MB
-aghoshpro/ontoraster   v1.2             6d681ae5614f   10 days ago     188MB
-aghoshpro/ontoraster   v1.1             c9e99e11212f   6 months ago    188MB
-aghoshpro/ontotaster   v1.1             c9e99e11212f   6 months ago    188MB
-aghoshpro/ontoraster   v1               3ca0a1c20954   6 months ago    188MB
-ontop/ontop            5.1.0            7500e3d497d5   16 months ago   187MB
-hello-world            latest           d2c94e258dcb   19 months ago   13.3kB
+aghoshpro/ontoraster   v1.6             58ec57d52963   2 minutes ago   188MB
+ontop/ontop            5.2.0-SNAPSHOT   58ec57d52963   2 minutes ago   188MB
+ontop/ontop            latest           58ec57d52963   2 minutes ago   188MB
+aghoshpro/ontoraster   v1.51            51edee5f35db   3 months ago    188MB
+aghoshpro/ontoraster   v1.5             8e30c6994cf3   3 months ago    188MB
+aghoshpro/ontoraster   v1.4             37694dd28b1d   3 months ago    188MB
+aghoshpro/ontoraster   v1.3             0bde6d0ef037   3 months ago    188MB
+aghoshpro/ontoraster   v1.2             6d681ae5614f   4 months ago    188MB
+aghoshpro/ontoraster   v1.1             c9e99e11212f   10 months ago   188MB
+aghoshpro/ontotaster   v1.1             c9e99e11212f   10 months ago   188MB
+aghoshpro/ontoraster   v1               3ca0a1c20954   10 months ago   188MB
+ontop/ontop            5.1.0            7500e3d497d5   20 months ago   187MB
+hello-world            latest           d2c94e258dcb   23 months ago   13.3kB
 
-root@lat7410g:~# docker push aghoshpro/ontoraster:v1.3
+
+root@lat7410g:~# docker push aghoshpro/ontoraster:v1.6
 
 The push refers to repository [docker.io/aghoshpro/ontoraster]
 b0675a34622b: Pushing [=====>                                           ]  2.653MB/50.96MB
@@ -139,10 +151,33 @@ b0675a34622b: Pushing [=====>                                           ]  2.653
 b4d77fa63fe9: Layer already exists 
 9579a22d7f2d: Layer already exists 
 2573e0d81582: Layer already exists 
-v1.4: digest: sha256:a2204aa3970738ff33a096eeddddb9cd6b0ade1dfc69f5360d322d44239d7ca9 size: 1370
+v1.6: digest: sha256:a79e35865bbc09fdd621305b6666a6b279c248a57e1671e63a17bf07efaf78eb size: 1370
 
 
 root@lat7410g:~#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #### AbstractSQLDBFunctionSymbolFactory [WORKING IN TESTING BUT NOT ON DOCKER]
