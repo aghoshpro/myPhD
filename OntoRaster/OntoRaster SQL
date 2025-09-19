@@ -39,6 +39,9 @@ shp2pgsql -s 4326 /home/arkaghosh/Downloads/Baveria/Vector/Baveria_1.shp region_
 
 shp2pgsql -s 4326 /home/arkaghosh/Downloads/OntoRaster/Vector/Districts_India.shp region_India | psql -h localhost -p 5432 -U postgres -d VectorDB
 
+shp2pgsql -s 4326 C:\Users\arkag\Downloads\MunichCity\CityGML\MasterCItyGML.shp munich_city3D | psql -h localhost -p 5434 -U postgres -d VectorDB
+
+C:\Users\arkag\Downloads\MunichCity\CityGML\MasterCItyGML.shp
 
 SELECT * FROM public.region_sweden
 WHERE name_2 LIKE '%Ume%';
